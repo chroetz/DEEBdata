@@ -36,10 +36,14 @@ getParmsFunctionLocalConst <- function(opts) {
 
 
 buildParmsSamplerLocalConst <- function(opts) {
-  locationSampler <- buildMatrixSampler(opts$locationSampler)
-  valueSampler <- buildMatrixSampler(opts$valueSampler)
+  locationSampler <- buildArraySampler(
+    opts$locationSampler,
+    arrayDim = c(opts$nSupp, opts$d))
+  valueSampler <- buildArraySampler(
+    opts$valueSampler,
+    arrayDim = c(opts$nSupp, opts$d))
   parmsSampler <- function() list(
-    locations = locationSampler(opts$nSupp, opts$d),
-    values = valueSampler(opts$nSupp, opts$d))
+    locations = locationSampler(),
+    values = valueSampler())
   return(parmsSampler)
 }

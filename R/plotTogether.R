@@ -1,15 +1,15 @@
-openPlotDevice <- function(name, opts, mfrow) {
-  if (name == "pdf") {
+openPlotDevice <- function(opts, mfrow) {
+  if (opts$name == "pdf") {
     message("Opening PDF device file ", opts$outFile)
     grDevices::pdf(
       opts$outFile,
       width = mfrow[2]*opts$scale,
       height = mfrow[1]*opts$scale)
     return(grDevices::dev.off)
-  } else if (name == "default") {
+  } else if (opts$name == "default") {
     return(function() NULL)
   } else {
-    stop("Unrecognized name ", name)
+    stop("Unrecognized name ", opts$name)
   }
 }
 
@@ -32,7 +32,7 @@ plotTogether <- function(opts) {
   len <- length(truthTrajFiles)
   n <- ceiling(sqrt(len))
   mfrow <- c(ceiling(len/n), n)
-  finalizeDevice <- openPlotDevice(opts$device, opts$deviceOpts, mfrow = mfrow)
+  finalizeDevice <- openPlotDevice(opts$device, mfrow = mfrow)
   graphics::par(mfrow = mfrow)
   graphics::par(mar = if (opts$axes) c(2,2,2,2) else c(0,0,0,0))
 

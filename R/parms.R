@@ -1,18 +1,18 @@
 getParmsFunction <- function(opts) {
-  if (opts$className == "localConst") {
-    parmsFunction <- getParmsFunctionLocalConst(opts)
-  } else {
-    stop("Unrecognized name ", opts$className)
-  }
+  parmsFunction <- switch(
+    opts$className,
+    localConst = getParmsFunctionLocalConst(opts),
+    polynomial = getParmsFunctionPolynomial(opts),
+    stop("Unrecognized name ", opts$className))
   return(parmsFunction)
 }
 
 
 buildParmsSampler <- function(opts) {
-  if (opts$className == "localConst") {
-    parmsSampler <- buildParmsSamplerLocalConst(opts)
-  } else {
-    stop("Unrecognized name ", opts$className)
-  }
+  parmsSampler <- switch(
+    opts$className,
+    localConst = buildParmsSamplerLocalConst(opts),
+    polynomial = buildParmsSamplerPolynomial(opts),
+    stop("Unrecognized name ", opts$className))
   return(parmsSampler)
 }

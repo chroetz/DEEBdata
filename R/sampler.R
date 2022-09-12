@@ -5,44 +5,38 @@ sampleUniformOnBall <- function(n, d, rMin, rMax) {
   direction * radius * rMax
 }
 
-sampleUniformOnHypercube <- function(n, d, range) {
-  matrix(stats::runif(d*n, min = range[1], max = range[2]), nrow = n)
-}
-
-buildSingleSampler <- function(opts) {
-  if (opts$name == "uniformBall") {
-    sampler <- \() sampleUniformOnBall(1, opts$d, opts$rMin, opts$rMax)
-  } else if (opts$name == "hypercube") {
-    sampler <- \() sampleUniformOnHypercube(1, opts$d, opts$range)
-  } else if (opts$name == "const") {
-    sampler <- \() opts$value
-  } else {
-    stop("Unrecognized name ", opts$name)
-  }
-  return(sampler)
-}
-
-buildMatrixSampler <- function(opts) {
-  if (opts$name == "uniformBall") {
-    sampler <- \(n, d) sampleUniformOnBall(n, d, opts$rMin, opts$rMax)
-  } else if (opts$name == "hypercube") {
-    sampler <- \(n, d) sampleUniformOnHypercube(n, d, opts$range)
-  } else if (opts$name == "normal") {
-    sampler <- \(n, d) matrix(stats::rnorm(d*n, mean = opts$mean, sd = opts$sd), nrow = n)
-  } else {
-    stop("Unrecognized name ", opts$name)
-  }
-  return(sampler)
-}
-
-buildMultiSampler <- function(opts) {
+buildArraySampler <- function(opts, arrayDim) {
   if (opts$name == "uniform") {
-    sampler <- \(n) stats::runif(n, min=opts$range[1], max=opts$range[2])
+    sampler <- \()
+      stats::runif(
+        prod(arrayDim),
+        min = opts$range[1],
+        max = opts$range[2]
+      ) |>
+        array(arrayDim)
   } else if (opts$name == "normal") {
-    sampler <- \(n) stats::rnorm(n, mean = opts$mean, sd = opts$sd)
+    sampler <- \()
+      stats::rnorm(
+        prod(arrayDim),
+        mean = opts$mean,
+        sd = opts$sd
+      ) |>
+      array(arrayDim)
+  } else if (opts$name == "const") {
+    sampler <- \() array(opts$value, arrayDim)
+  } else if (opts$name == "uniformOnBall") {
+    sampler <- \()
+      sampleUniformOnBall(
+        prod(arrayDim[-1]),
+        arrayDim[1],
+        opts$rMin,
+        opts$rMax
+      ) |>
+        array(arrayDim)
   } else {
     stop("Unrecognized name ", opts$name)
   }
   return(sampler)
 }
+
 

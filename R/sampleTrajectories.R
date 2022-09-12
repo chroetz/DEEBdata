@@ -12,8 +12,10 @@ sampleConditional <- function(parmsSampler, f, u0Sampler, opts) {
       parms = parms)
     if (checkConditions(opts$conditions, u, f, parms)) {
       success <- TRUE
+      cat("o\n")
       break
     }
+    cat("x")
   }
   if (!success) stop("Could not meet condition.")
   message("Met condition after ", i, " tries.")
@@ -32,7 +34,7 @@ sampleTrajectories <- function(opts) {
 
   parmsSampler <- buildParmsSampler(opts)
   f <- getParmsFunction(opts)
-  u0Sampler <- buildSingleSampler(opts$u0Sampler)
+  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = opts$d)
 
   set.seed(opts$seed)
 
