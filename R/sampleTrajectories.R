@@ -33,8 +33,8 @@ sampleTrajectories <- function(opts) {
   if (!dir.exists(fullPath)) dir.create(fullPath)
   writeOpts(opts, file.path(fullPath, "_opts_truth"))
 
-  parmsSampler <- buildParmsSampler(opts)
-  fun <- getParmsFunction(opts)
+  parmsSampler <- buildParmsSampler(opts$deFunSampler)
+  fun <- getParmsFunction(opts$deFunSampler)
   u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = opts$d)
 
   set.seed(opts$seed)

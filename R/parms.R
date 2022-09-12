@@ -1,6 +1,6 @@
 getParmsFunction <- function(opts) {
   parmsFunction <- switch(
-    opts$className,
+    opts$name,
     localConst = getParmsFunctionLocalConst(opts),
     polynomial = getParmsFunctionPolynomial(opts),
     lotkaVolterra = getParmsFunctionLotkaVolterra(opts),
@@ -12,7 +12,7 @@ getParmsFunction <- function(opts) {
 
 buildParmsSampler <- function(opts) {
   parmsSampler <- switch(
-    opts$className,
+    opts$name,
     localConst = buildParmsSamplerLocalConst(opts),
     polynomial = buildParmsSamplerPolynomial(opts),
     lotkaVolterra = buildParmsSamplerLotkaVolterra(opts),

@@ -36,8 +36,8 @@ plotTogether <- function(opts) {
   graphics::par(mfrow = mfrow)
   graphics::par(mar = if (opts$axes) c(2,2,2,2) else c(0,0,0,0))
 
-  funOpts <- readOpts(file.path(opts$path, "_opts_truth.json"))
-  fun <- getParmsFunction(funOpts)
+  truthOpts <- readOpts(file.path(opts$path, "_opts_truth.json"))
+  fun <- getParmsFunction(truthOpts$deFunSampler)
 
   for (i in seq_len(len)) {
 
