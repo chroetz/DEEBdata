@@ -10,8 +10,8 @@ plotTrajAndObs <- function(traj, obs, title, opts) {
   obs2D <- projection2D$project(as.matrix(obs[,-1]))
   truth2D <- projection2D$project(as.matrix(traj[,-1]))
 
-  xlim <- if (is.null(opts$xlim)) range(obs2D[,1], truth2D[,1]) else opts$xlim
-  ylim <- if (is.null(opts$ylim)) range(obs2D[,2], truth2D[,2]) else opts$ylim
+  xlim <- if (length(opts$xlim) != 2) range(obs2D[,1], truth2D[,1]) else opts$xlim
+  ylim <- if (length(opts$ylim) != 2) range(obs2D[,2], truth2D[,2]) else opts$ylim
   plot(NA, xlim=xlim, ylim=ylim, axes = opts$axes, asp=1)
   graphics::grid()
   if (opts$border == "circle") {

@@ -42,8 +42,10 @@ fillWithDefaultOpts <- function(opts, optsClass = NULL) {
     optsClass = optsClass,
     .fill = FALSE)
   opts <- fillOpts(opts, defaultOpts)
-  isOpts <- sapply(opts, inherits, "Opts")
-  opts[isOpts] <- lapply(opts[isOpts], fillWithDefaultOpts)
+  if (length(opts) > 0) {
+    isOpts <- sapply(opts, inherits, "Opts")
+    opts[isOpts] <- lapply(opts[isOpts], fillWithDefaultOpts)
+  }
   return(opts)
 }
 

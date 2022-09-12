@@ -9,7 +9,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
       fun, u0,
       tMax = opts$tMax,
       tStep = opts$tStep,
-      opts = opts$odeSolveropts,
+      opts = opts$odeSolver,
       parms = parms)
     if (checkConditions(opts$conditions, u, fun, parms)) {
       success <- TRUE
