@@ -1,19 +1,15 @@
-plotTrajAndObs <- function(truth, obs, title, opts) {
-  d <- ncol(truth) - 1
-  if (d == 1) {
-    obs2D <- as.matrix(obs)
-    truth2D <- as.matrix(truth)
-  } else if (d == 2) {
-    obs2D <- as.matrix(obs[,-1])
-    truth2D <- as.matrix(truth[,-1])
-  } else if (d >= 3) {
-    pca <- stats::prcomp(truth[,-1])
-    projectionMatrix <- pca$rotation[,1:2]
-    obs2D <- as.matrix(obs[,-1]) %*% projectionMatrix
-    truth2D <- as.matrix(truth[,-1]) %*% projectionMatrix
+plotTrajAndObs <- function(traj, obs, title, opts) {
+  d <- ncol(traj) - 1
+  if (d == 2) {
+    projection2D <- getIdentityProjection()
+  } else if (d > 2) {
+    projection2D <- calculateProjection(traj[, -1], dim = 2)
   } else {
-    stop("d is ", d)
+    stop("d invalid: ", d)
   }
+  obs2D <- projection2D$project(as.matrix(obs[,-1]))
+  truth2D <- projection2D$project(as.matrix(traj[,-1]))
+
   xlim <- if (is.null(opts$xlim)) range(obs2D[,1], truth2D[,1]) else opts$xlim
   ylim <- if (is.null(opts$ylim)) range(obs2D[,2], truth2D[,2]) else opts$ylim
   plot(NA, xlim=xlim, ylim=ylim, axes = opts$axes, asp=1)

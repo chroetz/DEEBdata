@@ -65,7 +65,7 @@ plotTogether <- function(opts) {
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
 
-    plotVectorField(traj, fun, parms)
+    plotVectorField(traj, fun, parms, title = nr, axes = opts$axes)
   })
 
   plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)

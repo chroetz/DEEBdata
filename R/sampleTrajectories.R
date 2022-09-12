@@ -19,7 +19,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
     cat("x")
   }
   if (!success) stop("Could not meet conditions.")
-  message("Met condition after ", i, " tries.")
+  message("Met all conditions after ", i, " tries.")
 
   return(list(u=u, parms = parms, u0 = u0))
 }

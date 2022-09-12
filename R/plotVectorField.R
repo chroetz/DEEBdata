@@ -1,41 +1,44 @@
 #' @importFrom rlang .data
-plotVectorField <- function(traj, fun, parms) {
+plotVectorField <- function(traj, fun, parms, title, axes) {
   d <- ncol(traj) - 1
 
   if (d == 2) {
-    projectionMatrix <- matrix(c(1,0,0,1), nrow=2)
+    projection2D <- getIdentityProjection()
   } else if (d > 2) {
-    pca <- stats::prcomp(traj[,-1])
-    projectionMatrix <- pca$rotation[,1:2]
+    projection2D <- calculateProjection(traj[, -1], dim = 2)
   } else {
-    stop("d invalid")
+    stop("d invalid: ", d)
   }
-  traj2D <- as.matrix(traj[,-1]) %*% projectionMatrix
+  traj2D <- projection2D$project(as.matrix(traj[, -1]))
 
   nArrows <- 20
   rangeLenX <- diff(range(traj2D[,1]))
   rangeLenY <- diff(range(traj2D[,2]))
+  maxLen <- pmax(rangeLenX, rangeLenY)
   s <- 0.1
   xGrid <- seq(
-    min(traj2D[,1])-s*rangeLenX,
-    max(traj2D[,1])+s*rangeLenX,
-    len=nArrows)
+    mean(range(traj2D[,1])) - (0.5+s) * maxLen,
+    mean(range(traj2D[,1])) + (0.5+s) * maxLen,
+    length.out = nArrows)
   yGrid <- seq(
-    min(traj2D[,2])-s*rangeLenY,
-    max(traj2D[,2])+s*rangeLenY,
-    len=nArrows)
-  gridPC <- as.matrix(expand.grid(xGrid, yGrid))
-  grid <- gridPC %*% t(projectionMatrix)
-  field <- sapply(
-    seq_len(nrow(grid)),
-    \(i) unlist(fun(u = grid[i,], parms = parms)))
-  fieldPC <- t(field) %*% projectionMatrix
+    mean(range(traj2D[,2])) - (0.5+s) * maxLen,
+    mean(range(traj2D[,2])) + (0.5+s) * maxLen,
+    length.out = nArrows)
+  grid2D <- as.matrix(expand.grid(xGrid, yGrid))
+  grid <- projection2D$embed(grid2D)
+  field <-
+    sapply(
+      seq_len(nrow(grid)),
+      \(i) unlist(fun(u = grid[i,], parms = parms))
+    ) |>
+    t()
+  field2D <- projection2D$project(field)
 
   pltData <- tibble::tibble(
-    x = gridPC[,1],
-    y = gridPC[,2],
-    vx = fieldPC[,1],
-    vy = fieldPC[,2])
+    x = grid2D[,1],
+    y = grid2D[,2],
+    vx = field2D[,1],
+    vy = field2D[,2])
   trajData <- tibble::tibble(
     x = traj2D[,1],
     y = traj2D[,2])
@@ -66,10 +69,19 @@ plotVectorField <- function(traj, fun, parms) {
       mapping = ggplot2::aes(x = .data$x, y = .data$y),
       size = 1) +
     ggplot2::xlab(NULL) +
-    ggplot2::ylab(NULL) +
-    ggplot2::theme_void() +
-    ggplot2::theme(legend.position = "none") +
-    ggplot2::coord_fixed(ratio = 1)
+    ggplot2::ylab(NULL)
+  if (!axes) {
+    plt <-
+      plt +
+      ggplot2::theme_void()
+  }
+  plt <-
+    plt +
+    ggplot2::theme(
+      legend.position = "none",
+      plot.title = ggplot2::element_text(hjust = 0.5, vjust = -2)) +
+    ggplot2::coord_fixed(ratio = 1) +
+    ggplot2::ggtitle(title)
 
   return(plt)
 }
