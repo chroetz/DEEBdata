@@ -29,13 +29,29 @@ sampleTrajectories <- function(opts) {
 
   opts <- readOpts(opts)
 
+  stopifnot(is.list(opts))
+  stopifnot(
+    c(
+      "deFunSampler",
+      "u0Sampler",
+      "path",
+      "name",
+      "seed",
+      "reps"
+    ) %in% names(opts))
+  stopifnot(is.list(opts$deFunSampler))
+  stopifnot(is.list(opts$u0Sampler))
+  stopifnot(
+    length(opts$deFunSampler$d) == 1,
+    is.finite(opts$deFunSampler$d))
+
   fullPath <- file.path(opts$path, opts$name)
   if (!dir.exists(fullPath)) dir.create(fullPath)
   writeOpts(opts, file.path(fullPath, "_opts_truth"))
 
   parmsSampler <- buildParmsSampler(opts$deFunSampler)
   fun <- getParmsFunction(opts$deFunSampler)
-  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = opts$d)
+  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = opts$deFunSampler$d)
 
   set.seed(opts$seed)
 
