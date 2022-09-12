@@ -1,0 +1,11 @@
+{
+  "_class": ["NoiseOpts", "Opts"],
+  "seed": 1,
+  "path": "~/DEEDataDB/Default",
+  "n": 100,
+  "tStep": 0.1,
+  "reps": 1,
+  "noiseSampler": {
+    "_class": ["ArraySamplerOpts", "Opts"]
+  }
+}

@@ -15,7 +15,7 @@ openPlotDevice <- function(opts, mfrow) {
 
 
 plotTogether <- function(opts) {
-  opts <- readOpts(opts)
+  opts <- asOpts(opts, "PlotOpts")
   writeOpts(opts, file.path(opts$path, "_opts_plot"))
 
   truthParmsFiles <-
@@ -36,7 +36,10 @@ plotTogether <- function(opts) {
   graphics::par(mfrow = mfrow)
   graphics::par(mar = if (opts$axes) c(2,2,2,2) else c(0,0,0,0))
 
-  truthOpts <- readOpts(file.path(opts$path, "_opts_truth.json"))
+  truthOpts <- readOpts(
+    file.path(opts$path, "_opts_truth.json"),
+    optsClass = "TruthOpts",
+    .fill=FALSE)
   fun <- getParmsFunction(truthOpts$deFunSampler)
 
   for (i in seq_len(len)) {
@@ -58,7 +61,7 @@ plotTogether <- function(opts) {
 
     flParms <- truthParmsFiles[i]
     fullPathParms <- file.path(opts$path, flParms)
-    parms <- readOpts(fullPathParms)
+    parms <- readOpts(fullPathParms, "ParmsOpts", .fill=FALSE)
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)
     traj <- readDeData(fullPathTraj)

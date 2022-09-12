@@ -1,0 +1,12 @@
+{
+  "_class": ["PlotOpts", "Opts"],
+  "obsNr": 1,
+  "path": "~/DEEDataDB/Default",
+  "device": {
+    "_class": ["DeviceOpts", "Opts"]
+  },
+  "xlim": {},
+  "ylim": {},
+  "border": "rect",
+  "axes": false
+}

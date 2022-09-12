@@ -1,0 +1,6 @@
+{
+  "_class": ["OdeSolverOpts", "Opts"],
+  "method": "rk4",
+  "rtol": 0.0001,
+  "atol": 0.0001
+}

@@ -27,7 +27,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 
 sampleTrajectories <- function(opts) {
 
-  opts <- readOpts(opts)
+  opts <- asOpts(opts, "TruthOpts")
 
   stopifnot(is.list(opts))
   stopifnot(

@@ -1,0 +1,6 @@
+{
+  "_class": ["DeviceOpts", "Opts"],
+  "name": "pdf",
+  "outFile": "~/DEEDataDB/Default/default.pdf",
+  "scale": 3
+}

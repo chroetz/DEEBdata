@@ -1,0 +1,23 @@
+{
+  "_class": ["TruthOpts", "Opts"],
+  "seed": 1,
+  "name": "Default",
+  "path": "~/DEEDataDB",
+  "reps": 1,
+  "tMax": 100,
+  "tStep": 0.01,
+  "deFunSampler": {
+    "_class": ["FunctionSamplerOpts", "Opts"],
+    "d": 2
+  },
+  "u0Sampler": {
+    "_class": ["ArraySamplerOpts", "Opts"]
+  },
+  "odeSolver": {
+    "_class": ["OdeSolverOpts", "Opts"]
+  },
+  "maxConditionTries": 1000,
+  "conditions": {
+    "_class": ["ConditionsOpts", "Opts"]
+  }
+}
