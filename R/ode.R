@@ -1,0 +1,7 @@
+solveOde <- function(f, u0, tMax, tStep, opts = list(), parms = NULL) {
+  tm <- seq(0, tMax, by = tStep)
+  u <- do.call(
+    deSolve::ode,
+    c(list(y = u0, times = tm, func = f, parms = parms), opts))
+  return(u)
+}
