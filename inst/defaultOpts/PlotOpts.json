@@ -1,6 +1,7 @@
 {
   "_class": ["PlotOpts", "Opts"],
   "obsNr": 1,
+  "_obsNr_description": "ID of observation to use",
   "path": "~/DEEDataDB/Default",
   "device": {
     "_class": ["DeviceOpts", "Opts"]
@@ -8,5 +9,6 @@
   "xlim": {},
   "ylim": {},
   "border": "rect",
+  "_border_possible_values": ["rect", "circle"],
   "axes": false
 }

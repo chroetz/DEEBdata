@@ -1,6 +1,32 @@
 {
   "_class": ["FunctionSamplerOpts", "Opts"],
   "name": "const",
+  "_name_possible_values": ["const", "localConst", "polynomial", "lotkaVolterra", "lorenz63"],
   "d": 2,
-  "value": 0
+  "_d_description": "dimension of state space",
+  "value": 0,
+  "_value_used_by": ["const"],
+  "polyDeg": 3,
+  "_polyDeg_used_by": ["polynomial"],
+  "maxNorm": 10,
+  "_maxNorm_used_by": ["polynomial"],
+  "kernel": "dnorm",
+  "_kernel_used_by": ["localConst"],
+  "bw": 0.2,
+  "_bw_used_by": ["localConst"],
+  "nSupp": 50,
+  "_nSupp_used_by": ["localConst"],
+  "_nSupp_description": "Number of support points",
+  "coefSampler": {
+    "_class": ["ArraySamplerOpts", "Opts"]
+  },
+  "_coefSampler_used_by": ["polynomial", "lotkaVolterra", "lorenz63"],
+  "locationSampler": {
+    "_class": ["ArraySamplerOpts", "Opts"]
+  },
+  "_locationSampler_used_by": ["localConst"],
+  "valueSampler": {
+    "_class": ["ArraySamplerOpts", "Opts"]
+  },
+  "_valueSampler_used_by": ["localConst"]
 }

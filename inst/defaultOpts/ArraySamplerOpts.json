@@ -1,5 +1,18 @@
 {
   "_class": ["ArraySamplerOpts", "Opts"],
   "name": "const",
-  "value": 0
+  "_name_possible_values": ["const", "uniform", "normal", "uniformOnBall"],
+  "value": 0,
+  "_value_used_by": ["const"],
+  "range": [0, 1],
+  "_range_used_by": ["uniform", "uniformOnBall"],
+  "_range_description": "Min and max of support of uniform distribution or min and max radius for uniformOnBall.",
+  "sparsity": {},
+  "_sparsity_description": "How many values are allowed to be different from 0. Set to NULL to allow all.",
+  "keepFirstColumn": false,
+  "_keepFirstColumn_description": "When using sparsity, should the first column always be allowed?",
+  "mean": 0,
+  "_mean_used_by": ["normal"],
+  "sd" : 1,
+  "_sd_used_by": ["normal"]
 }

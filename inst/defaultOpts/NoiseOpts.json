@@ -1,10 +1,14 @@
 {
   "_class": ["NoiseOpts", "Opts"],
   "seed": 1,
+  "_seed_description": "seed for random number generator",
   "path": "~/DEEDataDB/Default",
   "n": 100,
+  "_n_description": "number of observations",
   "tStep": 0.1,
+  "_tStep_description": "time difference between observations",
   "reps": 1,
+  "_reps_description": "repetitions of sampling n observations",
   "noiseSampler": {
     "_class": ["ArraySamplerOpts", "Opts"]
   }

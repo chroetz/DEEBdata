@@ -1,0 +1,9 @@
+{
+  "_class": ["ConditionOpts", "Opts"],
+  "name": "true",
+  "_name_possible_values": ["true", "stopped", "finite", "bounded"],
+  "threshold": 1,
+  "_threshold_used_by": ["stopped"],
+  "maxNorm": 1,
+  "_maxNorm_used_by": ["bounded"]
+}

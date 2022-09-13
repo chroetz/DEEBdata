@@ -6,37 +6,57 @@ sampleUniformOnBall <- function(n, d, rMin, rMax) {
 }
 
 buildArraySampler <- function(opts, arrayDim) {
+  p <- prod(arrayDim)
   if (opts$name == "uniform") {
-    sampler <- \()
+    sampleBase <- \()
       stats::runif(
-        prod(arrayDim),
+        p,
         min = opts$range[1],
         max = opts$range[2]
-      ) |>
-        array(arrayDim)
+      )
   } else if (opts$name == "normal") {
-    sampler <- \()
+    sampleBase <- \()
       stats::rnorm(
-        prod(arrayDim),
+        p,
         mean = opts$mean,
         sd = opts$sd
-      ) |>
-      array(arrayDim)
+      )
   } else if (opts$name == "const") {
-    sampler <- \() array(opts$value, arrayDim)
+    sampleBase <- \() opts$value
   } else if (opts$name == "uniformOnBall") {
-    sampler <- \()
+    sampleBase <- \()
       sampleUniformOnBall(
         prod(arrayDim[-1]),
         arrayDim[1],
-        opts$rMin,
-        opts$rMax
-      ) |>
-        array(arrayDim)
+        opts$range[1],
+        opts$range[2]
+      )
   } else {
     stop("Unrecognized name ", opts$name)
   }
-  return(sampler)
+  sampleArray <- \() array(sampleBase(), arrayDim)
+  if (length(opts$sparsity) == 1 && opts$sparsity < p) {
+    sampleSupport <- buildArraySupportSampler(opts$sparsity, arrayDim, opts$keepFirstColumn)
+    sample <- \() sampleArray() * sampleSupport()
+  } else {
+    sample <- sampleArray
+  }
+  return(sample)
 }
+
+buildArraySupportSampler <- function(supportSize, arrayDim, keepFirstColumn) {
+  p <- prod(arrayDim)
+  if (isTRUE(keepFirstColumn)) {
+    stopifnot(length(arrayDim) == 2) # only for matrix
+    sampleSupport <- \() matrix(
+      c(rep(TRUE, arrayDim[1]),
+        sample.int(p - arrayDim[1]) <= (supportSize - arrayDim[1])),
+      nrow = arrayDim[1])
+  } else {
+    sampleSupport <- \() array(sample.int(p) <= supportSize, arrayDim)
+  }
+  return(sampleSupport)
+}
+
 
 

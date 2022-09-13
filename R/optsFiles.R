@@ -1,19 +1,20 @@
 writeOpts <- function(opts, file) {
-  opts$timeStamp <- date()
-  opts$version <- getPackageVersion()
+  opts[["_timeStamp"]] <- date()
+  opts[["_packageVersion"]] <- getPackageVersion()
   if (is.character(file) && !endsWith(file, ".json")) {
     file <- paste0(file, ".json")
   }
   opts <- putClassAttributAsListEntry(opts)
-  jsonlite::write_json(unclass(opts), file, pretty = TRUE, digits = 8, auto_unbox = TRUE)
+  jsonlite::write_json(opts, file, pretty = TRUE, digits = 8, auto_unbox = TRUE)
 }
 
 
-readOpts <- function(file, optsClass = NULL, .fill = TRUE) {
+readOpts <- function(file, optsClass = NULL, .fill = TRUE, removeUnderscoreEntries = TRUE) {
   fileContent <- jsonlite::read_json(file, simplifyVector = TRUE)
   opts <- putListEntryClassAsAttribute(fileContent)
-  # nonStandardEntries <- opts[startsWith(names(opts), "_")]
-  opts <- opts[!startsWith(names(opts), "_")] # remove non-standard entries
+  if (removeUnderscoreEntries) {
+    opts <- opts[!startsWith(names(opts), "_")]
+  }
   if (is.null(optsClass)) {
     optsClass <- oldClass(opts)[1]
   }

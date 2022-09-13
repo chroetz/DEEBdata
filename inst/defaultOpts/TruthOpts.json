@@ -1,23 +1,34 @@
 {
   "_class": ["TruthOpts", "Opts"],
   "seed": 1,
+  "_seed_description": "seed for random number generator",
   "name": "Default",
+  "_name_description": "a name for this setup",
   "path": "~/DEEDataDB",
+  "_path_description": "At this location a folder with name <name> is created. All results are written to that folder.",
   "reps": 1,
+  "_reps_description": "repetitions of drawing new random function and initial value",
   "tMax": 100,
+  "_tMax_description": "maximal time point at which values are produced",
   "tStep": 0.01,
+  "_tStep_description": "difference between time points at which values are produced",
   "deFunSampler": {
     "_class": ["FunctionSamplerOpts", "Opts"],
     "d": 2
   },
+  "_deFunSampler_description": "Options for sampling the random function that maps the state to the derivative.",
   "u0Sampler": {
     "_class": ["ArraySamplerOpts", "Opts"]
   },
+  "_u0Sampler_description": "Options for sampling the initial value.",
   "odeSolver": {
     "_class": ["OdeSolverOpts", "Opts"]
   },
+  "_odeSolver_description": "Options for the ODE-solver.",
   "maxConditionTries": 1000,
+  "_maxConditionTries_description": "To fulfill the conditions, rejection sampling is used. After this number of rejections an error is thrown.",
   "conditions": {
-    "_class": ["ConditionsOpts", "Opts"]
-  }
+    "_class": ["ConditionsOptsList", "OptsList"]
+  },
+  "_conditions_description": "A (possibly emmty) list of Options for conditions that a sampled ODE must fulfill. Enfored by rejection sampling."
 }

@@ -20,6 +20,7 @@ checkCondition <- function(opts, u, f, parms) {
     stopped = checkConditionStopped(u, f, parms, opts$threshold),
     finite = checkConditionFinite(u),
     bounded = checkConditionBounded(u, opts$maxNorm),
+    true = TRUE,
     stop("Unrecognized name ", opts$name))
   return(fulfilled)
 }
