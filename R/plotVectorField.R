@@ -1,15 +1,15 @@
 #' @importFrom rlang .data
-plotVectorField <- function(traj, fun, parms, title, axes) {
-  d <- ncol(traj) - 1
+plotVectorField <- function(trajs, fun, parms, title, axes) {
+  d <- ncol(trajs$state)
 
   if (d == 2) {
     projection2D <- getIdentityProjection()
   } else if (d > 2) {
-    projection2D <- calculateProjection(traj[, -1], dim = 2)
+    projection2D <- calculateProjection(trajs$state, dim = 2)
   } else {
     stop("d invalid: ", d)
   }
-  traj2D <- projection2D$project(as.matrix(traj[, -1]))
+  traj2D <- projection2D$project(trajs$state)
 
   nArrows <- 20
   rangeLenX <- diff(range(traj2D[,1]))
@@ -41,7 +41,8 @@ plotVectorField <- function(traj, fun, parms, title, axes) {
     vy = field2D[,2])
   trajData <- tibble::tibble(
     x = traj2D[,1],
-    y = traj2D[,2])
+    y = traj2D[,2],
+    trajId = trajs$trajId)
 
   pltData <-
     pltData |>
@@ -66,7 +67,10 @@ plotVectorField <- function(traj, fun, parms, title, axes) {
       high = "darkred") +
     ggplot2::geom_path(
       data = trajData,
-      mapping = ggplot2::aes(x = .data$x, y = .data$y),
+      mapping = ggplot2::aes(
+        x = .data$x,
+        y = .data$y,
+        group = .data$trajId),
       size = 1) +
     ggplot2::xlab(NULL) +
     ggplot2::ylab(NULL)

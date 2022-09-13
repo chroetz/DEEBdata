@@ -1,14 +1,14 @@
-plotTrajAndObs <- function(traj, obs, title, opts) {
-  d <- ncol(traj) - 1
+plotTrajAndObs <- function(trajs, obs, title, opts) {
+  d <- ncol(trajs$state)
   if (d == 2) {
     projection2D <- getIdentityProjection()
   } else if (d > 2) {
-    projection2D <- calculateProjection(traj[, -1], dim = 2)
+    projection2D <- calculateProjection(trajs$state, dim = 2)
   } else {
     stop("d invalid: ", d)
   }
-  obs2D <- projection2D$project(as.matrix(obs[,-1]))
-  truth2D <- projection2D$project(as.matrix(traj[,-1]))
+  obs2D <- projection2D$project(obs$state)
+  truth2D <- projection2D$project(trajs$state)
 
   xlim <- if (length(opts$xlim) != 2) range(obs2D[,1], truth2D[,1]) else opts$xlim
   ylim <- if (length(opts$ylim) != 2) range(obs2D[,2], truth2D[,2]) else opts$ylim
@@ -26,8 +26,11 @@ plotTrajAndObs <- function(traj, obs, title, opts) {
     stop("Unrecognized name ", opts$border)
   }
   graphics::points(obs2D, col=3, pch=20)
-  graphics::lines(truth2D)
-  graphics::points(truth2D[1,,drop=FALSE], col=2, pch=3, lwd=2)
+  for (id in unique(trajs$trajId)) {
+    traj <- truth2D[trajs$trajId==id, ]
+    graphics::lines(traj)
+    graphics::points(traj[1,,drop=FALSE], col=2, pch=3, lwd=2)
+  }
   graphics::text(
     x = mean(xlim),
     y = pmax(mean(ylim)+0.47*diff(xlim), mean(ylim)+0.47*diff(ylim)), # asp=1

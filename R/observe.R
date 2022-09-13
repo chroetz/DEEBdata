@@ -1,11 +1,22 @@
-observeGrid <- function(u, n, tStep, noiseSampler) {
-  d <- ncol(u) - 1
+observeGrid <- function(trajs, n, tStep, noiseSampler) {
+  d <- ncol(trajs$state)
+  trajIds <- unique(trajs$trajId)
   tSample <- seq(0, by = tStep, length.out = n)
-  truth <- sapply(1 + 1:d, \(j) stats::approx(u[,1], u[,j], tSample)$y)
-  cbind(tSample, truth + noiseSampler(n, d))
+  observations <- lapply(trajIds, \(id) {
+    sel <- trajs$trajId == id
+    truth <- sapply(
+      seq_len(d),
+      \(j) stats::approx(trajs$time[sel], trajs$state[sel,j], tSample)$y)
+    tibble::tibble(
+      trajId = id,
+      time = tSample,
+      state = truth + noiseSampler(n, d))
+  })
+  dplyr::bind_rows(observations)
 }
 
 buildNoiseSampler <- function(opts) {
+  # TODO noise sampler vs array sampler
   if (opts$name == "normal") {
     noiseSampler <- \(n, d) matrix(stats::rnorm(n*d, sd = opts$sd), nrow = n)
   } else {

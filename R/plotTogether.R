@@ -46,7 +46,7 @@ plotTogether <- function(opts) {
 
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)
-    traj <- readDeData(fullPathTraj)
+    trajs <- readDeData(fullPathTraj)
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
 
@@ -54,7 +54,7 @@ plotTogether <- function(opts) {
       substr(fullPathTraj, 1, nchar(fullPathTraj)-4),
       sprintf("obs%04d.csv", opts$obsNr)))
 
-    plotTrajAndObs(traj, obs, title = nr, opts = opts)
+    plotTrajAndObs(trajs, obs, title = nr, opts = opts)
   }
 
   pltList <- lapply(seq_len(len), \(i) {

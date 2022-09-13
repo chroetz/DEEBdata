@@ -1,9 +1,11 @@
-writeDeData <- function(u, file) {
-  uFormated <- cbind(
-    time = format(u[, 1], digits=3),
-    as.data.frame(format(u[, -1], digits=1, scientific=FALSE, nsmall=8)))
+writeDeData <- function(trajs, file) {
+  colnames(trajs$state) <- paste0("state", seq_len(ncol(trajs$state)))
+  trajsFormated <- cbind(
+    trajId = format(trajs$trajId),
+    time = format(trajs$time),
+    as.data.frame(format(trajs$state, digits = 1, scientific=FALSE, nsmall=8)))
   utils::write.csv(
-    uFormated,
+    trajsFormated,
     file = file,
     quote = FALSE,
     row.names = FALSE)
@@ -11,5 +13,20 @@ writeDeData <- function(u, file) {
 
 
 readDeData <- function(file) {
-  utils::read.csv(file)
+  df <- utils::read.csv(file)
+  dataFrame2TrajsTibble(df)
+}
+
+dataFrame2TrajsTibble <- function(df) {
+  tibble::tibble(
+    time = df$time,
+    trajId = df$trajId,
+    state = as.matrix(df[setdiff(names(df), c("time", "trajId"))]))
+}
+
+matrix2TrajsTibble <- function(mat) {
+  tibble::tibble(
+    time = mat[,"time"],
+    trajId = mat[,"trajId"],
+    state = mat[, setdiff(colnames(mat), c("time", "trajId"))])
 }

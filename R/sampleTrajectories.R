@@ -1,27 +1,42 @@
 sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 
-  success <- FALSE
-  maxConditionTries <- if (length(opts$conditions) == 0) 1 else opts$maxConditionTries
-  for (i in seq_len(maxConditionTries)) {
+  successFun <- FALSE
+  for (i in seq_len(opts$maxRejectionsFun)) {
     parms <- parmsSampler()
-    u0 <- u0Sampler()
-    u <- solveOde(
-      fun, u0,
-      tMax = opts$tMax,
-      tStep = opts$tStep,
-      opts = opts$odeSolver,
-      parms = parms)
-    if (checkConditions(opts$conditions, u, fun, parms)) {
-      success <- TRUE
-      cat("o\n")
+    trajList <- list()
+    for (k in seq_len(opts$nTrajectories)) {
+      successU0 <- FALSE
+      for (j in seq_len(opts$maxRejectionsU0)) {
+        u0 <- u0Sampler()
+        u <- solveOde(
+          fun, u0,
+          tMax = opts$tMax,
+          tStep = opts$tStep,
+          opts = opts$odeSolver,
+          parms = parms)
+        if (checkConditions(opts$conditions, u, fun, parms)) {
+          successU0 <- TRUE
+          cat("o\n")
+          break
+        }
+        cat("x")
+      }
+      if (!successU0) {
+        break
+      }
+      trajList[[k]] <- cbind(trajId=k, u)
+    }
+    if (length(trajList) == opts$nTrajectories) {
+      successFun <- TRUE
       break
     }
-    cat("x")
   }
-  if (!success) stop("Could not meet conditions.")
+  if (!successFun) stop("Could not meet conditions.")
   message("Met all conditions after ", i, " tries.")
 
-  return(list(u=u, parms = parms, u0 = u0))
+  mat <- do.call(rbind, trajList)
+  tb <- matrix2TrajsTibble(mat)
+  return(list(trajs=tb, parms = parms))
 }
 
 
@@ -29,6 +44,7 @@ sampleTrajectories <- function(opts) {
 
   opts <- asOpts(opts, "TruthOpts")
 
+  # TODO: THis should not be done here. Use defaultOpts to check.
   stopifnot(is.list(opts))
   stopifnot(
     c(
@@ -58,7 +74,7 @@ sampleTrajectories <- function(opts) {
   for (i in seq_len(opts$reps)) {
     message("Iteration ", i, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
-    writeDeData(res$u, file.path(fullPath, sprintf("truth%04d.csv",i)))
+    writeDeData(res$trajs, file.path(fullPath, sprintf("truth%04d.csv",i)))
     writeOpts(res$parms, file.path(fullPath, sprintf("truth%04d_meta",i)))
   }
 }
