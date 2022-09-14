@@ -10,19 +10,13 @@ observeGrid <- function(trajs, n, tStep, noiseSampler) {
     tibble::tibble(
       trajId = id,
       time = tSample,
-      state = truth + noiseSampler(n, d))
+      state = truth + noiseSampler())
   })
   dplyr::bind_rows(observations)
 }
 
-buildNoiseSampler <- function(opts) {
-  # TODO noise sampler vs array sampler
-  if (opts$name == "normal") {
-    noiseSampler <- \(n, d) matrix(stats::rnorm(n*d, sd = opts$sd), nrow = n)
-  } else {
-    stop("Unrecognized name ", opts$name)
-  }
-  return(noiseSampler)
+buildNoiseSampler <- function(opts, n, d) {
+  buildArraySampler(opts, arrayDim = c(n, d))
 }
 
 generateObservations <- function(opts) {
@@ -37,7 +31,12 @@ generateObservations <- function(opts) {
     dir(opts$path) |>
     grep("^truth\\d+\\.csv$", x = _, value=TRUE)
 
-  noiseSampler <- buildNoiseSampler(opts$noiseSampler)
+  if (length(files) == 0) {
+    message("No truth files found.")
+    return(invisible(NULL))
+  }
+  d <- readDeData(file.path(opts$path, files[1]))$state |> ncol()
+  noiseSampler <- buildNoiseSampler(opts$noiseSampler, n = opts$n, d = d)
 
   for (fl in files) {
     message("Process Truth in ", fl)

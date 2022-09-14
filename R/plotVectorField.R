@@ -47,11 +47,14 @@ plotVectorField <- function(trajs, fun, parms, title, axes) {
   pltData <-
     pltData |>
     dplyr::mutate(speed = sqrt(.data$vx^2 + .data$vy^2))
-  maxSpeed <- max(pltData$speed)
 
+  maxSpeed <- max(pltData$speed)
+  if (!is.finite(maxSpeed) || maxSpeed <= .Machine$double.eps)
+    maxSpeed <- .Machine$double.eps
   sizeX <- max(diff(range(xGrid))) / nArrows
   sizeY <- max(diff(range(yGrid))) / nArrows
   size <- mean(c(sizeX, sizeY)) * sqrt(2)
+
   plt <- ggplot2::ggplot(pltData) +
     ggplot2::geom_segment(
       ggplot2::aes(

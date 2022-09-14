@@ -8,7 +8,7 @@
   "_path_description": "At this location a folder with name <name> is created. All results are written to that folder.",
   "reps": 1,
   "_reps_description": "repetitions of drawing new random function and initial value",
-  "tMax": 100,
+  "tMax": 10,
   "_tMax_description": "maximal time point at which values are produced",
   "tStep": 0.01,
   "_tStep_description": "difference between time points at which values are produced",
