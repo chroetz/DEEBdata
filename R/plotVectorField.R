@@ -70,8 +70,7 @@ plotVectorField <- function(trajs, fun, parms, title, axes) {
       mapping = ggplot2::aes(
         x = .data$x,
         y = .data$y,
-        group = .data$trajId),
-      size = 1) +
+        group = .data$trajId)) +
     ggplot2::xlab(NULL) +
     ggplot2::ylab(NULL)
   if (!axes) {

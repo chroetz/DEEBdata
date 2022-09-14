@@ -4,7 +4,7 @@ getParmsFunctionLotkaVolterra <- function(opts) {
       parms$coef[1] * u[1] - parms$coef[2] * u[1] * u[2],
       parms$coef[3] * u[1] * u[2] - parms$coef[4] * u[2]
     )
-    list(du)
+    return(du)
   }
   return(parmsFunction)
 }

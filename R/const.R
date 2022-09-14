@@ -1,7 +1,7 @@
 getParmsFunctionConst <- function(opts) {
   parmsFunction <- function(t, u, parms) {
     du <- array(opts$value, dim=length(u))
-    list(du)
+    return(du)
   }
   return(parmsFunction)
 }

@@ -9,7 +9,7 @@ getParmsFunctionPolynomial <- function(opts) {
     if (any(abs(u) > opts$boundary)) return(list(rep(0, length(u))))
     features <- apply(rep(u, each = nrow(degVecs))^degVecs, 1, prod)
     du <- parms$coef %*% features
-    list(du)
+    return(du)
   }
 
   return(parmsFunction)

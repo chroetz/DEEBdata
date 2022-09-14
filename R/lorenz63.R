@@ -19,7 +19,7 @@ getParmsFunctionLorenz63 <- function(opts) {
       parms$coef[2] * u[1] - u[2] - u[1] * u[3],
       u[1] * u[2] - parms$coef[3] * u[3]
     )
-    list(du)
+    return(du)
   }
   return(parmsFunction)
 }

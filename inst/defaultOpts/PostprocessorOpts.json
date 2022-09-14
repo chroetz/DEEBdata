@@ -1,0 +1,7 @@
+{
+  "_class": ["PostprocessorOpts", "Opts"],
+  "name": "identity",
+  "_name_possible_values": ["identity", "softBoundary"],
+  "boundaryRange": [1, 2],
+  "_boundaryRange_used_by": ["softBoundary"]
+}

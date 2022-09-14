@@ -1,13 +1,14 @@
 sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 
   successFun <- FALSE
+  nRejections <- 0
   for (i in seq_len(opts$maxRejectionsFun)) {
     parms <- parmsSampler()
     trajList <- list()
     for (k in seq_len(opts$nTrajectories)) {
       successU0 <- FALSE
       for (j in seq_len(opts$maxRejectionsU0)) {
-        u0 <- u0Sampler()
+        u0 <- as.vector(u0Sampler())
         u <- solveOde(
           fun, u0,
           tMax = opts$tMax,
@@ -16,9 +17,10 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
           parms = parms)
         if (checkConditions(opts$conditions, u, fun, parms)) {
           successU0 <- TRUE
-          cat("o\n")
+          cat("o")
           break
         }
+        nRejections <- nRejections + 1
         cat("x")
       }
       if (!successU0) {
@@ -28,11 +30,13 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
     }
     if (length(trajList) == opts$nTrajectories) {
       successFun <- TRUE
+      cat("\n")
       break
     }
   }
   if (!successFun) stop("Could not meet conditions.")
-  message("Met all conditions after ", i, " tries.")
+  message("Created ", length(trajList), " trajectories. ",
+          nRejections, " rejections in the process.")
 
   mat <- do.call(rbind, trajList)
   tb <- matrix2TrajsTibble(mat)

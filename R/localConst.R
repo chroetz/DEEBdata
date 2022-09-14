@@ -23,13 +23,7 @@ getParmsFunctionLocalConst <- function(opts) {
   kernel <- getKernel(opts$kernel)
   parmsFunction <- function(t, u, parms) {
     du <- localConstRegression(u, parms, kernel = kernel, bw = opts$bw)
-    uNorm <- sqrt(sum(u^2))
-    if (uNorm > 2) {
-      return(list(-u))
-    } else if (uNorm > 1) {
-      return(list(-u * (uNorm-1) + du * (2 - uNorm)))
-    }
-    list(du)
+    return(du)
   }
   return(parmsFunction)
 }

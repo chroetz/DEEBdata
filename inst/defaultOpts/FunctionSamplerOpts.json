@@ -4,6 +4,9 @@
   "_name_possible_values": ["const", "localConst", "polynomial", "lotkaVolterra", "lorenz63"],
   "d": 2,
   "_d_description": "dimension of state space",
+  "postprocessors": {
+    "_class": ["PostprocessorOptsList", "OptsList"]
+  },
   "value": 0,
   "_value_used_by": ["const"],
   "polyDeg": 3,
