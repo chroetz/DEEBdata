@@ -32,9 +32,9 @@ getPostprocessorSoftBoundary <- function(opts) {
   postprocessor <- function(du, u, t) {
     uNorm <- sqrt(sum(u^2))
     if (uNorm > rOuter) {
-      du <- -u
+      du <- -u / uNorm
     } else if (uNorm > rInner) {
-      du <- (-u * (uNorm - rInner) + du * (rOuter - uNorm)) / len
+      du <- (-u / uNorm * (uNorm - rInner) + du * (rOuter - uNorm)) / len
     }
     return(du)
   }

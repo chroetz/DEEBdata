@@ -27,7 +27,7 @@
   "_odeSolver_description": "Options for the ODE-solver.",
   "maxRejectionsU0": 1,
   "_maxRejectionsU0_description": "TODO",
-  "maxRejectionsFun": 100,
+  "maxRejectionsFun": 1000,
   "_maxRejectionsFun_description": "TODO",
   "nTrajectories": 1,
   "_nTrajectories_description": "TODO",

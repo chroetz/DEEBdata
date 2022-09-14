@@ -10,7 +10,11 @@ writeOpts <- function(opts, file) {
 
 
 readOpts <- function(file, optsClass = NULL, .fill = TRUE, removeUnderscoreEntries = TRUE) {
-  fileContent <- jsonlite::read_json(file, simplifyVector = TRUE)
+  fileContent <- jsonlite::read_json(
+    file,
+    simplifyVector = TRUE,
+    simplifyMatrix = TRUE,
+    simplifyDataFrame = FALSE)
   opts <- putListEntryClassAsAttribute(fileContent)
   if (removeUnderscoreEntries) {
     opts <- opts[!startsWith(names(opts), "_")]
@@ -18,6 +22,7 @@ readOpts <- function(file, optsClass = NULL, .fill = TRUE, removeUnderscoreEntri
   if (is.null(optsClass)) {
     optsClass <- oldClass(opts)[1]
   }
+  stopifnot(!is.null(optsClass))
   opts <- asOpts(opts, optsClass, .fill = .fill)
   validateOpts(opts)
 }
@@ -35,8 +40,9 @@ putListEntryClassAsAttribute <- function(lst) {
 }
 
 putClassAttributAsListEntry <- function(obj) {
-  obj[["_class"]] <- oldClass(obj)
-  obj <- unclass(obj)
+  classLst <- list()
+  classLst[["_class"]] <- oldClass(obj)
+  obj <- c(classLst, unclass(obj))
   for (i in seq_along(obj)) {
     if (is.list(obj[[i]]))
       obj[[i]] <- putClassAttributAsListEntry(obj[[i]])

@@ -25,11 +25,14 @@
   },
   "_coefSampler_used_by": ["polynomial", "lotkaVolterra", "lorenz63"],
   "locationSampler": {
-    "_class": ["ArraySamplerOpts", "Opts"]
+    "_class": ["ArraySamplerOpts", "Opts"],
+    "name": "uniformRadiusBall",
+    "range": [0, 2]
   },
   "_locationSampler_used_by": ["localConst"],
   "valueSampler": {
-    "_class": ["ArraySamplerOpts", "Opts"]
+    "_class": ["ArraySamplerOpts", "Opts"],
+    "name": "normal"
   },
   "_valueSampler_used_by": ["localConst"]
 }

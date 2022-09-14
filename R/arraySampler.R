@@ -5,6 +5,13 @@ sampleUniformOnBall <- function(n, d, rMin, rMax) {
   direction * radius * rMax
 }
 
+sampleUniformRadiusBall <- function(n, d, rMin, rMax) {
+  direction <- matrix(stats::rnorm(d*n), nrow = n)
+  direction <- direction / sqrt(rowSums(direction^2))
+  radius <- stats::runif(n, min = rMin/rMax, max = 1)
+  direction * radius * rMax
+}
+
 buildArraySampler <- function(opts, arrayDim) {
   p <- prod(arrayDim)
   if (opts$name == "uniform") {
@@ -26,6 +33,14 @@ buildArraySampler <- function(opts, arrayDim) {
   } else if (opts$name == "uniformOnBall") {
     sampleBase <- \()
       sampleUniformOnBall(
+        prod(arrayDim[-1]),
+        arrayDim[1],
+        opts$range[1],
+        opts$range[2]
+      )
+  } else if (opts$name == "uniformRadiusBall") {
+    sampleBase <- \()
+      sampleUniformRadiusBall(
         prod(arrayDim[-1]),
         arrayDim[1],
         opts$range[1],

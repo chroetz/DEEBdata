@@ -5,6 +5,16 @@ makeOpts <- function(optsClass, ..., .lst = NULL, .fill = TRUE) {
   validateOpts(opts)
 }
 
+# keep attributes
+`[.Opts` <- function(x, i, ...) {
+  a <- attributes(x)
+  attributes(x) <- NULL
+  res <- x[i, ...]
+  a$names <- a$names[i]
+  attributes(res) <- a
+  return(res)
+}
+
 
 validateOpts <- function(opts) {
   stopifnot(inherits(opts, "Opts"))
