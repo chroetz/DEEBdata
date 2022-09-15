@@ -1,7 +1,7 @@
 writeDeData <- function(trajs, file) {
   colnames(trajs$state) <- paste0("state", seq_len(ncol(trajs$state)))
   trajsFormated <- cbind(
-    trajId = format(trajs$trajId),
+    trajId = if ("trajId" %in% names(trajs)) format(trajs$trajId) else "0",
     time = format(trajs$time),
     as.data.frame(format(trajs$state, digits = 1, scientific=FALSE, nsmall=8)))
   utils::write.csv(
