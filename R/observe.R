@@ -7,7 +7,7 @@ observeGrid <- function(trajs, n, tStep, noiseSampler) {
     truth <- sapply(
       seq_len(d),
       \(j) stats::approx(trajs$time[sel], trajs$state[sel,j], tSample)$y)
-    tibble::tibble(
+    Trajs(
       trajId = id,
       time = tSample,
       state = truth + noiseSampler())
@@ -35,18 +35,18 @@ generateObservations <- function(opts) {
     message("No truth files found.")
     return(invisible(NULL))
   }
-  d <- readDeData(file.path(opts$path, files[1]))$state |> ncol()
+  d <- readTrajs(file.path(opts$path, files[1]))$state |> ncol()
   noiseSampler <- buildNoiseSampler(opts$noiseSampler, n = opts$n, d = d)
 
   for (fl in files) {
     message("Process Truth in ", fl)
     fullPath <- file.path(opts$path, fl)
-    truth <- readDeData(fullPath)
+    truth <- readTrajs(fullPath)
 
     for (i in seq_len(opts$reps)) {
       message("Generate observations. Iteration ", i)
       obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler)
-      writeDeData(
+      writeTrajs(
         obs,
         file.path(opts$path, paste0(substr(fl, 1, nchar(fl)-4), sprintf("obs%04d.csv", i))))
     }

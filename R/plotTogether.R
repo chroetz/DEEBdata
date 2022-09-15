@@ -46,11 +46,11 @@ plotTogether <- function(opts) {
 
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)
-    trajs <- readDeData(fullPathTraj)
+    trajs <- readTrajs(fullPathTraj)
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
 
-    obs <- readDeData(paste0(
+    obs <- readTrajs(paste0(
       substr(fullPathTraj, 1, nchar(fullPathTraj)-4),
       sprintf("obs%04d.csv", opts$obsNr)))
 
@@ -64,7 +64,7 @@ plotTogether <- function(opts) {
     parms <- readOpts(fullPathParms, "ParmsOpts", .fill=FALSE)
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)
-    traj <- readDeData(fullPathTraj)
+    traj <- readTrajs(fullPathTraj)
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
 

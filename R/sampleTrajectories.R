@@ -26,6 +26,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
       if (!successU0) {
         break
       }
+      colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
       trajList[[k]] <- cbind(trajId=k, u)
     }
     if (length(trajList) == opts$nTrajectories) {
@@ -39,7 +40,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
           nRejections, " rejections in the process.")
 
   mat <- do.call(rbind, trajList)
-  tb <- matrix2TrajsTibble(mat)
+  tb <- asTrajs(mat)
   return(list(trajs=tb, parms = parms))
 }
 
@@ -78,7 +79,7 @@ sampleTrajectories <- function(opts) {
   for (i in seq_len(opts$reps)) {
     message("Iteration ", i, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
-    writeDeData(res$trajs, file.path(fullPath, sprintf("truth%04d.csv",i)))
+    writeTrajs(res$trajs, file.path(fullPath, sprintf("truth%04d.csv",i)))
     writeOpts(res$parms, file.path(fullPath, sprintf("truth%04d_meta",i)))
   }
 }
