@@ -1,4 +1,4 @@
-plotTrajAndObs <- function(trajs, obs, title, opts) {
+plotTrajAndObs <- function(trajs, obs, title="", opts=makeOpts("PlotOpts"), esti=NULL) {
   d <- ncol(trajs$state)
   if (d == 2) {
     projection2D <- getIdentityProjection()
@@ -30,6 +30,14 @@ plotTrajAndObs <- function(trajs, obs, title, opts) {
     traj <- truth2D[trajs$trajId==id, ]
     graphics::lines(traj)
     graphics::points(traj[1,,drop=FALSE], col=2, pch=3, lwd=2)
+  }
+  if (!is.null(esti)) {
+    esti2D <- projection2D$project(esti$state)
+    for (id in unique(esti$trajId)) {
+      traj <- esti2D[esti$trajId==id, ]
+      graphics::lines(traj, col=4)
+      graphics::points(traj[1,,drop=FALSE], col=4, pch=3, lwd=2)
+    }
   }
   graphics::text(
     x = mean(xlim),

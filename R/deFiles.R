@@ -27,6 +27,6 @@ dataFrame2TrajsTibble <- function(df) {
 matrix2TrajsTibble <- function(mat) {
   tibble::tibble(
     time = mat[,"time"],
-    trajId = mat[,"trajId"],
+    trajId = if ("trajId" %in% colnames(mat)) mat[,"trajId"] else NULL,
     state = mat[, setdiff(colnames(mat), c("time", "trajId"))])
 }
