@@ -38,7 +38,7 @@ plotTogether <- function(opts) {
 
   truthOpts <- readOpts(
     file.path(opts$path, "_opts_truth.json"),
-    optsClass = "TruthOpts",
+    optsClass = "Truth",
     .fill=FALSE)
   fun <- getParmsFunction(truthOpts$deFunSampler)
 
@@ -61,7 +61,10 @@ plotTogether <- function(opts) {
 
     flParms <- truthParmsFiles[i]
     fullPathParms <- file.path(opts$path, flParms)
-    parms <- readOpts(fullPathParms, "Parms", .fill=FALSE)
+    parms <- readOpts(
+      fullPathParms,
+      c(truthOpts$deFunSampler$name, "Parms"),
+      .fill = FALSE)
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)
     traj <- readTrajs(fullPathTraj)
