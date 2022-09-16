@@ -1,4 +1,4 @@
 {
   "_class": ["Postprocessor", "Opts"],
-  "_defaultSubClass": "identity"
+  "boundaryRange": [1, 2]
 }

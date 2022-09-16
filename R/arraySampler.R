@@ -14,23 +14,24 @@ sampleUniformRadiusBall <- function(n, d, rMin, rMax) {
 
 buildArraySampler <- function(opts, arrayDim) {
   p <- prod(arrayDim)
-  if (opts$name == "uniform") {
+  name <- class(opts)[1]
+  if (name == "uniform") {
     sampleBase <- \()
       stats::runif(
         p,
         min = opts$range[1],
         max = opts$range[2]
       )
-  } else if (opts$name == "normal") {
+  } else if (name == "normal") {
     sampleBase <- \()
       stats::rnorm(
         p,
         mean = opts$mean,
         sd = opts$sd
       )
-  } else if (opts$name == "const") {
+  } else if (name == "const") {
     sampleBase <- \() opts$value
-  } else if (opts$name == "uniformOnBall") {
+  } else if (name == "uniformOnBall") {
     sampleBase <- \()
       sampleUniformOnBall(
         prod(arrayDim[-1]),
@@ -47,7 +48,7 @@ buildArraySampler <- function(opts, arrayDim) {
         opts$range[2]
       )
   } else {
-    stop("Unrecognized name ", opts$name)
+    stop("Unrecognized name ", name)
   }
   sampleArray <- \() array(sampleBase(), arrayDim)
   if (length(opts$sparsity) == 1 && opts$sparsity < p) {

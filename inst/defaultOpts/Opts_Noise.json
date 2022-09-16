@@ -10,6 +10,6 @@
   "reps": 1,
   "_reps_description": "repetitions of sampling n observations",
   "noiseSampler": {
-    "_class": ["ArraySampler", "Opts"]
+    "_class": ["Array", "Sampler", "Opts"]
   }
 }

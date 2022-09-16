@@ -1,0 +1,4 @@
+{
+  "_class": ["bounded", "Condition", "Opts"],
+  "maxNorm": 1
+}

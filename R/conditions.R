@@ -16,13 +16,14 @@ checkConditionBounded <- function(traj, maxNorm) {
 }
 
 checkCondition <- function(opts, traj, fun, parms) {
+  name <- class(opts)[1]
   fulfilled <- switch(
-    opts$name,
+    name,
     stopped = checkConditionStopped(traj, fun, parms, opts$threshold),
     finite = checkConditionFinite(traj),
     bounded = checkConditionBounded(traj, opts$maxNorm),
     true = TRUE,
-    stop("Unrecognized name ", opts$name))
+    stop("Unrecognized name ", name))
   return(fulfilled)
 }
 

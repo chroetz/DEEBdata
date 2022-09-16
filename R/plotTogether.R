@@ -1,15 +1,16 @@
 openPlotDevice <- function(opts, mfrow) {
-  if (opts$name == "pdf") {
+  name <- class(opts)[1]
+  if (name == "pdf") {
     message("Opening PDF device file ", opts$outFile)
     grDevices::pdf(
       opts$outFile,
       width = mfrow[2]*opts$scale,
       height = mfrow[1]*opts$scale)
     return(grDevices::dev.off)
-  } else if (opts$name == "default") {
+  } else if (name == "default") {
     return(function() NULL)
   } else {
-    stop("Unrecognized name ", opts$name)
+    stop("Unrecognized name ", name)
   }
 }
 
@@ -63,7 +64,7 @@ plotTogether <- function(opts) {
     fullPathParms <- file.path(opts$path, flParms)
     parms <- readOpts(
       fullPathParms,
-      c(truthOpts$deFunSampler$name, "Parms"),
+      c(class(truthOpts$deFunSampler)[1], "Parms"),
       .fill = FALSE)
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)

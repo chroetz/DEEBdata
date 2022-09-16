@@ -1,0 +1,6 @@
+{
+  "_class": ["Function", "Sampler", "Opts"],
+  "coefSampler": {
+    "_class": ["Array", "Sampler", "Opts"]
+  }
+}

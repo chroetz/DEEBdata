@@ -13,12 +13,12 @@
   "tStep": 0.01,
   "_tStep_description": "difference between time points at which values are produced",
   "deFunSampler": {
-    "_class": ["FunctionSampler", "Opts"],
+    "_class": ["Function", "Sampler", "Opts"],
     "d": 2
   },
   "_deFunSampler_description": "Options for sampling the random function that maps the state to the derivative.",
   "u0Sampler": {
-    "_class": ["ArraySampler", "Opts"]
+    "_class": ["Array", "Sampler", "Opts"]
   },
   "_u0Sampler_description": "Options for sampling the initial value.",
   "odeSolver": {

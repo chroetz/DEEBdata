@@ -1,4 +1,3 @@
 {
-    "_class": ["Postprocessor", "List", "Opts"],
-    "list": {}
+    "_class": ["Postprocessor", "List", "Opts"]
 }

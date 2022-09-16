@@ -1,9 +1,4 @@
 {
   "_class": ["Device", "Opts"],
-  "name": "pdf",
-  "_name_possible_values": ["default", "pdf"],
-  "outFile": "~/DEEDataDB/Default/default.pdf",
-  "_outFile_used_by": ["pdf"],
-  "scale": 3,
-  "_scale_used_by": ["pdf"]
+  "_defaultSubClass": "default"
 }
