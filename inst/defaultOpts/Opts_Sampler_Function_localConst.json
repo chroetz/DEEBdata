@@ -5,12 +5,10 @@
   "nSupp": 50,
   "_nSupp_description": "Number of support points",
   "locationSampler": {
-    "_class": ["Array", "Sampler", "Opts"],
-    "name": "uniformRadiusBall",
+    "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
     "range": [0, 2]
   },
   "valueSampler": {
-    "_class": ["Array", "Sampler", "Opts"],
-    "name": "normal"
+    "_class": ["normal", "Array", "Sampler", "Opts"]
   }
 }
