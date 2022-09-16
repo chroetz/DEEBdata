@@ -1,0 +1,12 @@
+{
+    "_class": ["Run", "Opts"],
+    "truthOpts": {
+        "_class": ["Truth", "Opts"]
+    },
+    "noiseOpts": {
+        "_class": ["Noise", "Opts"]
+    },
+    "plotOpts": {
+        "_class": ["Plot", "Opts"]
+    }
+}

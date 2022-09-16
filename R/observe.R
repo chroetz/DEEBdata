@@ -22,7 +22,7 @@ buildNoiseSampler <- function(opts, d) {
 
 generateObservations <- function(opts) {
 
-  opts <- asOpts(opts, "NoiseOpts")
+  opts <- asOpts(opts, "Noise")
 
   writeOpts(opts, file.path(opts$path, "_opts_noise"))
 

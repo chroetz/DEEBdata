@@ -1,11 +1,11 @@
 {
-  "_class": ["FunctionSamplerOpts", "Opts"],
+  "_class": ["FunctionSampler", "Opts"],
   "name": "const",
   "_name_possible_values": ["const", "localConst", "polynomial", "lotkaVolterra", "lorenz63"],
   "d": 2,
   "_d_description": "dimension of state space",
   "postprocessors": {
-    "_class": ["PostprocessorOptsList", "OptsList"]
+    "_class": ["Postprocessor", "List", "Opts"]
   },
   "value": 0,
   "_value_used_by": ["const"],
@@ -21,17 +21,17 @@
   "_nSupp_used_by": ["localConst"],
   "_nSupp_description": "Number of support points",
   "coefSampler": {
-    "_class": ["ArraySamplerOpts", "Opts"]
+    "_class": ["ArraySampler", "Opts"]
   },
   "_coefSampler_used_by": ["polynomial", "lotkaVolterra", "lorenz63"],
   "locationSampler": {
-    "_class": ["ArraySamplerOpts", "Opts"],
+    "_class": ["ArraySampler", "Opts"],
     "name": "uniformRadiusBall",
     "range": [0, 2]
   },
   "_locationSampler_used_by": ["localConst"],
   "valueSampler": {
-    "_class": ["ArraySamplerOpts", "Opts"],
+    "_class": ["ArraySampler", "Opts"],
     "name": "normal"
   },
   "_valueSampler_used_by": ["localConst"]

@@ -1,5 +1,5 @@
-composeWithPostprocessors <- function(fun, optsList) {
-  postprocessors <- lapply(optsList, buildPostprocessor)
+composeWithPostprocessors <- function(fun, opts) {
+  postprocessors <- lapply(opts$list, buildPostprocessor)
   funWithPostprocessing <- function(t, u, parms) {
     du <- fun(t, u, parms)
     for (pp in postprocessors) {

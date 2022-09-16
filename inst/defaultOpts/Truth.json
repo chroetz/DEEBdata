@@ -1,5 +1,5 @@
 {
-  "_class": ["TruthOpts", "Opts"],
+  "_class": ["Truth", "Opts"],
   "seed": 1,
   "_seed_description": "seed for random number generator",
   "name": "Default",
@@ -13,16 +13,16 @@
   "tStep": 0.01,
   "_tStep_description": "difference between time points at which values are produced",
   "deFunSampler": {
-    "_class": ["FunctionSamplerOpts", "Opts"],
+    "_class": ["FunctionSampler", "Opts"],
     "d": 2
   },
   "_deFunSampler_description": "Options for sampling the random function that maps the state to the derivative.",
   "u0Sampler": {
-    "_class": ["ArraySamplerOpts", "Opts"]
+    "_class": ["ArraySampler", "Opts"]
   },
   "_u0Sampler_description": "Options for sampling the initial value.",
   "odeSolver": {
-    "_class": ["OdeSolverOpts", "Opts"]
+    "_class": ["OdeSolver", "Opts"]
   },
   "_odeSolver_description": "Options for the ODE-solver.",
   "maxRejectionsU0": 1,
@@ -32,7 +32,7 @@
   "nTrajectories": 1,
   "_nTrajectories_description": "TODO",
   "conditions": {
-    "_class": ["ConditionsOptsList", "OptsList"]
+    "_class": ["Condition", "List", "Opts"]
   },
   "_conditions_description": "A (possibly emmty) list of Options for conditions that a sampled ODE must fulfill. Enfored by rejection sampling."
 }

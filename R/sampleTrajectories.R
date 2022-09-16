@@ -44,7 +44,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 
 sampleTrajectories <- function(opts) {
 
-  opts <- asOpts(opts, "TruthOpts")
+  opts <- asOpts(opts, "Truth")
 
   # TODO: THis should not be done here. Use defaultOpts to check.
   stopifnot(is.list(opts))

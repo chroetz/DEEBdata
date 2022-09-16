@@ -1,5 +1,5 @@
 {
-  "_class": ["NoiseOpts", "Opts"],
+  "_class": ["Noise", "Opts"],
   "seed": 1,
   "_seed_description": "seed for random number generator",
   "path": "~/DEEDataDB/Default",
@@ -10,6 +10,6 @@
   "reps": 1,
   "_reps_description": "repetitions of sampling n observations",
   "noiseSampler": {
-    "_class": ["ArraySamplerOpts", "Opts"]
+    "_class": ["ArraySampler", "Opts"]
   }
 }

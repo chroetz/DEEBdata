@@ -1,5 +1,5 @@
 {
-  "_class": ["ArraySamplerOpts", "Opts"],
+  "_class": ["ArraySampler", "Opts"],
   "name": "const",
   "_name_possible_values": ["const", "uniform", "normal", "uniformOnBall", "uniformRadiusBall"],
   "value": 0,

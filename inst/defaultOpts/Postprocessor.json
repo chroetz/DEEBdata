@@ -1,5 +1,5 @@
 {
-  "_class": ["PostprocessorOpts", "Opts"],
+  "_class": ["Postprocessor", "Opts"],
   "name": "identity",
   "_name_possible_values": ["identity", "softBoundary"],
   "boundaryRange": [1, 2],

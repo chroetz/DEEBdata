@@ -1,5 +1,5 @@
 {
-  "_class": ["DeviceOpts", "Opts"],
+  "_class": ["Device", "Opts"],
   "name": "pdf",
   "_name_possible_values": ["default", "pdf"],
   "outFile": "~/DEEDataDB/Default/default.pdf",

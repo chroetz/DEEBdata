@@ -1,4 +1,4 @@
-plotTrajAndObs <- function(trajs, obs, title="", opts=makeOpts("PlotOpts"), esti=NULL) {
+plotTrajAndObs <- function(trajs, obs, title="", opts=makeOpts("Plot"), esti=NULL) {
   d <- getDim(trajs)
   if (d == 2) {
     projection2D <- getIdentityProjection()

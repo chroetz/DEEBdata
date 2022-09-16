@@ -1,10 +1,10 @@
 {
-  "_class": ["PlotOpts", "Opts"],
+  "_class": ["Plot", "Opts"],
   "obsNr": 1,
   "_obsNr_description": "ID of observation to use",
   "path": "~/DEEDataDB/Default",
   "device": {
-    "_class": ["DeviceOpts", "Opts"]
+    "_class": ["Device", "Opts"]
   },
   "xlim": {},
   "ylim": {},

@@ -1,5 +1,5 @@
 {
-  "_class": ["OdeSolverOpts", "Opts"],
+  "_class": ["OdeSolver", "Opts"],
   "_description": "see R function deSolve::ode()",
   "method": "rk4",
   "rtol": 0.000001,

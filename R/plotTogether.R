@@ -15,7 +15,7 @@ openPlotDevice <- function(opts, mfrow) {
 
 
 plotTogether <- function(opts) {
-  opts <- asOpts(opts, "PlotOpts")
+  opts <- asOpts(opts, "Plot")
   writeOpts(opts, file.path(opts$path, "_opts_plot"))
 
   truthParmsFiles <-
@@ -61,7 +61,7 @@ plotTogether <- function(opts) {
 
     flParms <- truthParmsFiles[i]
     fullPathParms <- file.path(opts$path, flParms)
-    parms <- readOpts(fullPathParms, "ParmsOpts", .fill=FALSE)
+    parms <- readOpts(fullPathParms, "Parms", .fill=FALSE)
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$path, flTraj)
     traj <- readTrajs(fullPathTraj)

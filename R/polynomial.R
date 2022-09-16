@@ -23,3 +23,8 @@ buildParmsSamplerPolynomial <- function(opts) {
   parmsSampler <- function() list(coef = coefSampler())
   return(parmsSampler)
 }
+
+
+numberOfTermsInPoly <- \(polyDeg, d) {
+  sum(sapply(0:polyDeg, \(deg) choose(d+deg-1, deg)))
+}

@@ -27,7 +27,7 @@ checkCondition <- function(opts, traj, fun, parms) {
 }
 
 checkConditions <- function(opts, traj, fun, parms) {
-  if (length(opts) == 0) return(TRUE)
-  conditionsFulfilled <- sapply(opts, checkCondition, traj=traj, fun=fun, parms=parms)
+  if (length(opts$list) == 0) return(TRUE)
+  conditionsFulfilled <- sapply(opts$list, checkCondition, traj=traj, fun=fun, parms=parms)
   return(isTRUE(all(conditionsFulfilled)))
 }

@@ -10,12 +10,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Imports: 
+    ConfigOpts,
     DEETrajs,
     deSolve,
     dplyr,
     ggplot2,
     gridExtra,
-    jsonlite,
     rlang,
     stats,
     stringr,

@@ -1,5 +1,5 @@
 {
-  "_class": ["ConditionOpts", "Opts"],
+  "_class": ["Condition", "Opts"],
   "name": "true",
   "_name_possible_values": ["true", "stopped", "finite", "bounded"],
   "threshold": 1,

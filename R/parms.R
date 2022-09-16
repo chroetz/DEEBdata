@@ -23,10 +23,10 @@ buildParmsSampler <- function(opts) {
     stop("Unrecognized name ", opts$name))
   parmsSamplerWithClass <- function() {
     res <- parmsSampler()
-    oldClass(res) <- c(paste0(opts$name, "ParmsOpts"), "ParmsOpts", "Opts")
-    return(res)
+    opts <- asOpts(res, c(opts$name, "Parms"), .fill = FALSE)
+    return(opts)
   }
-  return(parmsSampler)
+  return(parmsSamplerWithClass)
 }
 
 
