@@ -1,22 +1,23 @@
 observeGrid <- function(trajs, n, tStep, noiseSampler) {
-  d <- ncol(trajs$state)
-  trajIds <- unique(trajs$trajId)
   tSample <- seq(0, by = tStep, length.out = n)
-  observations <- lapply(trajIds, \(id) {
-    sel <- trajs$trajId == id
-    truth <- sapply(
-      seq_len(d),
-      \(j) stats::approx(trajs$time[sel], trajs$state[sel,j], tSample)$y)
-    Trajs(
-      trajId = id,
-      time = tSample,
-      state = truth + noiseSampler())
-  })
-  dplyr::bind_rows(observations)
+  obs <- interpolateTrajs(trajs, tSample)
+  trajIds <- unique(trajs$trajId)
+  for (trajId in trajIds) {
+    nTraj <- sum(obs$trajId == trajId)
+    obs$state[obs$trajId == trajId, ] <-
+      obs$state[obs$trajId == trajId, ] +
+      noiseSampler(nTraj)
+  }
+  return(obs)
 }
 
-buildNoiseSampler <- function(opts, n, d) {
-  buildArraySampler(opts, arrayDim = c(n, d))
+buildNoiseSampler <- function(opts, d) {
+  sampler1 <- buildArraySampler(opts, arrayDim = c(1, d))
+  noiseSampler <- function(n) {
+    lst <- replicate(n, sampler1(), simplify=FALSE)
+    do.call(rbind, lst)
+  }
+  return(noiseSampler)
 }
 
 generateObservations <- function(opts) {
@@ -35,8 +36,11 @@ generateObservations <- function(opts) {
     message("No truth files found.")
     return(invisible(NULL))
   }
-  d <- readTrajs(file.path(opts$path, files[1]))$state |> ncol()
-  noiseSampler <- buildNoiseSampler(opts$noiseSampler, n = opts$n, d = d)
+  d <-
+    file.path(opts$path, files[1]) |>
+    readTrajs() |>
+    getDim()
+  noiseSampler <- buildNoiseSampler(opts$noiseSampler, d = d)
 
   for (fl in files) {
     message("Process Truth in ", fl)

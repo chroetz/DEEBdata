@@ -1,32 +1,33 @@
 
-checkConditionStopped <- function(u, f, parms, thershold) {
-  duLast <- unlist(f(u[nrow(u),1], u[nrow(u),-1], parms))
+checkConditionStopped <- function(traj, fun, parms, thershold) {
+  idxLast <- nrow(traj)
+  duLast <- unlist(fun(traj$time[idxLast], traj$state[idxLast,], parms))
   duLastNorm <- sqrt(sum(duLast^2))
   return(duLastNorm >= thershold)
 }
 
-checkConditionFinite <- function(u) {
-  return(all(is.finite(u)))
+checkConditionFinite <- function(traj) {
+  return(all(is.finite(traj$state)))
 }
 
-checkConditionBounded <- function(u, maxNorm) {
-  uNormsSqr <- rowSums(u[,-1]^2)
+checkConditionBounded <- function(traj, maxNorm) {
+  uNormsSqr <- rowSums(traj$state^2)
   return(all(uNormsSqr <= maxNorm^2))
 }
 
-checkCondition <- function(opts, u, f, parms) {
+checkCondition <- function(opts, traj, fun, parms) {
   fulfilled <- switch(
     opts$name,
-    stopped = checkConditionStopped(u, f, parms, opts$threshold),
-    finite = checkConditionFinite(u),
-    bounded = checkConditionBounded(u, opts$maxNorm),
+    stopped = checkConditionStopped(traj, fun, parms, opts$threshold),
+    finite = checkConditionFinite(traj),
+    bounded = checkConditionBounded(traj, opts$maxNorm),
     true = TRUE,
     stop("Unrecognized name ", opts$name))
   return(fulfilled)
 }
 
-checkConditions <- function(opts, u, f, parms) {
+checkConditions <- function(opts, traj, fun, parms) {
   if (length(opts) == 0) return(TRUE)
-  conditionsFulfilled <- sapply(opts, checkCondition, u=u, f=f, parms=parms)
+  conditionsFulfilled <- sapply(opts, checkCondition, traj=traj, fun=fun, parms=parms)
   return(isTRUE(all(conditionsFulfilled)))
 }

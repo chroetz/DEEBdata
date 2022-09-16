@@ -9,13 +9,13 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
       successU0 <- FALSE
       for (j in seq_len(opts$maxRejectionsU0)) {
         u0 <- as.vector(u0Sampler())
-        u <- solveOde(
+        traj <- solveOde(
           fun, u0,
           tMax = opts$tMax,
           tStep = opts$tStep,
           opts = opts$odeSolver,
           parms = parms)
-        if (checkConditions(opts$conditions, u, fun, parms)) {
+        if (checkConditions(opts$conditions, traj, fun, parms)) {
           successU0 <- TRUE
           cat("o")
           break
@@ -26,8 +26,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
       if (!successU0) {
         break
       }
-      colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
-      trajList[[k]] <- cbind(trajId=k, u)
+      trajList[[k]] <- setTrajId(traj, k)
     }
     if (length(trajList) == opts$nTrajectories) {
       successFun <- TRUE
@@ -39,9 +38,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
   message("Created ", length(trajList), " trajectories. ",
           nRejections, " rejections in the process.")
 
-  mat <- do.call(rbind, trajList)
-  tb <- asTrajs(mat)
-  return(list(trajs=tb, parms = parms))
+  return(list(trajs = bindTrajs(trajList), parms = parms))
 }
 
 

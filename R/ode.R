@@ -5,5 +5,6 @@ solveOde <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
       deSolve::ode,
       c(list(y = u0, times = tm, func = fun, parms = parms), opts))
   )))
-  return(u)
+  colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
+  return(asTrajs(u))
 }
