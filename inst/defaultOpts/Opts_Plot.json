@@ -6,7 +6,11 @@
   "path": ".",
   "_path_description": "",
   "device": {
-    "_class": ["Device", "Opts"]
+    "_class": ["Device", "Opts"],
+    "_defaultInstance": {
+      "_class": ["pdf", "Device", "Opts"],
+      "outFile": "PlotsTogether.pdf"
+    }
   },
   "_device_description": "",
   "xlim": [],
