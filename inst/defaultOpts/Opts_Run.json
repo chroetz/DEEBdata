@@ -1,10 +1,12 @@
 {
     "_class": ["Run", "Opts"],
+    "name": "Default",
+    "path": ".",
     "truthOpts": {
         "_class": ["Truth", "Opts"]
     },
-    "noiseOpts": {
-        "_class": ["Noise", "Opts"]
+    "observationOpts": {
+        "_class": ["Observation", "Opts"]
     },
     "plotOpts": {
         "_class": ["Plot", "Opts"]

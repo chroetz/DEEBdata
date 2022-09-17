@@ -1,8 +1,8 @@
 {
-  "_class": ["Noise", "Opts"],
+  "_class": ["Observation", "Opts"],
   "seed": 1,
   "_seed_description": "seed for random number generator",
-  "path": "~/DEEDataDB/Default",
+  "path": ".",
   "n": 100,
   "_n_description": "number of observations",
   "tStep": 0.1,

@@ -15,14 +15,15 @@ openPlotDevice <- function(opts, mfrow) {
 }
 
 
-plotTogether <- function(opts) {
+plotTogether <- function(opts, writeOpts = TRUE) {
+
   opts <- asOpts(opts, "Plot")
-  writeOpts(opts, file.path(opts$path, "_opts_plot"))
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Plot"))
 
   truthParmsFiles <-
     opts$path |>
     dir() |>
-    grep("^truth\\d+_meta\\.json$", x = _, value=TRUE)
+    grep("^truth\\d+_parms\\.json$", x = _, value=TRUE)
   truthTrajFiles <-
     opts$path |>
     dir() |>
@@ -37,10 +38,17 @@ plotTogether <- function(opts) {
   graphics::par(mfrow = mfrow)
   graphics::par(mar = if (opts$axes) c(2,2,2,2) else c(0,0,0,0))
 
-  truthOpts <- readOpts(
-    file.path(opts$path, "_opts_truth.json"),
-    optsClass = "Truth",
-    .fill=FALSE)
+  if (file.exists(file.path(opts$path, "Opts_Truth.json"))) {
+    truthOpts <- readOpts(
+      file.path(opts$path, "Opts_Truth.json"),
+      optsClass = "Truth",
+      .fill=FALSE)
+  } else {
+    truthOpts <- readOpts(
+      file.path(opts$path, "Opts_Run.json"),
+      optsClass = "Run",
+      .fill=FALSE)$truthOpts
+  }
   fun <- getParmsFunction(truthOpts$deFunSampler)
 
   for (i in seq_len(len)) {

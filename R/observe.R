@@ -20,11 +20,10 @@ buildNoiseSampler <- function(opts, d) {
   return(noiseSampler)
 }
 
-generateObservations <- function(opts) {
+generateObservations <- function(opts, writeOpts = TRUE) {
 
-  opts <- asOpts(opts, "Noise")
-
-  writeOpts(opts, file.path(opts$path, "_opts_noise"))
+  opts <- asOpts(opts, "Observation")
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Observation"))
 
   set.seed(opts$seed)
 

@@ -2,7 +2,7 @@
   "_class": ["Plot", "Opts"],
   "obsNr": 1,
   "_obsNr_description": "ID of observation to use",
-  "path": "~/DEEDataDB/Default",
+  "path": ".",
   "device": {
     "_class": ["Device", "Opts"]
   },

@@ -42,13 +42,10 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 }
 
 
-sampleTrajectories <- function(opts) {
+sampleTrajectories <- function(opts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Truth")
-
-  fullPath <- file.path(opts$path, opts$name)
-  if (!dir.exists(fullPath)) dir.create(fullPath)
-  writeOpts(opts, file.path(fullPath, "_opts_truth"))
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Truth"))
 
   parmsSampler <- buildParmsSampler(opts$deFunSampler)
   fun <- getParmsFunction(opts$deFunSampler)
@@ -59,7 +56,7 @@ sampleTrajectories <- function(opts) {
   for (i in seq_len(opts$reps)) {
     message("Iteration ", i, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
-    writeTrajs(res$trajs, file.path(fullPath, sprintf("truth%04d.csv",i)))
-    writeOpts(res$parms, file.path(fullPath, sprintf("truth%04d_meta",i)))
+    writeTrajs(res$trajs, file.path(opts$path, sprintf("truth%04d.csv",i)))
+    writeOpts(res$parms, file.path(opts$path, sprintf("truth%04d_parms",i)))
   }
 }
