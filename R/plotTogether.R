@@ -1,5 +1,5 @@
 openPlotDevice <- function(opts, mfrow) {
-  name <- class(opts)[1]
+  name <- getThisClass(opts)
   if (name == "pdf") {
     message("Opening PDF device file ", opts$outFile)
     grDevices::pdf(

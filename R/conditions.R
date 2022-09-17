@@ -16,7 +16,7 @@ checkConditionBounded <- function(traj, maxNorm) {
 }
 
 checkCondition <- function(opts, traj, fun, parms) {
-  name <- class(opts)[1]
+  name <- getThisClass(opts)
   fulfilled <- switch(
     name,
     stopped = checkConditionStopped(traj, fun, parms, opts$threshold),

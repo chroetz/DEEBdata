@@ -1,6 +1,6 @@
 getParmsFunction <- function(opts) {
-  name <- class(opts)[1]
-  f <- switch(
+  name <- getThisClass(opts)
+  fun <- switch(
     name,
     const = getParmsFunctionConst(opts),
     localConst = getParmsFunctionLocalConst(opts),
@@ -8,13 +8,13 @@ getParmsFunction <- function(opts) {
     lotkaVolterra = getParmsFunctionLotkaVolterra(opts),
     lorenz63 = getParmsFunctionLorenz63(opts),
     stop("Unrecognized name ", name))
-  parmsFunction <- composeWithPostprocessors(f, opts$postprocessors)
+  parmsFunction <- composeWithPostprocessors(fun, opts$postprocessors)
   return(parmsFunction)
 }
 
 
 buildParmsSampler <- function(opts) {
-  name <- class(opts)[1]
+  name <- getThisClass(opts)
   parmsSampler <- switch(
     name,
     const = buildParmsSamplerConst(opts),

@@ -5,10 +5,10 @@ sampleLorenz63 <- function(coeffSampler) {
     c(-coef[1], coef[1], 0, 0, 0, 0),
     c(coef[2], -1, 0, 0, -1, 0),
     c(0, 0, -coef[3], 1, 0, 0))
-  f <- function(t, u, parms) {
+  fun <- function(t, u, parms) {
     list(fOpts$A %*% c(u, u[1]*u[2], u[1]*u[3], u[2]*u[3]))
   }
-  return(f)
+  return(fun)
 }
 
 

@@ -1,3 +1,4 @@
+#' @export
 run <- function(x) {
 
   opts <- asOpts(x, "Run")

@@ -17,13 +17,13 @@ formatForSolver <- function(du) {
 }
 
 buildPostprocessor <- function(opts) {
-  name <- class(opts)[1]
-  f <- switch(
+  name <- getThisClass(opts)
+  postproc <- switch(
     name,
     identity = function(du, u, t) du,
     softBoundary = getPostprocessorSoftBoundary(opts),
     stop("Unrecognized name ", name))
-  return(f)
+  return(postproc)
 }
 
 getPostprocessorSoftBoundary <- function(opts) {
