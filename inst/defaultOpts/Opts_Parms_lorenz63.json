@@ -1,5 +1,8 @@
 {
-    "_class": ["lorenz63", "Parms", "Opts"],
-    "coef": [[0]]
+  "_class": ["lorenz63", "Parms", "Opts"],
+  "_description": "",
+  "coef": [
+    [0]
+  ],
+  "_coef_description": ""
 }
-  

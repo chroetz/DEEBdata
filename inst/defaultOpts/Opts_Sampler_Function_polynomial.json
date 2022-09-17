@@ -1,8 +1,12 @@
 {
-  "_class": ["Function", "Sampler", "Opts"],
+  "_class": ["polynomial", "Function", "Sampler", "Opts"],
+  "_description": "",
   "polyDeg": 3,
+  "_polyDeg_description": "",
   "maxNorm": 10,
+  "_maxNorm_description": "",
   "coefSampler": {
     "_class": ["Array", "Sampler", "Opts"]
-  }
+  },
+  "_coefSampler_description": ""
 }

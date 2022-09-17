@@ -1,4 +1,8 @@
 {
-    "_class": ["polynomial", "Parms", "Opts"],
-    "coef": [[0]]
+  "_class": ["polynomial", "Parms", "Opts"],
+  "_description": "",
+  "coef": [
+    [0]
+  ],
+  "_coef_description": ""
 }

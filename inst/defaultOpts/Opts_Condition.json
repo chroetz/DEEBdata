@@ -1,4 +1,5 @@
 {
   "_class": ["Condition", "Opts"],
-  "_defaultSubClass": "true"
+  "_defaultSubClass": "true",
+  "_description": ""
 }

@@ -1,6 +1,8 @@
 {
-  "_class": ["Function", "Sampler", "Opts"],
+  "_class": ["lorenz63", "Function", "Sampler", "Opts"],
+  "_description": "",
   "coefSampler": {
     "_class": ["Array", "Sampler", "Opts"]
-  }
+  },
+  "_coefSampler_description": ""
 }

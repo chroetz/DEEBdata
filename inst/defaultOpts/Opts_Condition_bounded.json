@@ -1,4 +1,6 @@
 {
   "_class": ["bounded", "Condition", "Opts"],
-  "maxNorm": 1
+  "_description": "",
+  "maxNorm": 1,
+  "_maxNorm_description": ""
 }

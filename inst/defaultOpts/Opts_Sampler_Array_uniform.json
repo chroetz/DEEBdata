@@ -1,5 +1,6 @@
 {
   "_class": ["uniform", "Array", "Sampler", "Opts"],
+  "_description": "",
   "range": [0, 1],
-  "_range_description": "Min and max of support of uniform distribution or min and max radius for uniformOnBall and uniformRadiusBall."
+  "_range_description": "Min and max of support."
 }

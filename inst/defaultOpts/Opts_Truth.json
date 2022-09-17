@@ -1,8 +1,10 @@
 {
   "_class": ["Truth", "Opts"],
+  "_description": "",
   "seed": 1,
   "_seed_description": "seed for random number generator",
   "path": ".",
+  "_path_description": "",
   "reps": 1,
   "_reps_description": "repetitions of drawing new random function and initial value",
   "tMax": 10,

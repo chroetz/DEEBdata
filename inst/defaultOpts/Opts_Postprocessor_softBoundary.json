@@ -1,4 +1,6 @@
 {
-  "_class": ["Postprocessor", "Opts"],
-  "boundaryRange": [1, 2]
+  "_class": ["softBoundary", "Postprocessor", "Opts"],
+  "_description": "",
+  "boundaryRange": [1, 2],
+  "_boundaryRange_description": ""
 }

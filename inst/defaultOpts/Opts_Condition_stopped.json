@@ -1,4 +1,6 @@
 {
   "_class": ["stopped", "Condition", "Opts"],
-  "threshold": 1
+  "_description": "",
+  "threshold": 1,
+  "_threshold_description": ""
 }

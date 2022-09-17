@@ -1,5 +1,8 @@
 {
   "_class": ["pdf", "Device", "Opts"],
-  "outFile": "~/DEEDataDB/Default/default.pdf",
-  "scale": 3
+  "_description": "",
+  "outFile": "default.pdf",
+  "_outFile_description": "",
+  "scale": 3,
+  "_scale_description": ""
 }

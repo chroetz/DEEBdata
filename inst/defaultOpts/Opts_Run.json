@@ -1,14 +1,20 @@
 {
-    "_class": ["Run", "Opts"],
-    "name": "Default",
-    "path": ".",
-    "truthOpts": {
-        "_class": ["Truth", "Opts"]
-    },
-    "observationOpts": {
-        "_class": ["Observation", "Opts"]
-    },
-    "plotOpts": {
-        "_class": ["Plot", "Opts"]
-    }
+  "_class": ["Run", "Opts"],
+  "_description": "",
+  "name": "Default",
+  "_name_description": "",
+  "path": ".",
+  "_path_description": "",
+  "truthOpts": {
+    "_class": ["Truth", "Opts"]
+  },
+  "_truthOpts_description": "",
+  "observationOpts": {
+    "_class": ["Observation", "Opts"]
+  },
+  "_observationOpts_description": "",
+  "plotOpts": {
+    "_class": ["Plot", "Opts"]
+  },
+  "_plotOpts_description": ""
 }

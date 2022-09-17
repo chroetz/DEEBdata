@@ -1,5 +1,8 @@
 {
   "_class": ["normal", "Array", "Sampler", "Opts"],
+  "_description": "",
   "mean": 0,
-  "sd" : 1
+  "_mean_description": "",
+  "sd": 1,
+  "_sd_description": ""
 }

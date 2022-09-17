@@ -1,14 +1,19 @@
 {
   "_class": ["localConst", "Function", "Sampler", "Opts"],
+  "_description": "",
   "kernel": "dnorm",
+  "_kernel_description": "",
   "bw": 0.2,
+  "_bw_description": "",
   "nSupp": 50,
   "_nSupp_description": "Number of support points",
   "locationSampler": {
     "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
     "range": [0, 2]
   },
+  "_locationSampler_description": "",
   "valueSampler": {
     "_class": ["normal", "Array", "Sampler", "Opts"]
-  }
+  },
+  "_valueSampler_description": ""
 }

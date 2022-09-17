@@ -1,9 +1,11 @@
 {
   "_class": ["Function", "Sampler", "Opts"],
   "_defaultSubClass": "const",
+  "_description": "",
   "d": 2,
   "_d_description": "dimension of state space",
   "postprocessors": {
     "_class": ["Postprocessor", "List", "Opts"]
-  }
+  },
+  "_postprocessors_description": ""
 }

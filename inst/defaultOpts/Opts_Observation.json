@@ -1,8 +1,10 @@
 {
   "_class": ["Observation", "Opts"],
+  "_description": "",
   "seed": 1,
   "_seed_description": "seed for random number generator",
   "path": ".",
+  "_path_description": "",
   "n": 100,
   "_n_description": "number of observations",
   "tStep": 0.1,
@@ -11,5 +13,6 @@
   "_reps_description": "repetitions of sampling n observations",
   "noiseSampler": {
     "_class": ["Array", "Sampler", "Opts"]
-  }
+  },
+  "_noiseSampler_description": ""
 }

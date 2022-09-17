@@ -1,4 +1,5 @@
 {
   "_class": ["Postprocessor", "Opts"],
-  "_defaultSubClass": "identity"
+  "_defaultSubClass": "identity",
+  "_description": ""
 }

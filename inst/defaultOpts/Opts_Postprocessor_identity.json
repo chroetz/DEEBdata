@@ -1,3 +1,4 @@
 {
-  "_class": ["Postprocessor", "Opts"]
+  "_class": ["identity", "Postprocessor", "Opts"],
+  "_description": ""
 }

@@ -1,4 +1,5 @@
 {
   "_class": ["Device", "Opts"],
-  "_defaultSubClass": "default"
+  "_defaultSubClass": "default",
+  "_description": ""
 }

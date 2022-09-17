@@ -1,3 +1,4 @@
 {
-    "_class": ["Condition", "List", "Opts"]
+  "_class": ["Condition", "List", "Opts"],
+  "_description": ""
 }

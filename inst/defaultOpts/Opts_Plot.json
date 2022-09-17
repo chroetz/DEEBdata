@@ -1,14 +1,21 @@
 {
   "_class": ["Plot", "Opts"],
+  "_description": "",
   "obsNr": 1,
   "_obsNr_description": "ID of observation to use",
   "path": ".",
+  "_path_description": "",
   "device": {
     "_class": ["Device", "Opts"]
   },
-  "xlim": {},
-  "ylim": {},
+  "_device_description": "",
+  "xlim": [],
+  "_xlim_description": "",
+  "ylim": [],
+  "_ylim_description": "",
   "border": "rect",
+  "_border_description": "",
   "_border_possible_values": ["rect", "circle"],
-  "axes": false
+  "axes": false,
+  "_axes_description": ""
 }
