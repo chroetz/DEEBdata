@@ -1,21 +1,46 @@
 #' @export
-run <- function(x) {
+run <- function(x, writeAsDB = FALSE) {
 
   opts <- asOpts(x, "Run")
 
-  fullPath <- file.path(opts$path, opts$name)
-  if (!dir.exists(fullPath)) dir.create(fullPath, recursive=TRUE)
-  fullPath <- normalizePath(fullPath, winslash="/", mustWork=TRUE)
-
-  message("Entering directory ", fullPath)
-
   wd <- getwd()
-  setwd(fullPath)
   on.exit(setwd(wd))
 
-  writeOpts(opts, file.path(fullPath, "Opts_Run"))
+  modelPath <- file.path(opts$path, opts$name)
+  if (!dir.exists(modelPath)) dir.create(modelPath, recursive=TRUE)
+  modelPath <- normalizePath(modelPath, winslash="/", mustWork=TRUE)
 
-  sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
-  generateObservations(opts$observationOpts, writeOpts = FALSE)
-  plotTogether(opts$plotOpts, writeOpts = FALSE)
+  message("Entering directory ", modelPath)
+  setwd(modelPath)
+
+  writeOpts(opts, "Opts_Run")
+
+  if (writeAsDB) {
+
+    dir.create("truth")
+    dir.create("observation")
+    dir.create("example")
+    dir.create("submission")
+
+    set.seed(opts$seed)
+
+    setwd("truth")
+    sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
+
+    setwd("../observation")
+    generateObservations(opts$observationOpts, writeOpts = FALSE)
+
+    setwd("../example")
+    opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)
+    opts$observationOpts$seed <- sample.int(.Machine$integer.max, 1)
+    sampleTrajectories(opts$truthOpts, writeOpts = TRUE)
+    generateObservations(opts$observationOpts, writeOpts = TRUE)
+    plotTogether(opts$plotOpts, writeOpts = TRUE)
+
+  } else {
+
+    sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
+    generateObservations(opts$observationOpts, writeOpts = FALSE)
+    plotTogether(opts$plotOpts, writeOpts = FALSE)
+  }
 }
