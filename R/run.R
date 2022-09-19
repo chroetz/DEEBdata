@@ -28,6 +28,7 @@ run <- function(x, writeAsDB = FALSE) {
     sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
 
     setwd("../observation")
+    opts$observationOpts$truthPath <- file.path(modelPath, "truth")
     generateObservations(opts$observationOpts, writeOpts = FALSE)
 
     setwd("../example")

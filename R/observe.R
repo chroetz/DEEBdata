@@ -23,12 +23,12 @@ buildNoiseSampler <- function(opts, d) {
 generateObservations <- function(opts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Observation")
-  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Observation"))
+  if (writeOpts) writeOpts(opts, file.path(opts$outPath, "Opts_Observation"))
 
   set.seed(opts$seed)
 
   files <-
-    dir(opts$path) |>
+    dir(opts$truthPath) |>
     grep("^truth\\d+\\.csv$", x = _, value=TRUE)
 
   if (length(files) == 0) {
@@ -36,14 +36,14 @@ generateObservations <- function(opts, writeOpts = TRUE) {
     return(invisible(NULL))
   }
   d <-
-    file.path(opts$path, files[1]) |>
+    file.path(opts$truthPath, files[1]) |>
     readTrajs() |>
     getDim()
   noiseSampler <- buildNoiseSampler(opts$noiseSampler, d = d)
 
   for (fl in files) {
     message("Process Truth in ", fl)
-    fullPath <- file.path(opts$path, fl)
+    fullPath <- file.path(opts$truthPath, fl)
     truth <- readTrajs(fullPath)
 
     for (i in seq_len(opts$reps)) {
@@ -51,7 +51,7 @@ generateObservations <- function(opts, writeOpts = TRUE) {
       obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler)
       writeTrajs(
         obs,
-        file.path(opts$path, paste0(substr(fl, 1, nchar(fl)-4), sprintf("obs%04d.csv", i))))
+        file.path(opts$outPath, paste0(substr(fl, 1, nchar(fl)-4), sprintf("obs%04d.csv", i))))
     }
   }
 }
