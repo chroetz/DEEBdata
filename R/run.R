@@ -28,12 +28,13 @@ run <- function(x, writeAsDB = FALSE) {
     sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
 
     setwd("../observation")
-    opts$observationOpts$truthPath <- file.path(modelPath, "truth")
+    opts$observationOpts$truthPath <- file.path("..", "truth")
     generateObservations(opts$observationOpts, writeOpts = FALSE)
 
     setwd("../example")
     opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)
     opts$observationOpts$seed <- sample.int(.Machine$integer.max, 1)
+    opts$observationOpts$truthPath <- "."
     sampleTrajectories(opts$truthOpts, writeOpts = TRUE)
     generateObservations(opts$observationOpts, writeOpts = TRUE)
     plotTogether(opts$plotOpts, writeOpts = TRUE)
