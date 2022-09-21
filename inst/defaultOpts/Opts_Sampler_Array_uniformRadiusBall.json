@@ -1,0 +1,6 @@
+{
+  "_class": ["uniformRadiusBall", "Array", "Sampler", "Opts"],
+  "_description": "",
+  "range": [0, 1],
+  "_range_description": "Min and max radius."
+}

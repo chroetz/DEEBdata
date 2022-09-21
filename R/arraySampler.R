@@ -14,6 +14,8 @@ sampleUniformRadiusBall <- function(n, d, rMin, rMax) {
 
 buildArraySampler <- function(opts, arrayDim) {
   p <- prod(arrayDim)
+  n <- arrayDim[1]
+  d <- prod(arrayDim[-1])
   clss <- getThisClass(opts)
   if (clss == "uniform") {
     sampleBase <- \()
@@ -33,20 +35,14 @@ buildArraySampler <- function(opts, arrayDim) {
     sampleBase <- \() opts$value
   } else if (clss == "uniformOnBall") {
     sampleBase <- \()
-      sampleUniformOnBall(
-        prod(arrayDim[-1]),
-        arrayDim[1],
-        opts$range[1],
-        opts$range[2]
-      )
+      sampleUniformOnBall(n, d, opts$range[1], opts$range[2])
+  } else if (clss == "uniformInRect") {
+    sampleBase <- \() {
+      apply(opts$ranges, 1, \(r) stats::runif(n, min=r[1], max=r[2]))
+    }
   } else if (clss == "uniformRadiusBall") {
     sampleBase <- \()
-      sampleUniformRadiusBall(
-        prod(arrayDim[-1]),
-        arrayDim[1],
-        opts$range[1],
-        opts$range[2]
-      )
+      sampleUniformRadiusBall(n, d, opts$range[1], opts$range[2])
   } else {
     stop("Unrecognized name ", clss)
   }

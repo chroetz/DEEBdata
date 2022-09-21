@@ -1,0 +1,6 @@
+{
+  "_class": ["uniformInRect", "Array", "Sampler", "Opts"],
+  "_description": "",
+  "ranges": [[0, 1], [0, 1], [0, 1]],
+  "_ranges_description": "Pairs of min and max of support."
+}
