@@ -29,6 +29,6 @@ buildParmsSamplerLorenz63 <- function(opts) {
   coefSampler <- buildArraySampler(
     opts$coefSampler,
     arrayDim = 3)
-  parmsSampler <- function() list(coef = coefSampler())
+  parmsSampler <- function() list(coef = as.vector(coefSampler()))
   return(parmsSampler)
 }
