@@ -33,7 +33,14 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     opts$observationOpts$truthPath <- file.path("..", "truth")
     generateObservations(opts$observationOpts, writeOpts = FALSE)
 
-    setwd("../example")
+    setwd("..")
+    pltOpts <- opts$plotOpts
+    pltOpts$truthPath <- "truth"
+    pltOpts$obsPath <- "observation"
+    pltOpts$path <- "."
+    plotTogether(pltOpts, writeOpts = FALSE)
+
+    setwd("example")
     opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)
     opts$observationOpts$seed <- sample.int(.Machine$integer.max, 1)
     opts$observationOpts$truthPath <- "."

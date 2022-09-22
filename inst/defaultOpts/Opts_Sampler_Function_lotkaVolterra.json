@@ -1,6 +1,7 @@
 {
   "_class": ["lotkaVolterra", "Function", "Sampler", "Opts"],
   "_description": "",
+  "d": 2,
   "coefSampler": {
     "_class": ["Array", "Sampler", "Opts"]
   },

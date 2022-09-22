@@ -21,11 +21,11 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Plot"))
 
   truthParmsFiles <-
-    opts$path |>
+    opts$truthPath |>
     dir() |>
     grep("^truth\\d+_parms\\.json$", x = _, value=TRUE)
   truthTrajFiles <-
-    opts$path |>
+    opts$truthPath |>
     dir() |>
     grep("^truth\\d+\\.csv$", x = _, value=TRUE)
 
@@ -40,7 +40,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
 
   if (file.exists(file.path(opts$path, "Opts_Truth.json"))) {
     truthOpts <- readOpts(
-      file.path(opts$path, "Opts_Truth.json"),
+      file.path(opts$truthPath, "Opts_Truth.json"),
       optsClass = "Truth",
       .fill=FALSE)
   } else {
@@ -54,14 +54,15 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   for (i in seq_len(len)) {
 
     flTraj <- truthTrajFiles[i]
-    fullPathTraj <- file.path(opts$path, flTraj)
+    fullPathTraj <- file.path(opts$truthPath, flTraj)
     trajs <- readTrajs(fullPathTraj)
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
 
-    obs <- readTrajs(paste0(
-      substr(fullPathTraj, 1, nchar(fullPathTraj)-4),
-      sprintf("obs%04d.csv", opts$obsNr)))
+    obsFileName <- paste0(
+      substr(flTraj, 1, nchar(flTraj)-4),
+      sprintf("obs%04d.csv", opts$obsNr))
+    obs <- readTrajs(file.path(opts$obsPath, obsFileName))
 
     plotTrajAndObs(trajs, obs, title = nr, opts = opts)
   }
@@ -69,13 +70,13 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   pltList <- lapply(seq_len(len), \(i) {
 
     flParms <- truthParmsFiles[i]
-    fullPathParms <- file.path(opts$path, flParms)
+    fullPathParms <- file.path(opts$truthPath, flParms)
     parms <- readOpts(
       fullPathParms,
       c(class(truthOpts$deFunSampler)[1], "Parms"),
       .fill = FALSE)
     flTraj <- truthTrajFiles[i]
-    fullPathTraj <- file.path(opts$path, flTraj)
+    fullPathTraj <- file.path(opts$truthPath, flTraj)
     traj <- readTrajs(fullPathTraj)
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))

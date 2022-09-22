@@ -5,6 +5,10 @@
   "_obsNr_description": "ID of observation to use",
   "path": ".",
   "_path_description": "",
+  "truthPath": ".",
+  "_truthPath_description": "",
+  "obsPath": ".",
+  "_obsPath_description": "",
   "device": {
     "_class": ["Device", "Opts"],
     "_defaultInstance": {

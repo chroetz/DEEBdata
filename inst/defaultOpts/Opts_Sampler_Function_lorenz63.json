@@ -1,12 +1,12 @@
 {
   "_class": ["lorenz63", "Function", "Sampler", "Opts"],
   "_description": "",
+  "d": 3,
   "coefSampler": {
     "_class": ["Array", "Sampler", "Opts"],
     "_defaultInstance": {
-      "_class": ["normal", "Array", "Sampler", "Opts"],
-      "mean": [10, 28, 2.66666667],
-      "sd": [1, 2, 0.1]
+      "_class": ["const", "Array", "Sampler", "Opts"],
+      "value": [10, 28, 2.66666667]
     }
   },
   "_coefSampler_description": ""
