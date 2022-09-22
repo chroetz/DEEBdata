@@ -1,7 +1,11 @@
 #' @export
-run <- function(x, writeAsDB = FALSE) {
+run <- function(x, writeAsDB = FALSE, overwriteReps = NULL) {
 
   opts <- asOpts(x, "Run")
+
+  if (!is.null(overwriteReps)) {
+    opts$truthOpts$reps <- overwriteReps
+  }
 
   wd <- getwd()
   on.exit(setwd(wd))
