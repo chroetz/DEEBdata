@@ -32,6 +32,8 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     setwd("../observation")
     opts$observationOpts$truthPath <- file.path("..", "truth")
     generateObservations(opts$observationOpts, writeOpts = FALSE)
+    opts$taskList$path <- "."
+    writeTasks(opts$taskList, writeOpts = FALSE)
 
     setwd("..")
     pltOpts <- opts$plotOpts
@@ -47,11 +49,13 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     sampleTrajectories(opts$truthOpts, writeOpts = TRUE)
     generateObservations(opts$observationOpts, writeOpts = TRUE)
     plotTogether(opts$plotOpts, writeOpts = TRUE)
+    writeTasks(opts$taskList, writeOpts = TRUE)
 
   } else {
 
     sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
     generateObservations(opts$observationOpts, writeOpts = FALSE)
     plotTogether(opts$plotOpts, writeOpts = FALSE)
+    writeTasks(opts$taskList, writeOpts = FALSE)
   }
 }

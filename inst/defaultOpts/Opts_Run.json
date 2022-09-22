@@ -16,5 +16,9 @@
   "plotOpts": {
     "_class": ["Plot", "Opts"]
   },
-  "_plotOpts_description": ""
+  "_plotOpts_description": "",
+  "taskList": {
+    "_class": ["Task", "List", "Opts"]
+  },
+  "_taskList_description": ""
 }
