@@ -22,7 +22,8 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     dir.create("truth")
     dir.create("observation")
     dir.create("example")
-    dir.create("submission")
+    dir.create("estimation")
+    dir.create("evaluation")
 
     set.seed(opts$seed)
 
@@ -39,7 +40,7 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     pltOpts <- opts$plotOpts
     pltOpts$truthPath <- "truth"
     pltOpts$obsPath <- "observation"
-    pltOpts$path <- "."
+    pltOpts$path <- "evaluation"
     plotTogether(pltOpts, writeOpts = FALSE)
 
     setwd("example")

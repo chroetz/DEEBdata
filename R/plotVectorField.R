@@ -56,6 +56,12 @@ plotVectorField <- function(trajs, fun, parms, title, axes) {
   size <- mean(c(sizeX, sizeY)) * sqrt(2)
 
   plt <- ggplot2::ggplot(pltData) +
+    ggplot2::geom_path(
+      data = trajData,
+      mapping = ggplot2::aes(
+        x = .data$x,
+        y = .data$y,
+        group = .data$trajId)) +
     ggplot2::geom_segment(
       ggplot2::aes(
         x = .data$x,
@@ -68,12 +74,6 @@ plotVectorField <- function(trajs, fun, parms, title, axes) {
     ggplot2::scale_colour_continuous(
       low = "grey80",
       high = "darkred") +
-    ggplot2::geom_path(
-      data = trajData,
-      mapping = ggplot2::aes(
-        x = .data$x,
-        y = .data$y,
-        group = .data$trajId)) +
     ggplot2::xlab(NULL) +
     ggplot2::ylab(NULL)
   if (!axes) {

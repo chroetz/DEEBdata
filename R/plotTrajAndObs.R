@@ -25,12 +25,12 @@ plotTrajAndObs <- function(trajs, obs, title="", opts=makeOpts("Plot"), esti=NUL
   } else {
     stop("Unrecognized name ", opts$border)
   }
-  graphics::points(obs2D, col=3, pch=20)
   for (id in unique(trajs$trajId)) {
     traj <- truth2D[trajs$trajId==id, ]
     graphics::lines(traj)
     graphics::points(traj[1,,drop=FALSE], col=2, pch=3, lwd=2)
   }
+  graphics::points(obs2D, col=3, pch=20, cex=0.7)
   if (!is.null(esti)) {
     esti2D <- projection2D$project(esti$state)
     for (id in unique(esti$trajId)) {

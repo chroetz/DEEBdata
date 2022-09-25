@@ -87,6 +87,27 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
   plot(plts)
 
+
+  pltList <- lapply(seq_len(len), \(i) {
+
+    flTraj <- truthTrajFiles[i]
+    fullPathTraj <- file.path(opts$truthPath, flTraj)
+    traj <- readTrajs(fullPathTraj)
+
+    nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
+
+    obsFileName <- paste0(
+      substr(flTraj, 1, nchar(flTraj)-4),
+      sprintf("obs%04d.csv", opts$obsNr))
+    obs <- readTrajs(file.path(opts$obsPath, obsFileName))
+
+    plotTimeDep(traj, obs, title = nr)
+  })
+
+  plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
+  plot(plts)
+
+
   finalizeDevice()
 }
 
