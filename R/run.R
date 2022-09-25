@@ -40,7 +40,8 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     pltOpts <- opts$plotOpts
     pltOpts$truthPath <- "truth"
     pltOpts$obsPath <- "observation"
-    pltOpts$path <- "evaluation"
+    pltOpts$path <- "."
+    pltOpts$device$path <- "evaluation"
     plotTogether(pltOpts, writeOpts = FALSE)
 
     setwd("example")

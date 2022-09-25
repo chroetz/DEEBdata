@@ -3,6 +3,8 @@
   "_description": "",
   "outFile": "default.pdf",
   "_outFile_description": "",
+  "outPath": ".",
+  "_outPath_description": "",
   "scale": 3,
   "_scale_description": ""
 }

@@ -1,9 +1,9 @@
 openPlotDevice <- function(opts, mfrow) {
   name <- getThisClass(opts)
   if (name == "pdf") {
-    message("Opening PDF device file ", opts$outFile)
+    message("Opening PDF device file ", file.path(opts$outPath, opts$outFile))
     grDevices::pdf(
-      opts$outFile,
+      file.path(opts$outPath, opts$outFile),
       width = mfrow[2]*opts$scale,
       height = mfrow[1]*opts$scale)
     return(grDevices::dev.off)
@@ -40,7 +40,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
 
   if (file.exists(file.path(opts$path, "Opts_Truth.json"))) {
     truthOpts <- readOpts(
-      file.path(opts$truthPath, "Opts_Truth.json"),
+      file.path(opts$path, "Opts_Truth.json"),
       optsClass = "Truth",
       .fill=FALSE)
   } else {
