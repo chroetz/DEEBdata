@@ -6,6 +6,17 @@ checkConditionStopped <- function(traj, fun, parms, thershold) {
   return(duLastNorm >= thershold)
 }
 
+countTurns <- function(x, time, threshold) {
+  v <- diff(x) / diff(time)
+  y <- v[abs(v) >= threshold]
+  sum(abs(diff(sign(y))) > 1)
+}
+
+checkConditionTurning <- function(traj, threshold, minTurnCount) {
+  turnCount <- sum(apply(traj$state, 2, countTurns, time=traj$time, threshold=threshold))
+  return(turnCount >= minTurnCount)
+}
+
 checkConditionFinite <- function(traj) {
   return(all(is.finite(traj$state)))
 }
@@ -22,6 +33,7 @@ checkCondition <- function(opts, traj, fun, parms) {
     stopped = checkConditionStopped(traj, fun, parms, opts$threshold),
     finite = checkConditionFinite(traj),
     bounded = checkConditionBounded(traj, opts$maxNorm),
+    turning = checkConditionTurning(traj, opts$threshold, opts$minTurnCount),
     true = TRUE,
     stop("Unrecognized name ", name))
   return(fulfilled)

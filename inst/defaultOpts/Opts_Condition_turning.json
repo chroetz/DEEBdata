@@ -1,0 +1,8 @@
+{
+  "_class": ["turning", "Condition", "Opts"],
+  "_description": "",
+  "minTurnCount": 1,
+  "_minTurnCount_description": "How often the velocity needs to change sign summed over all dimension",
+  "threshold": 0,
+  "_threshold_description": "Min absolut value of velocity to be counted as non-zero"
+}
