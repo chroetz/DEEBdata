@@ -1,25 +1,3 @@
-observeGrid <- function(trajs, n, tStep, noiseSampler) {
-  tSample <- seq(0, by = tStep, length.out = n)
-  obs <- interpolateTrajs(trajs, tSample)
-  trajIds <- unique(trajs$trajId)
-  for (trajId in trajIds) {
-    nTraj <- sum(obs$trajId == trajId)
-    obs$state[obs$trajId == trajId, ] <-
-      obs$state[obs$trajId == trajId, ] +
-      noiseSampler(nTraj)
-  }
-  return(obs)
-}
-
-buildNoiseSampler <- function(opts, d) {
-  sampler1 <- buildArraySampler(opts, arrayDim = c(1, d))
-  noiseSampler <- function(n) {
-    lst <- replicate(n, sampler1(), simplify=FALSE)
-    do.call(rbind, lst)
-  }
-  return(noiseSampler)
-}
-
 generateObservations <- function(opts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Observation")
@@ -46,12 +24,39 @@ generateObservations <- function(opts, writeOpts = TRUE) {
     fullPath <- file.path(opts$truthPath, fl)
     truth <- readTrajs(fullPath)
 
-    for (i in seq_len(opts$reps)) {
-      message("Generate observations. Iteration ", i)
-      obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler)
-      writeTrajs(
-        obs,
-        file.path(opts$outPath, paste0(substr(fl, 1, nchar(fl)-4), sprintf("obs%04d.csv", i))))
+    z <- 0
+    for (i in seq_len(opts$reps)) for (s in opts$scales) {
+      z <- z+1
+      message("Generate observations. Iteration ", z)
+      obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler, scale=s)
+      obsFileName <- paste0(
+        substr(fl, 1, nchar(fl)-4), # remove file ending
+        sprintf("obs%04d.csv", z))
+      writeTrajs(obs, file.path(opts$outPath, obsFileName))
     }
   }
+}
+
+
+buildNoiseSampler <- function(opts, d) {
+  sampler1 <- buildArraySampler(opts, arrayDim = c(1, d))
+  noiseSampler <- function(n) {
+    lst <- replicate(n, sampler1(), simplify=FALSE)
+    do.call(rbind, lst)
+  }
+  return(noiseSampler)
+}
+
+
+observeGrid <- function(trajs, n, tStep, noiseSampler, scale=1) {
+  tSample <- seq(0, by = tStep, length.out = n)
+  obs <- interpolateTrajs(trajs, tSample)
+  trajIds <- unique(trajs$trajId)
+  for (trajId in trajIds) {
+    nTraj <- sum(obs$trajId == trajId)
+    obs$state[obs$trajId == trajId, ] <-
+      obs$state[obs$trajId == trajId, ] +
+      scale * noiseSampler(nTraj)
+  }
+  return(obs)
 }

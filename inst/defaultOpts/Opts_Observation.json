@@ -12,9 +12,11 @@
   "tStep": 0.1,
   "_tStep_description": "time difference between observations",
   "reps": 1,
-  "_reps_description": "repetitions of sampling n observations",
+  "_reps_description": "repetitions of sampling n observations of each scale",
+  "scale": 1,
+  "_scale_description": "a sequence of factors the sampled noise is scaled with to generate different sets of n observations with different noise levels",
   "noiseSampler": {
     "_class": ["Array", "Sampler", "Opts"]
   },
-  "_noiseSampler_description": ""
+  "_noiseSampler_description": "The distribution of noise. The sampler will be called to produce n arrays of dimension 1 x d."
 }
