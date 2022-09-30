@@ -12,6 +12,11 @@ sampleUniformRadiusBall <- function(n, d, rMin, rMax) {
   direction * radius * rMax
 }
 
+sampleOnLorenz63Attractor <- function(n) {
+  states <- readRDS(system.file("lorenz63.RDS", package="DEEData"))
+  states[sample.int(nrow(states), n),]
+}
+
 buildArraySampler <- function(opts, arrayDim) {
   p <- prod(arrayDim)
   n <- arrayDim[1]
@@ -43,6 +48,8 @@ buildArraySampler <- function(opts, arrayDim) {
   } else if (clss == "uniformRadiusBall") {
     sampleBase <- \()
       sampleUniformRadiusBall(n, d, opts$range[1], opts$range[2])
+  } else if (clss == "lorenz63") {
+    sampleBase <- \() sampleOnLorenz63Attractor(n)
   } else {
     stop("Unrecognized name ", clss)
   }

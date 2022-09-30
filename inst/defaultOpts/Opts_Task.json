@@ -1,8 +1,7 @@
 {
   "_class": ["Task", "Opts"],
-  "_defaultSubClass": "continue",
+  "_defaultSubClass": "estiObsTrajs",
   "_description": "",
   "name": "",
-  "predictionTime": [0, 1],
-  "evaluationLoss": ["L1", "L2"]
+  "evaluationLosses": ["L1", "L2"]
 }

@@ -1,4 +1,4 @@
-plotTrajAndObs <- function(trajs, obs, title="", opts=makeOpts("Plot"), esti=NULL) {
+plotTrajAndObs <- function(trajs, obs = NULL, title="", opts=makeOpts("Plot"), esti=NULL) {
   d <- getDim(trajs)
   if (d == 2) {
     projection2D <- getIdentityProjection()
@@ -7,8 +7,12 @@ plotTrajAndObs <- function(trajs, obs, title="", opts=makeOpts("Plot"), esti=NUL
   } else {
     stop("d invalid: ", d)
   }
-  obs2D <- projection2D$project(obs$state)
   truth2D <- projection2D$project(trajs$state)
+  if (is.null(obs)) {
+    obs2D <- truth2D[0,]
+  } else {
+    obs2D <- projection2D$project(obs$state)
+  }
 
   xlim <- if (length(opts$xlim) != 2) range(obs2D[,1], truth2D[,1]) else opts$xlim
   ylim <- if (length(opts$ylim) != 2) range(obs2D[,2], truth2D[,2]) else opts$ylim

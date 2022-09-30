@@ -13,7 +13,7 @@
   "_tStep_description": "time difference between observations",
   "reps": 1,
   "_reps_description": "repetitions of sampling n observations of each scale",
-  "scale": 1,
+  "scales": 1,
   "_scale_description": "a sequence of factors the sampled noise is scaled with to generate different sets of n observations with different noise levels",
   "noiseSampler": {
     "_class": ["Array", "Sampler", "Opts"]

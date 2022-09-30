@@ -1,0 +1,6 @@
+{
+  "_class": ["velocity", "Task", "Opts"],
+  "_description": "estimate the velocities on the given grid",
+  "gridRanges": [[0, 1], [0, 1]],
+  "gridSteps": [0.1, 0.1]
+}

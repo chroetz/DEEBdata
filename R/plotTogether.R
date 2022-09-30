@@ -62,7 +62,12 @@ plotTogether <- function(opts, writeOpts = TRUE) {
     obsFileName <- paste0(
       substr(flTraj, 1, nchar(flTraj)-4),
       sprintf("obs%04d.csv", opts$obsNr))
-    obs <- readTrajs(file.path(opts$obsPath, obsFileName))
+    obsFilePath <- file.path(opts$obsPath, obsFileName)
+    if (file.exists(obsFilePath)) {
+      obs <- readTrajs(obsFilePath)
+    } else {
+      obs <- NULL
+    }
 
     plotTrajAndObs(trajs, obs, title = nr, opts = opts)
   }
@@ -99,7 +104,12 @@ plotTogether <- function(opts, writeOpts = TRUE) {
     obsFileName <- paste0(
       substr(flTraj, 1, nchar(flTraj)-4),
       sprintf("obs%04d.csv", opts$obsNr))
-    obs <- readTrajs(file.path(opts$obsPath, obsFileName))
+    obsFilePath <- file.path(opts$obsPath, obsFileName)
+    if (file.exists(obsFilePath)) {
+      obs <- readTrajs(obsFilePath)
+    } else {
+      obs <- NULL
+    }
 
     plotTimeDep(traj, obs, title = nr)
   })

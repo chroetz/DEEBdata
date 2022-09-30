@@ -9,8 +9,10 @@
   "_reps_description": "repetitions of drawing new random function and initial value",
   "tMax": 10,
   "_tMax_description": "maximal time point at which values are produced",
-  "tStep": 0.01,
-  "_tStep_description": "difference between time points at which values are produced",
+  "tStepOut": 0.01,
+  "_tStepOut_description": "difference between time points for outout",
+  "tStepOde": 0.01,
+  "_tStepOde_description": "difference between time points for OdeSolver",
   "deFunSampler": {
     "_class": ["Function", "Sampler", "Opts"],
     "d": 2

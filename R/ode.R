@@ -1,4 +1,5 @@
 solveOde <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
+  opts <- asOpts(opts, "OdeSolver")
   tm <- seq(0, tMax, by = tStep)
   suppressWarnings(suppressMessages(utils::capture.output( # make silent
     u <- do.call(

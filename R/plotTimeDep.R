@@ -1,6 +1,6 @@
 # TODO: move to own plots package
 
-plotTimeDep <- function(truth, obs, title="") {
+plotTimeDep <- function(truth, obs=NULL, title="") {
   if (is.null(obs)) {
     obs <- truth[0,]
   }
@@ -10,10 +10,12 @@ plotTimeDep <- function(truth, obs, title="") {
       truth |> dplyr::mutate(kind = "truth")) |>
     unpackStateLong()
 
-  obs <-
-    obs |>
-    dplyr::mutate(kind = "obs") |>
-    unpackStateLong()
+  if (!is.null(obs)) {
+    obs <-
+      obs |>
+      dplyr::mutate(kind = "obs") |>
+      unpackStateLong()
+  }
 
   plt <-
     ggplot2::ggplot(data, ggplot2::aes(
@@ -23,16 +25,21 @@ plotTimeDep <- function(truth, obs, title="") {
       group = paste0(.data$trajId, .data$kind)
     )) +
     ggplot2::geom_path() +
-    ggplot2::geom_point(
-      data = obs,
-      mapping = ggplot2::aes(color = NULL, group = NULL),
-      size = 0.1,
-      alpha = 0.5
-    ) +
     ggplot2::facet_wrap(ggplot2::vars(dim), ncol = 1, scales = "free_y") +
     ggplot2::xlab(NULL) + ggplot2::ylab(NULL) +
     ggplot2::theme(legend.position = "none") +
     ggplot2::ggtitle(title)
+
+  if (!is.null(obs)) {
+    plt <-
+      plt +
+      ggplot2::geom_point(
+        data = obs,
+        mapping = ggplot2::aes(color = NULL, group = NULL),
+        size = 0.1,
+        alpha = 0.5
+      )
+  }
 
   return(plt)
 }

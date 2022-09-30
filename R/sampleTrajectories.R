@@ -12,9 +12,10 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
         traj <- solveOde(
           fun, u0,
           tMax = opts$tMax,
-          tStep = opts$tStep,
+          tStep = opts$tStepOde,
           opts = opts$odeSolver,
           parms = parms)
+        traj <- interpolateTrajs(traj, seq(0, opts$tMax, by=opts$tStepOut))
         if (checkConditions(opts$conditions, traj, fun, parms)) {
           successU0 <- TRUE
           cat("o")
