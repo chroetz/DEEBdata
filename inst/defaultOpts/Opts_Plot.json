@@ -16,14 +16,5 @@
       "outFile": "PlotsTogether.pdf"
     }
   },
-  "_device_description": "",
-  "xlim": [],
-  "_xlim_description": "",
-  "ylim": [],
-  "_ylim_description": "",
-  "border": "rect",
-  "_border_description": "",
-  "_border_possible_values": ["rect", "circle"],
-  "axes": false,
-  "_axes_description": ""
+  "_device_description": ""
 }

@@ -3,4 +3,3 @@
 export(run)
 import(ConfigOpts)
 import(DEEBtrajs)
-importFrom(rlang,.data)

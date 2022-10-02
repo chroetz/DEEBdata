@@ -36,7 +36,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   mfrow <- c(ceiling(len/n), n)
   finalizeDevice <- openPlotDevice(opts$device, mfrow = mfrow)
   graphics::par(mfrow = mfrow)
-  graphics::par(mar = if (opts$axes) c(2,2,2,2) else c(0,0,0,0))
+  graphics::par(mar = c(2,2,2,2))
 
   if (file.exists(file.path(opts$path, "Opts_Truth.json"))) {
     truthOpts <- readOpts(
@@ -51,7 +51,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   }
   fun <- getParmsFunction(truthOpts$deFunSampler)
 
-  for (i in seq_len(len)) {
+  pltList <- lapply(seq_len(len), \(i) {
 
     flTraj <- truthTrajFiles[i]
     fullPathTraj <- file.path(opts$truthPath, flTraj)
@@ -69,8 +69,10 @@ plotTogether <- function(opts, writeOpts = TRUE) {
       obs <- NULL
     }
 
-    plotTrajAndObs(trajs, obs, title = nr, opts = opts)
-  }
+    DEEBplots::plotStateSpace(trajs, esti = NULL, obs = obs, title = nr)
+  })
+  plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
+  plot(plts)
 
   pltList <- lapply(seq_len(len), \(i) {
 
@@ -86,9 +88,8 @@ plotTogether <- function(opts, writeOpts = TRUE) {
 
     nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
 
-    plotVectorField(traj, fun, parms, title = nr, axes = opts$axes)
+    DEEBplots::plotVectorField(traj, fun, parms, title = nr)
   })
-
   plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
   plot(plts)
 
@@ -111,12 +112,10 @@ plotTogether <- function(opts, writeOpts = TRUE) {
       obs <- NULL
     }
 
-    plotTimeDep(traj, obs, title = nr)
+    DEEBplots::plotTimeState(traj, esti=NULL, obs=obs, title=nr)
   })
-
   plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
   plot(plts)
-
 
   finalizeDevice()
 }
