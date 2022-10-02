@@ -13,7 +13,7 @@ sampleUniformRadiusBall <- function(n, d, rMin, rMax) {
 }
 
 sampleOnLorenz63Attractor <- function(n) {
-  states <- readRDS(system.file("lorenz63.RDS", package="DEEData"))
+  states <- readRDS(system.file("lorenz63.RDS", package="DEEBdata"))
   states[sample.int(nrow(states), n),]
 }
 

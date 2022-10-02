@@ -1,4 +1,4 @@
-Package: DEEData
+Package: DEEBdata
 Title: Create a data for a simulation study to compare differential equation estimators
 Version: 0.0.0.9015
 Authors@R: 
