@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @import DEETrajs
+#' @import DEEBtrajs
 #' @import ConfigOpts
 "_PACKAGE"
 
