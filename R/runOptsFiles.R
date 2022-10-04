@@ -11,7 +11,7 @@ getRunOptsFiles <- function(fullPath = FALSE, fileEnding = fullPath) {
 runAll <- function(
     dbPath = paste0("~/DEEBDB", reps),
     pattern = NULL,
-    writeAsDB = TRUE,
+    createExample = FALSE,
     reps = NULL
 ) {
   files <- getRunOptsFiles(fullPath = TRUE)
@@ -21,7 +21,7 @@ runAll <- function(
     overwrite$truthOpts = list(reps = reps)
   }
   for (fl in files) {
-    run(fl, writeAsDB = writeAsDB, overwriteList = overwrite)
+    run(fl, createExample = createExample, overwriteList = overwrite)
   }
   dbPath <- normalizePath(dbPath)
   return(dbPath)

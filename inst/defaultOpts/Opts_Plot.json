@@ -3,13 +3,13 @@
   "_description": "",
   "obsNr": 0,
   "_obsNr_description": "IDs of observation to use; 0 means all",
-  "outPath": ".",
-  "_outPath_description": "",
+  "path": "evaluation",
+  "_path_description": "",
   "truthOptsPath": ".",
   "_truthOptsPath_description": "",
-  "truthPath": ".",
+  "truthPath": "truth",
   "_truthPath_description": "",
-  "obsPath": ".",
+  "obsPath": "observation",
   "_obsPath_description": "",
   "outFileName": "Plots_TruthObs"
 }

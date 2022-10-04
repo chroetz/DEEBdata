@@ -1,7 +1,8 @@
 generateObservations <- function(opts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Observation")
-  if (writeOpts) writeOpts(opts, file.path(opts$outPath, "Opts_Observation"))
+  if (!dir.exists(opts$path)) dir.create(opts$path)
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Observation"))
 
   set.seed(opts$seed)
 
@@ -32,7 +33,7 @@ generateObservations <- function(opts, writeOpts = TRUE) {
       obsFileName <- paste0(
         substr(fl, 1, nchar(fl)-4), # remove file ending
         sprintf("obs%04d.csv", z))
-      writeTrajs(obs, file.path(opts$outPath, obsFileName))
+      writeTrajs(obs, file.path(opts$path, obsFileName))
     }
   }
 }

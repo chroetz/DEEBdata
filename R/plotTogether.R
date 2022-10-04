@@ -1,9 +1,10 @@
 plotTogether <- function(opts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Plot")
-  if (writeOpts) writeOpts(opts, file.path(opts$outPath, "Opts_Plot"))
+  if (!dir.exists(opts$path)) dir.create(opts$path)
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Plot"))
 
-  plotsPath <- file.path(opts$outPath, "plots")
+  plotsPath <- file.path(opts$path, "plots")
   if (!dir.exists(plotsPath)) dir.create(plotsPath)
   plotsPath <- normalizePath(plotsPath, mustWork=TRUE)
 
@@ -37,7 +38,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
 
   metaTruth <- DEEBpath::getMetaGeneric(
     opts$truthPath,
-    tagsFilter = c("truth", "_parms"))
+    tagsFilter = c("truth", "parms"))
 
   metaTruth$plots <- lapply(
     seq_len(nrow(metaTruth)),
@@ -58,7 +59,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
 
   writeDoc(
     "plots",
-    outDir = opts$outPath,
+    outDir = opts$path,
     outFile = opts$outFileName,
     plotsDir = plotsPath)
 }
@@ -78,7 +79,7 @@ createTruthPlots <- function(info, fun) {
   title <- sprintf("Truth %d", info$truthNr)
   list(
     velocityField = DEEBplots::plotVectorField(
-      info$truth, fun, info$`_parms`, title = title))
+      info$truth, fun, info$parms, title = title))
 }
 
 writeDoc <- function(markdown, outDir, outFile, ...) {

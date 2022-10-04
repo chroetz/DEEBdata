@@ -3,7 +3,7 @@
   "_description": "",
   "seed": 1,
   "_seed_description": "seed for random number generator",
-  "path": ".",
+  "path": "truth",
   "_path_description": "",
   "reps": 1,
   "_reps_description": "repetitions of drawing new random function and initial value",
