@@ -3,5 +3,7 @@
   "_defaultSubClass": "estiObsTrajs",
   "_description": "",
   "name": "",
-  "evaluationLosses": ["L1", "L2"]
+  "scoreList": {
+    "_class": ["Score", "List", "Opts"]
+  }
 }

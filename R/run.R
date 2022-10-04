@@ -40,9 +40,9 @@ run <- function(x, writeAsDB = FALSE, overwriteList = NULL) {
     pltOpts <- opts$plotOpts
     pltOpts$truthPath <- "truth"
     pltOpts$obsPath <- "observation"
-    pltOpts$path <- "."
-    pltOpts$device$path <- "evaluation"
-    plotTogether(pltOpts, writeOpts = FALSE)
+    pltOpts$outPath <- "evaluation"
+    pltOpts$truthOptsPath <- "."
+    plotTogether(pltOpts, writeOpts = TRUE)
 
     setwd("example")
     opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)

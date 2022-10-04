@@ -1,0 +1,87 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "lotkaVolterra",
+    "path": "~/DEEDataDB",
+    "truthOpts": {
+        "_class": ["Truth", "Opts"],
+        "reps": 1,
+        "tMax": 60,
+        "tStepOde": 0.01,
+        "tStepOut": 0.05,
+        "deFunSampler": {
+            "_class": ["lotkaVolterra", "Function", "Sampler", "Opts"],
+            "coefSampler": {
+                "_class": ["uniform", "Array", "Sampler", "Opts"],
+                "range": [0, 2]
+            }    
+        },
+        "u0Sampler": {
+            "_class": ["uniform", "Array", "Sampler", "Opts"],
+            "range": [0, 4]
+        }
+    },
+    "observationOpts": {
+        "_class": ["Observation", "Opts"],
+        "n": 100,
+        "tStep": 0.3,
+        "reps": 1,
+        "scales": [0, 0.02, 0.07, 0.2],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "observation time",
+                "predictionTime": [0, 30],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "future",
+                "predictionTime": [30, 60],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

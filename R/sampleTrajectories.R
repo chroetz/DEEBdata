@@ -50,7 +50,7 @@ sampleTrajectories <- function(opts, writeOpts = TRUE) {
 
   parmsSampler <- buildParmsSampler(opts$deFunSampler)
   fun <- getParmsFunction(opts$deFunSampler)
-  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = opts$deFunSampler$d)
+  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = c(1, opts$deFunSampler$d))
 
   set.seed(opts$seed)
 

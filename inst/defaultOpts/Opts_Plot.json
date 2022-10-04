@@ -1,20 +1,15 @@
 {
   "_class": ["Plot", "Opts"],
   "_description": "",
-  "obsNr": 1,
-  "_obsNr_description": "ID of observation to use",
-  "path": ".",
-  "_path_description": "",
+  "obsNr": 0,
+  "_obsNr_description": "IDs of observation to use; 0 means all",
+  "outPath": ".",
+  "_outPath_description": "",
+  "truthOptsPath": ".",
+  "_truthOptsPath_description": "",
   "truthPath": ".",
   "_truthPath_description": "",
   "obsPath": ".",
   "_obsPath_description": "",
-  "device": {
-    "_class": ["Device", "Opts"],
-    "_defaultInstance": {
-      "_class": ["pdf", "Device", "Opts"],
-      "outFile": "PlotsTogether.pdf"
-    }
-  },
-  "_device_description": ""
+  "outFileName": "Plots_TruthObs"
 }

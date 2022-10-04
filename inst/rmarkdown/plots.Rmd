@@ -1,0 +1,69 @@
+---
+title: "DEEB Data -- Plots"
+date: "`r format(Sys.Date())`"
+output: 
+  html_document:
+    toc: no
+    toc_depth: 6
+    number_sections: no
+    self_contained: false
+params:
+  plotsDir: "~/DEEBDB9/lotkaVolterra/plots"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+```
+
+```{r, include=FALSE}
+pattern <- "Truth(\\d+)Obs(\\d+)_(\\w+)\\.png"
+fileMatrix <- 
+  params$plotsDir |> 
+  dir() |> 
+  str_subset(pattern) |> 
+  str_match(pattern)
+colnames(fileMatrix) <- c("fileName", "truthNr", "obsNr", "kind")
+truthObsPlots <- 
+  as_tibble(fileMatrix) |> 
+  mutate(across(ends_with("Nr"), as.integer)) |> 
+  mutate(path = normalizePath(file.path(params$plotsDir, .data$fileName), mustWork=TRUE))
+```
+
+```{r, include=FALSE}
+pattern <- "Truth(\\d+)_(\\w+)\\.png"
+fileMatrix <- 
+  params$plotsDir |> 
+  dir() |> 
+  str_subset(pattern) |> 
+  str_match(pattern)
+colnames(fileMatrix) <- c("fileName", "truthNr", "kind")
+truthPlots <- 
+  as_tibble(fileMatrix) |> 
+  mutate(across(ends_with("Nr"), as.integer)) |> 
+  mutate(path = normalizePath(file.path(params$plotsDir, .data$fileName), mustWork=TRUE))
+```
+
+```{r}
+plots <- bind_rows(
+  truthObsPlots,
+  truthPlots |> mutate(obsNr = NA))
+```
+
+
+# Plots  {.tabset}
+
+```{r results='asis', fig.show='asis'}
+for (knd in unique(plots$kind)) {
+  cat("##", knd, " {.tabset}\n\n")
+  kindPlots <- filter(plots, kind == knd)
+  for (thnr in sort(unique(kindPlots$truthNr))) {
+    truthPlots <- filter(kindPlots, truthNr == thnr)
+    cat(paste(paste0("![](", truthPlots$path, "){width=", min(40, 100/(length(truthPlots$path))-1),"%}"), collapse="\n"), "\n\n") 
+  }
+  cat("\n\n")
+}
+```
+
+

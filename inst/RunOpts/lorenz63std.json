@@ -1,0 +1,57 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "lorenz63std",
+    "path": "~/DEEDataDB",
+    "truthOpts": {
+        "_class": ["Truth", "Opts"],
+        "reps": 100,
+        "tMax": 150,
+        "tStepOut": 0.005,
+        "tStepOde": 0.001,
+        "deFunSampler": {
+            "_class": ["lorenz63", "Function", "Sampler", "Opts"],
+            "coefSampler": {
+                "_class": ["const", "Array", "Sampler", "Opts"],
+                "value": [10, 28, 2.6666666666666667]
+            }    
+        },
+        "u0Sampler": {
+            "_class": ["lorenz63", "Array", "Sampler", "Opts"]
+        }
+    },
+    "observationOpts": {
+        "_class": ["Observation", "Opts"],
+        "n": 5000,
+        "tStep": 0.02,
+        "reps": 1,
+        "scales": [0, 0.02, 0.1, 0.5],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "future",
+                "predictionTime": [100, 150],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

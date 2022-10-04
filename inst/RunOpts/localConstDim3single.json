@@ -1,0 +1,118 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "localConstDim3single",
+    "path": "~/DEEBtest",
+    "truthOpts": {
+        "_class": ["Truth", "Opts"],
+        "reps": 100,
+        "tMax": 200,
+        "tStepOut": 0.01,
+        "tStepOde": 0.01,
+        "deFunSampler": {
+            "_class": ["localConst", "Function", "Sampler", "Opts"],
+            "d": 3,
+            "bw": 2,
+            "nSupp": 30,
+            "locationSampler": {
+                "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
+                "range": [0, 10],
+                "sparsity": [],
+                "keepFirstColumn": false
+            },
+            "valueSampler": {
+                "_class": ["normal", "Array", "Sampler", "Opts"],
+                "sparsity": [],
+                "keepFirstColumn": false,
+                "mean": 0,
+                "sd": 1
+            },
+            "postprocessors": {
+                "_class": ["Postprocessor", "List", "Opts"],
+                "list": [ 
+                    {
+                        "_class": ["softBoundary", "Postprocessor", "Opts"],
+                        "boundaryRange": [5, 10]
+                    }
+                ]
+            }
+        },
+        "u0Sampler": {
+            "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
+            "range": [0, 1]    
+        },
+        "conditions": {
+            "_class": ["Condition", "List", "Opts"],
+            "list": [ 
+                {
+                    "_class": ["turning", "Condition", "Opts"],
+                    "threshold": 0.05,
+                    "minTurnCount": 15
+                }
+            ]
+        }
+    },
+    "observationOpts": {
+        "_class": ["Observation", "Opts"],
+        "n": 100,
+        "tStep": 1,
+        "reps": 1,
+        "scales": [0, 0.03, 0.1, 0.3],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "observation time",
+                "predictionTime": [0, 100],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "future",
+                "predictionTime": [100, 200],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

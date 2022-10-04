@@ -1,122 +1,90 @@
-openPlotDevice <- function(opts, mfrow) {
-  name <- getThisClass(opts)
-  if (name == "pdf") {
-    message("Opening PDF device file ", file.path(opts$outPath, opts$outFile))
-    grDevices::pdf(
-      file.path(opts$outPath, opts$outFile),
-      width = mfrow[2]*opts$scale,
-      height = mfrow[1]*opts$scale)
-    return(grDevices::dev.off)
-  } else if (name == "default") {
-    return(function() NULL)
-  } else {
-    stop("Unrecognized name ", name)
-  }
-}
-
-
 plotTogether <- function(opts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Plot")
-  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Plot"))
+  if (writeOpts) writeOpts(opts, file.path(opts$outPath, "Opts_Plot"))
 
-  truthParmsFiles <-
-    opts$truthPath |>
-    dir() |>
-    grep("^truth\\d+_parms\\.json$", x = _, value=TRUE)
-  truthTrajFiles <-
-    opts$truthPath |>
-    dir() |>
-    grep("^truth\\d+\\.csv$", x = _, value=TRUE)
+  plotsPath <- file.path(opts$outPath, "plots")
+  if (!dir.exists(plotsPath)) dir.create(plotsPath)
+  plotsPath <- normalizePath(plotsPath, mustWork=TRUE)
 
-  # TODO: make sure they match
+  metaTruthObs <- DEEBpath::getMetaGeneric(
+    c(opts$truthPath, opts$obsPath),
+    tagsFilter = c("truth", "obs"))
 
-  len <- length(truthTrajFiles)
-  n <- ceiling(sqrt(len))
-  mfrow <- c(ceiling(len/n), n)
-  finalizeDevice <- openPlotDevice(opts$device, mfrow = mfrow)
-  graphics::par(mfrow = mfrow)
-  graphics::par(mar = c(2,2,2,2))
+  metaTruthObs$plots <- lapply(
+    seq_len(nrow(metaTruthObs)),
+    \(i) createTruthObsPlots(metaTruthObs[i,]))
 
-  if (file.exists(file.path(opts$path, "Opts_Truth.json"))) {
-    truthOpts <- readOpts(
-      file.path(opts$path, "Opts_Truth.json"),
-      optsClass = "Truth",
-      .fill=FALSE)
+  for (i in 1:nrow(metaTruthObs)) {
+    row <- metaTruthObs[i,]
+    plots <- row$plots[[1]]
+    for (nm in names(plots)) {
+      plt <- plots[[nm]]
+      if (length(plt) == 0) next
+      fileName <- sprintf(
+        "Truth%04dObs%04d_%s.png",
+        row$truthNr, row$obsNr, nm)
+      ggplot2::ggsave(file.path(plotsPath, fileName), plt, width = 3, height = 3)
+    }
+  }
+
+  if (file.exists(file.path(opts$truthOptsPath, "Opts_Truth.json"))) {
+    truthOpts <- readOptsBare(file.path(opts$truthOptsPath, "Opts_Truth.json"))
   } else {
-    truthOpts <- readOpts(
-      file.path(opts$path, "Opts_Run.json"),
-      optsClass = "Run",
-      .fill=FALSE)$truthOpts
+    truthOpts <- readOptsBare(file.path(opts$truthOptsPath, "Opts_Run.json"))$truthOpts
   }
   fun <- getParmsFunction(truthOpts$deFunSampler)
 
-  pltList <- lapply(seq_len(len), \(i) {
+  metaTruth <- DEEBpath::getMetaGeneric(
+    opts$truthPath,
+    tagsFilter = c("truth", "_parms"))
 
-    flTraj <- truthTrajFiles[i]
-    fullPathTraj <- file.path(opts$truthPath, flTraj)
-    trajs <- readTrajs(fullPathTraj)
+  metaTruth$plots <- lapply(
+    seq_len(nrow(metaTruth)),
+    \(i) createTruthPlots(metaTruth[i,], fun))
 
-    nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
-
-    obsFileName <- paste0(
-      substr(flTraj, 1, nchar(flTraj)-4),
-      sprintf("obs%04d.csv", opts$obsNr))
-    obsFilePath <- file.path(opts$obsPath, obsFileName)
-    if (file.exists(obsFilePath)) {
-      obs <- readTrajs(obsFilePath)
-    } else {
-      obs <- NULL
+  for (i in 1:nrow(metaTruth)) {
+    row <- metaTruth[i,]
+    plots <- row$plots[[1]]
+    for (nm in names(plots)) {
+      plt <- plots[[nm]]
+      if (length(plt) == 0) next
+      fileName <- sprintf(
+        "Truth%04d_%s.png",
+        row$truthNr, nm)
+      ggplot2::ggsave(file.path(plotsPath, fileName), plt, width = 3, height = 3)
     }
+  }
 
-    DEEBplots::plotStateSpace(trajs, esti = NULL, obs = obs, title = nr)
-  })
-  plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
-  plot(plts)
-
-  pltList <- lapply(seq_len(len), \(i) {
-
-    flParms <- truthParmsFiles[i]
-    fullPathParms <- file.path(opts$truthPath, flParms)
-    parms <- readOpts(
-      fullPathParms,
-      c(class(truthOpts$deFunSampler)[1], "Parms"),
-      .fill = FALSE)
-    flTraj <- truthTrajFiles[i]
-    fullPathTraj <- file.path(opts$truthPath, flTraj)
-    traj <- readTrajs(fullPathTraj)
-
-    nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
-
-    DEEBplots::plotVectorField(traj, fun, parms, title = nr)
-  })
-  plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
-  plot(plts)
-
-
-  pltList <- lapply(seq_len(len), \(i) {
-
-    flTraj <- truthTrajFiles[i]
-    fullPathTraj <- file.path(opts$truthPath, flTraj)
-    traj <- readTrajs(fullPathTraj)
-
-    nr <- as.integer(stringr::str_match(flTraj, "\\d+"))
-
-    obsFileName <- paste0(
-      substr(flTraj, 1, nchar(flTraj)-4),
-      sprintf("obs%04d.csv", opts$obsNr))
-    obsFilePath <- file.path(opts$obsPath, obsFileName)
-    if (file.exists(obsFilePath)) {
-      obs <- readTrajs(obsFilePath)
-    } else {
-      obs <- NULL
-    }
-
-    DEEBplots::plotTimeState(traj, esti=NULL, obs=obs, title=nr)
-  })
-  plts <- gridExtra::arrangeGrob(grobs = pltList, ncol = n)
-  plot(plts)
-
-  finalizeDevice()
+  writeDoc(
+    "plots",
+    outDir = opts$outPath,
+    outFile = opts$outFileName,
+    plotsDir = plotsPath)
 }
 
+createTruthObsPlots <- function(info) {
+  info <- DEEBpath::loadPathsInInfo(as.list(info))
+  title <- sprintf("Truth %d, Obs %d", info$truthNr, info$obsNr)
+  list(
+    stateSpace = DEEBplots::plotStateSpace(
+      info$truth, esti = NULL, obs = info$obs, title = title),
+    timeState = DEEBplots::plotTimeState(
+      info$truth, esti=NULL, obs = info$obs, title = title))
+}
+
+createTruthPlots <- function(info, fun) {
+  info <- DEEBpath::loadPathsInInfo(as.list(info))
+  title <- sprintf("Truth %d", info$truthNr)
+  list(
+    velocityField = DEEBplots::plotVectorField(
+      info$truth, fun, info$`_parms`, title = title))
+}
+
+writeDoc <- function(markdown, outDir, outFile, ...) {
+  rmarkdown::render(
+    system.file("rmarkdown", paste0(markdown, ".Rmd"), package = "DEEBdata"),
+    params = list(...),
+    output_dir = outDir,
+    output_file= outFile)
+}
