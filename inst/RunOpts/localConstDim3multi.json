@@ -47,7 +47,7 @@
         "n": 20,
         "tStep": 1.5,
         "reps": 1,
-        "scales": [0, 0.02, 0.07, 0.2],
+        "scales": [0, 0.03, 0.1, 0.3],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
@@ -60,6 +60,7 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "observation time",
                 "predictionTime": [0, 10],
+                "timeStep": 0.1,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
@@ -84,6 +85,7 @@
                 "_class": ["newTrajs", "Task", "Opts"],
                 "name": "new trajectories",
                 "predictionTime": [0, 10],
+                "timeStep": 0.1,
                 "initialState": [
                     [ 0, 0, 0],
                     [ 3, 0, 0],

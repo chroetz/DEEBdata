@@ -6,7 +6,7 @@
         "_class": ["Truth", "Opts"],
         "reps": 100,
         "tMax": 10,
-        "tStepOut": 0.1,
+        "tStepOut": 0.05,
         "tStepOde": 0.01,
         "nTrajectories": 20,
         "deFunSampler": {
@@ -54,6 +54,7 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "observation time",
                 "predictionTime": [0, 10],
+                "timeStep": 0.05,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
@@ -78,6 +79,7 @@
                 "_class": ["newTrajs", "Task", "Opts"],
                 "name": "new trajectories",
                 "predictionTime": [0, 10],
+                "timeStep": 0.05,
                 "initialState": [
                     [ 0, 0],
                     [ 1, 0],

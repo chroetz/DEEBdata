@@ -1,5 +1,6 @@
 {
   "_class": ["estiObsTrajs", "Task", "Opts"],
   "_description": "estimate observed trajectories",
-  "predictionTime": [0, 1]
+  "predictionTime": [0, 1],
+  "timeStep": 0.1
 }

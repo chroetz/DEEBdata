@@ -38,6 +38,7 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "observation time",
                 "predictionTime": [0, 30],
+                "timeStep": 0.05,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
@@ -62,6 +63,7 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "future",
                 "predictionTime": [30, 60],
+                "timeStep": 0.05,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [

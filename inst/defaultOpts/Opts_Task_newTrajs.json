@@ -2,5 +2,6 @@
   "_class": ["newTrajs", "Task", "Opts"],
   "_description": "estimate trajectoreies starting from given points",
   "predictionTime": [0, 1],
+  "timeStep": 0.1,
   "initialState": [[0]]
 }

@@ -6,7 +6,7 @@
         "_class": ["Truth", "Opts"],
         "reps": 100,
         "tMax": 40,
-        "tStepOut": 0.005,
+        "tStepOut": 0.01,
         "tStepOde": 0.001,
         "deFunSampler": {
             "_class": ["lorenz63", "Function", "Sampler", "Opts"],
@@ -38,6 +38,7 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "observation time",
                 "predictionTime": [0, 20],
+                "timeStep": 0.01,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
@@ -62,6 +63,7 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "future",
                 "predictionTime": [20, 40],
+                "timeStep": 0.01,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
