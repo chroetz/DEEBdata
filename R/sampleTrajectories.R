@@ -15,7 +15,6 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
           tStep = opts$tStepOde,
           opts = opts$odeSolver,
           parms = parms)
-        traj <- interpolateTrajs(traj, seq(0, opts$tMax, by=opts$tStepOut))
         if (checkConditions(opts$conditions, traj, fun, parms)) {
           successU0 <- TRUE
           cat("o")
@@ -43,7 +42,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 }
 
 
-sampleTrajectories <- function(opts, writeOpts = TRUE) {
+sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Truth")
   if (!dir.exists(opts$path)) dir.create(opts$path)
@@ -55,10 +54,50 @@ sampleTrajectories <- function(opts, writeOpts = TRUE) {
 
   set.seed(opts$seed)
 
-  for (i in seq_len(opts$reps)) {
-    message("Iteration ", i, " of ", opts$reps, ".")
+  for (truthNr in seq_len(opts$reps)) {
+    message("Iteration ", truthNr, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
-    writeTrajs(res$trajs, file.path(opts$path, sprintf("truth%04d.csv",i)))
-    writeOpts(res$parms, file.path(opts$path, sprintf("truth%04dparms",i)))
+    writeOpts(res$parms, file.path(opts$path, sprintf("truth%04dparms",truthNr)))
+    for (taskNr in seq_along(taskList$list)) {
+      writeTurthForTask(
+        res$trajs, res$parms, fun,
+        taskList$list[[taskNr]],
+        file.path(opts$path, sprintf("task%02dtruth%04d.csv", taskNr, truthNr)),
+        opts)
+    }
   }
+}
+
+writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
+  taskClass <- getClassAt(task, 2)
+  switch(
+    taskClass,
+    "estiObsTrajs" = {
+      times <- seq(task$predictionTime[1], task$predictionTime[2], task$timeStep)
+      trajs <- interpolateTrajs(trajs, times)
+      writeTrajs(trajs, filePath)
+    },
+    "newTrajs" = {
+      newTrajs <- solveOdeMulti(
+        derivFun, task$initialState,
+        tMax = task$predictionTime[2],
+        tStep = opts$tStepOde,
+        opts = opts$odeSolver,
+        parms = parms)
+      times <- seq(task$predictionTime[1], task$predictionTime[2], task$timeStep)
+      newTrajs <- interpolateTrajs(newTrajs, times)
+      writeTrajs(newTrajs, filePath)
+    },
+    "velocity " = {
+      gridSides <- lapply(seq_along(task$gridSteps), \(i) seq(
+        task$gridRanges[i,1],
+        task$gridRanges[i,2],
+        task$gridSteps[i]
+      ))
+      states <- as.matrix(expand.grid(gridSides))
+      derivs <- t(apply(states, 1, \(s) derivFun(0, s, parms)[[1]]))
+      result <- makeDerivTrajs(state = states, deriv = derivs)
+      writeDerivTrajs(result, filePath)
+    },
+    stop("Unknown task class ", taskClass))
 }

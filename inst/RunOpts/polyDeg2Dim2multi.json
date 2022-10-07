@@ -110,8 +110,8 @@
             {
                 "_class": ["velocity", "Task", "Opts"],
                 "name": "velocity",
-                "gridRanges": [[-1, 1], [-1, 1], [-1, 1]],
-                "gridSteps": [0.1, 0.1, 0.1],
+                "gridRanges": [[-1, 1], [-1, 1]],
+                "gridSteps": [0.1, 0.1],
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [

@@ -18,7 +18,7 @@ run <- function(x, createExample = FALSE, overwriteList = NULL) {
   writeOpts(opts, "Opts_Run")
 
   dir.create("estimation")
-  sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
+  sampleTrajectoriesAndWriteForTasks(opts$truthOpts, opts$taskList, writeOpts = FALSE)
   generateObservations(opts$observationOpts, writeOpts = FALSE)
   writeTasks(opts$taskList, writeOpts = FALSE)
   plotTogether(opts$plotOpts, writeOpts = FALSE)
@@ -29,7 +29,7 @@ run <- function(x, createExample = FALSE, overwriteList = NULL) {
     opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)
     opts$observationOpts$seed <- sample.int(.Machine$integer.max, 1)
     writeOpts(opts, "Opts_Run")
-    sampleTrajectories(opts$truthOpts, writeOpts = FALSE)
+    sampleTrajectoriesAndWriteForTasks(opts$truthOpts, opts$taskList, writeOpts = FALSE)
     generateObservations(opts$observationOpts, writeOpts = FALSE)
     plotTogether(opts$plotOpts, writeOpts = FALSE)
     writeTasks(opts$taskList, writeOpts = FALSE)
