@@ -33,9 +33,13 @@ run <- function(x, createExample = FALSE, overwriteList = NULL) {
     opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)
     opts$observationOpts$seed <- sample.int(.Machine$integer.max, 1)
     writeOpts(opts, "Opts_Run")
-    sampleTrajectoriesAndWriteForTasks(opts$truthOpts, opts$taskList, writeOpts = FALSE)
+    sampleTrajectoriesAndWriteForTasks(
+      opts$truthOpts,
+      opts$taskList,
+      opts$observationOpts,
+      writeOpts = FALSE)
     generateObservations(opts$observationOpts, writeOpts = FALSE)
-    plotTogether(opts$plotOpts, writeOpts = FALSE)
     writeTasks(opts$taskList, writeOpts = FALSE)
+    plotTogether(opts$plotOpts, writeOpts = FALSE)
   }
 }

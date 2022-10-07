@@ -18,7 +18,7 @@ library(tidyverse)
 ```
 
 ```{r, include=FALSE}
-pattern <- "Truth(\\d+)Obs(\\d+)_(\\w+)\\.png"
+pattern <- "Truth(\\d+)Obs(\\d+)(\\w+)\\.png"
 fileMatrix <- 
   params$plotsDir |> 
   dir() |> 
@@ -32,34 +32,44 @@ truthObsPlots <-
 ```
 
 ```{r, include=FALSE}
-pattern <- "Truth(\\d+)_(\\w+)\\.png"
+pattern <- "Truth(\\d+)Task(\\d+)(\\w+)\\.png"
 fileMatrix <- 
   params$plotsDir |> 
   dir() |> 
   str_subset(pattern) |> 
   str_match(pattern)
-colnames(fileMatrix) <- c("fileName", "truthNr", "kind")
-truthPlots <- 
+colnames(fileMatrix) <- c("fileName", "truthNr", "taskNr", "kind")
+truthTaskPlots <- 
   as_tibble(fileMatrix) |> 
   mutate(across(ends_with("Nr"), as.integer)) |> 
   mutate(path = normalizePath(file.path(params$plotsDir, .data$fileName), mustWork=TRUE))
 ```
 
-```{r}
-plots <- bind_rows(
-  truthObsPlots,
-  truthPlots |> mutate(obsNr = NA))
+
+
+# Observation  {.tabset}
+
+```{r results='asis', fig.show='asis'}
+for (knd in unique(truthObsPlots$kind)) {
+  cat("##", knd, " {.tabset}\n\n")
+  kindPlots <- filter(truthObsPlots, kind == knd)
+  for (thnr in sort(unique(kindPlots$truthNr))) {
+    truthPlots <- filter(kindPlots, truthNr == thnr)
+    cat(paste(paste0("![](", truthPlots$path, "){width=", min(40, 100/(length(truthPlots$path))-1),"%}"), collapse="\n"), "\n\n") 
+  }
+  cat("\n\n")
+}
 ```
 
 
-# Plots  {.tabset}
+# Tasks  {.tabset}
 
 ```{r results='asis', fig.show='asis'}
-for (knd in unique(plots$kind)) {
-  cat("##", knd, " {.tabset}\n\n")
-  kindPlots <- filter(plots, kind == knd)
-  for (thnr in sort(unique(kindPlots$truthNr))) {
-    truthPlots <- filter(kindPlots, truthNr == thnr)
+for (tnr in unique(truthTaskPlots$taskNr)) {
+  cat("## Task ", tnr, " {.tabset}\n\n")
+  taskPlots <- filter(truthTaskPlots, taskNr == tnr)
+  for (thnr in sort(unique(taskPlots$truthNr))) {
+    truthPlots <- filter(taskPlots, truthNr == thnr)
     cat(paste(paste0("![](", truthPlots$path, "){width=", min(40, 100/(length(truthPlots$path))-1),"%}"), collapse="\n"), "\n\n") 
   }
   cat("\n\n")

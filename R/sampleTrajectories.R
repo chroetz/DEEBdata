@@ -61,12 +61,12 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
     writeTruthForObservation(
       res$trajs,
       observationOpts,
-      file.path(opts$path, sprintf("truth%04d.csv", truthNr)))
+      file.path(opts$path, sprintf("obs_truth%04d.csv", truthNr))) # TODO: handle with DEEBpath
     for (taskNr in seq_along(taskList$list)) {
       writeTurthForTask(
         res$trajs, res$parms, fun,
         taskList$list[[taskNr]],
-        file.path(opts$path, sprintf("task%02dtruth%04d.csv", taskNr, truthNr)),
+        file.path(opts$path, sprintf("task%02dtruth%04d.csv", taskNr, truthNr)), # TODO: handle with DEEBpath
         opts)
     }
   }
@@ -98,7 +98,7 @@ writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
       outTrajs <- interpolateTrajs(newTrajs, times)
       writeTrajs(outTrajs, filePath)
     },
-    "velocity " = {
+    "velocity" = {
       gridSides <- lapply(seq_along(task$gridSteps), \(i) seq(
         task$gridRanges[i,1],
         task$gridRanges[i,2],
@@ -109,5 +109,6 @@ writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
       result <- makeDerivTrajs(state = states, deriv = derivs)
       writeDerivTrajs(result, filePath)
     },
-    stop("Unknown task class ", taskClass))
+    stop("Unknown task class ", taskClass)
+  )
 }

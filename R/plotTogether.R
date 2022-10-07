@@ -8,52 +8,30 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   if (!dir.exists(plotsPath)) dir.create(plotsPath)
   plotsPath <- normalizePath(plotsPath, mustWork=TRUE)
 
-  metaTruthObs <- DEEBpath::getMetaGeneric(
+  metaObs <- DEEBpath::getMetaGeneric(
     c(opts$truthPath, opts$obsPath),
     tagsFilter = c("truth", "obs"))
 
-  metaTruthObs$plots <- lapply(
-    seq_len(nrow(metaTruthObs)),
-    \(i) createTruthObsPlots(metaTruthObs[i,]))
-
-  for (i in 1:nrow(metaTruthObs)) {
-    row <- metaTruthObs[i,]
-    plots <- row$plots[[1]]
-    for (nm in names(plots)) {
-      plt <- plots[[nm]]
-      if (length(plt) == 0) next
-      fileName <- sprintf(
-        "Truth%04dObs%04d_%s.png",
-        row$truthNr, row$obsNr, nm)
-      ggplot2::ggsave(file.path(plotsPath, fileName), plt, width = 3, height = 3)
+  for (i in seq_len(nrow(metaObs))) {
+    info <- metaObs[i,]
+    plts <- createTruthObsPlots(info)
+    for (nm in names(plts)) {
+      fileName <- sprintf("Truth%04dObs%04d%s.png", info$truthNr, info$obsNr, nm)
+      ggplot2::ggsave(file.path(plotsPath, fileName), plts[[nm]], width = 3, height = 3)
     }
   }
 
-  if (file.exists(file.path(opts$truthOptsPath, "Opts_Truth.json"))) {
-    truthOpts <- readOptsBare(file.path(opts$truthOptsPath, "Opts_Truth.json"))
-  } else {
-    truthOpts <- readOptsBare(file.path(opts$truthOptsPath, "Opts_Run.json"))$truthOpts
-  }
-  fun <- getParmsFunction(truthOpts$deFunSampler)
-
   metaTruth <- DEEBpath::getMetaGeneric(
-    opts$truthPath,
-    tagsFilter = c("truth", "parms"))
+    c(opts$truthPath, opts$taskPath),
+    tagsFilter = c("truth", "task"))
+  if (!"taskNr" %in% colnames(metaTruth)) metaTruth <- metaTruth[0,]
 
-  metaTruth$plots <- lapply(
-    seq_len(nrow(metaTruth)),
-    \(i) createTruthPlots(metaTruth[i,], fun))
-
-  for (i in 1:nrow(metaTruth)) {
-    row <- metaTruth[i,]
-    plots <- row$plots[[1]]
-    for (nm in names(plots)) {
-      plt <- plots[[nm]]
-      if (length(plt) == 0) next
-      fileName <- sprintf(
-        "Truth%04d_%s.png",
-        row$truthNr, nm)
-      ggplot2::ggsave(file.path(plotsPath, fileName), plt, width = 3, height = 3)
+  for (i in seq_len(nrow(metaTruth))) {
+    info <- metaTruth[i,]
+    plts <- createTruthTaskPlots(info)
+    for (nm in names(plts)) {
+      fileName <- sprintf("Truth%04dTask%02d%s.png", info$truthNr, info$taskNr, nm)
+      ggplot2::ggsave(file.path(plotsPath, fileName), plts[[nm]], width = 3, height = 3)
     }
   }
 
@@ -64,6 +42,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
     plotsDir = plotsPath)
 }
 
+
 createTruthObsPlots <- function(info) {
   info <- DEEBpath::loadPathsInInfo(as.list(info))
   title <- sprintf("Truth %d, Obs %d", info$truthNr, info$obsNr)
@@ -71,16 +50,42 @@ createTruthObsPlots <- function(info) {
     stateSpace = DEEBplots::plotStateSpace(
       info$truth, esti = NULL, obs = info$obs, title = title),
     timeState = DEEBplots::plotTimeState(
-      info$truth, esti=NULL, obs = info$obs, title = title))
+      info$truth, esti = NULL, obs = info$obs, title = title)
+    )
 }
 
-createTruthPlots <- function(info, fun) {
+
+createTruthTaskPlots <- function(info) {
   info <- DEEBpath::loadPathsInInfo(as.list(info))
-  title <- sprintf("Truth %d", info$truthNr)
-  list(
-    velocityField = DEEBplots::plotVectorField(
-      info$truth, fun, info$parms, title = title))
+  title <- sprintf("Truth %d, Task %d", info$truthNr, info$taskNr)
+  taskClass <- getClassAt(info$task, 2)
+  switch(
+    taskClass,
+    "estiObsTrajs" = {
+      list(
+        stateSpace = DEEBplots::plotStateSpace(
+          info$truth, esti = NULL, obs = NULL, title = title),
+        timeState = DEEBplots::plotTimeState(
+          info$truth, esti = NULL, obs = NULL, title = title)
+      )
+    },
+    "newTrajs" = {
+      list(
+        stateSpace = DEEBplots::plotStateSpace(
+          info$truth, esti = NULL, obs = NULL, title = title),
+        timeState = DEEBplots::plotTimeState(
+          info$truth, esti = NULL, obs = NULL, title = title)
+      )
+    },
+    "velocity" = {
+      list(
+        vectorField = DEEBplots::plotVectorField(info$truth, title = title)
+      )
+    },
+    stop("Unknown task class ", taskClass)
+  )
 }
+
 
 writeDoc <- function(markdown, outDir, outFile, ...) {
   rmarkdown::render(

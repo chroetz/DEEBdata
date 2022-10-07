@@ -6,33 +6,28 @@ generateObservations <- function(opts, writeOpts = TRUE) {
 
   set.seed(opts$seed)
 
-  files <-
-    dir(opts$truthPath) |>
-    grep("^truth\\d+\\.csv$", x = _, value=TRUE)
+  meta <- DEEBpath::getMetaGeneric(opts$truthPath, tagsFilter = c("obs", "truth"))
 
-  if (length(files) == 0) {
+  if (nrow(meta) == 0) {
     message("No truth files found.")
     return(invisible(NULL))
   }
   d <-
-    file.path(opts$truthPath, files[1]) |>
+    meta$truthPath[1] |>
     readTrajs() |>
     getDim()
   noiseSampler <- buildNoiseSampler(opts$noiseSampler, d = d)
 
-  for (fl in files) {
-    message("Process Truth in ", fl)
-    fullPath <- file.path(opts$truthPath, fl)
-    truth <- readTrajs(fullPath)
-
-    z <- 0
+  for (i in seq_len(nrow(meta))) {
+    info <- meta[i, ]
+    message("Process Truth ", info$truthNr)
+    truth <- readTrajs(info$truthPath)
+    obsNr <- 0
     for (i in seq_len(opts$reps)) for (s in opts$scales) {
-      z <- z+1
-      message("Generate observations. Iteration ", z)
+      obsNr <- obsNr+1
+      message("Generate observations. Iteration ", obsNr)
       obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler, scale=s)
-      obsFileName <- paste0(
-        substr(fl, 1, nchar(fl)-4), # remove file ending
-        sprintf("obs%04d.csv", z))
+      obsFileName <- sprintf("truth%04dobs%04d.csv", info$truthNr, obsNr) # TODO: handle with DEEBpath
       writeTrajs(obs, file.path(opts$path, obsFileName))
     }
   }

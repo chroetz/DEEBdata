@@ -11,5 +11,7 @@
   "_truthPath_description": "",
   "obsPath": "observation",
   "_obsPath_description": "",
+  "taskPath": "task",
+  "_taskPath_description": "",
   "outFileName": "Plots_TruthObs"
 }
