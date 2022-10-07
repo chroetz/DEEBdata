@@ -42,7 +42,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
 }
 
 
-sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, writeOpts = TRUE) {
+sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, writeOpts = TRUE) {
 
   opts <- asOpts(opts, "Truth")
   if (!dir.exists(opts$path)) dir.create(opts$path)
@@ -58,6 +58,10 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, writeOpts = TRUE)
     message("Iteration ", truthNr, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
     writeOpts(res$parms, file.path(opts$path, sprintf("truth%04dparms",truthNr)))
+    writeTruthForObservation(
+      res$trajs,
+      observationOpts,
+      file.path(opts$path, sprintf("truth%04d.csv", truthNr)))
     for (taskNr in seq_along(taskList$list)) {
       writeTurthForTask(
         res$trajs, res$parms, fun,
@@ -68,14 +72,20 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, writeOpts = TRUE)
   }
 }
 
+writeTruthForObservation <- function(trajs, observationOpts, filePath) {
+  times <- seq(0, by = observationOpts$tStep, length.out = observationOpts$n)
+  outTrajs <- interpolateTrajs(trajs, times)
+  writeTrajs(outTrajs, filePath)
+}
+
 writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
   taskClass <- getClassAt(task, 2)
   switch(
     taskClass,
     "estiObsTrajs" = {
       times <- seq(task$predictionTime[1], task$predictionTime[2], task$timeStep)
-      trajs <- interpolateTrajs(trajs, times)
-      writeTrajs(trajs, filePath)
+      outTrajs <- interpolateTrajs(trajs, times)
+      writeTrajs(outTrajs, filePath)
     },
     "newTrajs" = {
       newTrajs <- solveOdeMulti(
@@ -85,8 +95,8 @@ writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
         opts = opts$odeSolver,
         parms = parms)
       times <- seq(task$predictionTime[1], task$predictionTime[2], task$timeStep)
-      newTrajs <- interpolateTrajs(newTrajs, times)
-      writeTrajs(newTrajs, filePath)
+      outTrajs <- interpolateTrajs(newTrajs, times)
+      writeTrajs(outTrajs, filePath)
     },
     "velocity " = {
       gridSides <- lapply(seq_along(task$gridSteps), \(i) seq(

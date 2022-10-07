@@ -18,7 +18,11 @@ run <- function(x, createExample = FALSE, overwriteList = NULL) {
   writeOpts(opts, "Opts_Run")
 
   dir.create("estimation")
-  sampleTrajectoriesAndWriteForTasks(opts$truthOpts, opts$taskList, writeOpts = FALSE)
+  sampleTrajectoriesAndWriteForTasks(
+    opts$truthOpts,
+    opts$taskList,
+    opts$observationOpts,
+    writeOpts = FALSE)
   generateObservations(opts$observationOpts, writeOpts = FALSE)
   writeTasks(opts$taskList, writeOpts = FALSE)
   plotTogether(opts$plotOpts, writeOpts = FALSE)

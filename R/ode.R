@@ -10,7 +10,7 @@ solveOde <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
   return(asTrajs(u))
 }
 
-solveOdeMulti <- function(fun, initialStates, tMax, tStep, opts = list(), parms = NULL) {
+solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
   # TODO: fix code duplication; strange handling of time; move to DEEBtrajs package
   opts <- asOpts(opts, "OdeSolver")
   tm <- seq(0, tMax, by = tStep)

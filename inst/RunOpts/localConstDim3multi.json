@@ -6,7 +6,6 @@
         "_class": ["Truth", "Opts"],
         "reps": 100,
         "tMax": 30,
-        "tStepOut": 0.1,
         "tStepOde": 0.01,
         "nTrajectories": 30,
         "deFunSampler": {

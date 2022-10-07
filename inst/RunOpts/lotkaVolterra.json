@@ -7,7 +7,6 @@
         "reps": 1,
         "tMax": 60,
         "tStepOde": 0.01,
-        "tStepOut": 0.05,
         "deFunSampler": {
             "_class": ["lotkaVolterra", "Function", "Sampler", "Opts"],
             "coefSampler": {

@@ -5,7 +5,6 @@
     "truthOpts": {
         "_class": ["Truth", "Opts"],
         "reps": 100,
-        "tMax": 40,
         "tStepOut": 0.01,
         "tStepOde": 0.001,
         "deFunSampler": {
