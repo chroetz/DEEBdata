@@ -1,7 +1,6 @@
 {
     "_class": ["Score", "Opts"],
     "_description": "",
-    "name": "ScoreName",
-    "optimalValue": 0
+    "name": "ScoreName"
 }
   

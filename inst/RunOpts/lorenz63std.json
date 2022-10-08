@@ -41,14 +41,15 @@
                     "_class": ["Score", "List", "Opts"],
                     "list": [
                         {
-                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
-                            "name": "FollowTime"
-                        },
-                        {
                             "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
                             "name": "W2",
                             "p": 2
-                        }
+                        },
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "lostTimeThreshold": 2
+                        }   
                     ]
                 }
             }

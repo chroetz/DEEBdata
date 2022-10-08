@@ -85,6 +85,11 @@
                             "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
                             "name": "W2",
                             "p": 2
+                        },
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "lostTimeThreshold": 10
                         }
                     ]
                 }
@@ -110,6 +115,11 @@
                             "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
                             "name": "W2",
                             "p": 2
+                        },
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "lostTimeThreshold": 10
                         }
                     ]
                 }
