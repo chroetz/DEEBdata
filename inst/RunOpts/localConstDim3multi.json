@@ -4,7 +4,7 @@
     "path": "~/DEEBtest",
     "truthOpts": {
         "_class": ["Truth", "Opts"],
-        "reps": 100,
+        "reps": 1,
         "tMax": 30,
         "tStepOde": 0.01,
         "nTrajectories": 30,

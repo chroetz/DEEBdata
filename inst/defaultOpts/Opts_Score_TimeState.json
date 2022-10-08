@@ -1,6 +1,5 @@
 {
     "_class": ["TimeState", "Score", "Opts"],
-    "_description": "",
-    "timeSteps": 1000
+    "_description": ""
 }
   
