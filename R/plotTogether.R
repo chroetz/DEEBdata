@@ -16,7 +16,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
     info <- metaObs[i,]
     plts <- createTruthObsPlots(info)
     for (nm in names(plts)) {
-      fileName <- sprintf("Truth%04dObs%04d%s.png", info$truthNr, info$obsNr, nm)
+      fileName <- DEEBpath::parenthesisFileName(truth = info$truthNr, obs = info$obsNr, plot = nm, .ending = "png")
       ggplot2::ggsave(file.path(plotsPath, fileName), plts[[nm]], width = 3, height = 3)
     }
   }
@@ -30,16 +30,12 @@ plotTogether <- function(opts, writeOpts = TRUE) {
     info <- metaTruth[i,]
     plts <- createTruthTaskPlots(info)
     for (nm in names(plts)) {
-      fileName <- sprintf("Truth%04dTask%02d%s.png", info$truthNr, info$taskNr, nm)
+      fileName <- DEEBpath::parenthesisFileName(truth = info$truthNr, task = info$taskNr, plot = nm, .ending = "png")
       ggplot2::ggsave(file.path(plotsPath, fileName), plts[[nm]], width = 3, height = 3)
     }
   }
 
-  writeDoc(
-    "plots",
-    outDir = opts$path,
-    outFile = opts$outFileName,
-    plotsDir = plotsPath)
+  DEEBplots::createShowPlots(opts$path)
 }
 
 
@@ -84,13 +80,4 @@ createTruthTaskPlots <- function(info) {
     },
     stop("Unknown task class ", taskClass)
   )
-}
-
-
-writeDoc <- function(markdown, outDir, outFile, ...) {
-  rmarkdown::render(
-    system.file("rmarkdown", paste0(markdown, ".Rmd"), package = "DEEBdata"),
-    params = list(...),
-    output_dir = outDir,
-    output_file= outFile)
 }
