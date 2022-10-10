@@ -1,17 +1,10 @@
 solveOde <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
   opts <- asOpts(opts, "OdeSolver")
   tm <- seq(0, tMax, by = tStep)
-  suppressWarnings(suppressMessages(utils::capture.output( # make silent
-    u <- do.call(
-      deSolve::ode,
-      c(list(y = u0, times = tm, func = fun, parms = parms), opts))
-  )))
-  colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
-  return(asTrajs(u))
+  .solveOde(fun, u0, tm, parms, opts)
 }
 
 solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
-  # TODO: fix code duplication; strange handling of time; move to DEEBtrajs package
   opts <- asOpts(opts, "OdeSolver")
   tm <- seq(0, tMax, by = tStep)
   if (is.null(nrow(u0))) {
@@ -22,15 +15,19 @@ solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
   }
   trajIds <- rownames(u0)
   trajList <- lapply(seq_len(nrow(u0)), \(i) {
-    suppressWarnings(suppressMessages(utils::capture.output( # make silent
-      u <- do.call(
-        deSolve::ode,
-        c(list(y = u0[i, ], times = tm, func = fun, parms = parms), opts))
-    )))
-    colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
-    trajs <- asTrajs(u)
+    trajs <- .solveOde(fun, u0, tm, parms, opts)
     trajs <- setTrajId(trajs, trajIds[i])
     return(trajs)
   })
   return(bindTrajs(trajList))
+}
+
+.solveOde <- function(fun, u0, time, parms, opts) {
+  suppressWarnings(suppressMessages(utils::capture.output( # make silent
+    u <- do.call(
+      deSolve::ode,
+      c(list(y = u0, times = time, func = fun, parms = parms), opts))
+  )))
+  colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
+  return(asTrajs(u))
 }

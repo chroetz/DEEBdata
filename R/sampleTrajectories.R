@@ -57,16 +57,16 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
   for (truthNr in seq_len(opts$reps)) {
     message("Iteration ", truthNr, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
-    writeOpts(res$parms, file.path(opts$path, sprintf("truth%04dparms",truthNr)))
+    writeOpts(res$parms, file.path(opts$path, DEEBpath::parmsFile(truthNr = truthNr)))
     writeTruthForObservation(
       res$trajs,
       observationOpts,
-      file.path(opts$path, sprintf("obs_truth%04d.csv", truthNr))) # TODO: handle with DEEBpath
+      file.path(opts$path, DEEBpath::obsTruthFile(truthNr = truthNr)))
     for (taskNr in seq_along(taskList$list)) {
       writeTurthForTask(
         res$trajs, res$parms, fun,
         taskList$list[[taskNr]],
-        file.path(opts$path, sprintf("task%02dtruth%04d.csv", taskNr, truthNr)), # TODO: handle with DEEBpath
+        file.path(opts$path, DEEBpath::taskTruthFile(truthNr = truthNr, taskNr = taskNr)),
         opts)
     }
   }

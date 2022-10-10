@@ -27,7 +27,7 @@ generateObservations <- function(opts, writeOpts = TRUE) {
       obsNr <- obsNr+1
       message("Generate observations. Iteration ", obsNr)
       obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler, scale=s)
-      obsFileName <- sprintf("truth%04dobs%04d.csv", info$truthNr, obsNr) # TODO: handle with DEEBpath
+      obsFileName <- DEEBpath::obsFile(truthNr = info$truthNr, obsNr = obsNr)
       writeTrajs(obs, file.path(opts$path, obsFileName))
     }
   }

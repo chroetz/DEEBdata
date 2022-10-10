@@ -5,7 +5,7 @@ writeTasks <- function(opts, writeOpts = TRUE) {
   taskNr <- 0
   for (task in opts$list) {
     taskNr <- taskNr + 1
-    writeOpts(task, file.path(opts$path, sprintf("task%02d", taskNr)))
+    writeOpts(task, file.path(opts$path, DEEBpath::taskFile(taskNr = taskNr)))
   }
   return(taskNr)
 }
