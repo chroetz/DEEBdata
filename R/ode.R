@@ -14,9 +14,9 @@ solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
     rownames(u0) <- seq_len(nrow(u0))
   }
   trajIds <- rownames(u0)
-  trajList <- lapply(seq_len(nrow(u0)), \(i) {
-    trajs <- .solveOde(fun, u0, tm, parms, opts)
-    trajs <- setTrajId(trajs, trajIds[i])
+  trajList <- lapply(trajIds, \(id) {
+    trajs <- .solveOde(fun, u0[id, ], tm, parms, opts)
+    trajs <- setTrajId(trajs, id)
     return(trajs)
   })
   return(bindTrajs(trajList))
