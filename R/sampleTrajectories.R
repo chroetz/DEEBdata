@@ -32,18 +32,33 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSetti
       trajList[[k]] <- setTrajId(traj, k)
     }
     if (length(trajList) < opts$nTrajectories) next
-    taskTrajs <- lapply(taskTrajsSettings$initialState, \(inis) {
-      solveOde(
-        fun, inis,
-        tMax = taskTrajsSettings$tMax,
-        tStep = opts$tStepOde,
-        opts = opts$odeSolver,
-        parms = parms)
+
+    successTask <- TRUE
+    taskTrajs <- lapply(taskTrajsSettings, \(tts) {
+      if (length(tts) == 0) return(NULL)
+      tt <- lapply(seq_len(nrow(tts$initialState)), \(id) {
+        trajs <- solveOde(
+          fun, tts$initialState[id, ],
+          tMax = tts$tMax,
+          tStep = opts$tStepOde,
+          opts = opts$odeSolver,
+          parms = parms)
+        if (is.null(trajs)) return(NULL)
+        trajs <- setTrajId(trajs, id)
+        return(trajs)
+      })
+      if (any(vapply(tt, is.null, logical(1)))) {
+        successTask <<- FALSE
+        return(NULL)
+      }
+      bindTrajs(tt)
     })
-    if (any(vapply(taskTrajs, is.null, logical(1)))) {
+    if (!successTask) {
       nRejections <- nRejections + 1
+      cat("T")
       next
     }
+
     successFun <- TRUE
     cat("\n")
     break
@@ -55,7 +70,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSetti
   return(list(
     trajs = bindTrajs(trajList),
     parms = parms,
-    taskTrajs = bindTrajs(taskTrajs)))
+    taskTrajs = taskTrajs))
 }
 
 
