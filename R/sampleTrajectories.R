@@ -15,7 +15,10 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
           tStep = opts$tStepOde,
           opts = opts$odeSolver,
           parms = parms)
-        if (checkConditions(opts$conditions, traj, fun, parms)) {
+        if (
+          !is.null(traj) &&
+          checkConditions(opts$conditions, traj, fun, parms)
+        ) {
           successU0 <- TRUE
           cat("o")
           break
