@@ -1,4 +1,4 @@
-sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
+sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSettings) {
 
   successFun <- FALSE
   nRejections <- 0
@@ -31,17 +31,31 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts) {
       }
       trajList[[k]] <- setTrajId(traj, k)
     }
-    if (length(trajList) == opts$nTrajectories) {
-      successFun <- TRUE
-      cat("\n")
-      break
+    if (length(trajList) < opts$nTrajectories) next
+    taskTrajs <- lapply(taskTrajsSettings$initialState, \(inis) {
+      solveOde(
+        fun, inis,
+        tMax = taskTrajsSettings$tMax,
+        tStep = opts$tStepOde,
+        opts = opts$odeSolver,
+        parms = parms)
+    })
+    if (any(vapply(taskTrajs, is.null, logical(1)))) {
+      nRejections <- nRejections + 1
+      next
     }
+    successFun <- TRUE
+    cat("\n")
+    break
   }
   if (!successFun) stop("Could not meet conditions.")
   message("Created ", length(trajList), " trajectories. ",
           nRejections, " rejections in the process.")
 
-  return(list(trajs = bindTrajs(trajList), parms = parms))
+  return(list(
+    trajs = bindTrajs(trajList),
+    parms = parms,
+    taskTrajs = bindTrajs(taskTrajs)))
 }
 
 
@@ -55,11 +69,19 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
   fun <- getParmsFunction(opts$deFunSampler)
   u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = c(1, opts$deFunSampler$d))
 
+  # Some tasks require the existence / calculatability of further trajectories
+  # (starting from new initial states) additional to those used for creating the
+  # observations and solving the task of predicting these observed trajectories
+  # into the future. These are collected here and are then calculated in
+  # sampleConditional(). If the ODE solver cannot calculate them, the sampled
+  # parms are rejected.
+  taskTrajsSettings <- collectRequiredTrajsFromTasks(taskList)
+
   set.seed(opts$seed)
 
   for (truthNr in seq_len(opts$reps)) {
     message("Iteration ", truthNr, " of ", opts$reps, ".")
-    res <- sampleConditional(parmsSampler, fun, u0Sampler, opts)
+    res <- sampleConditional(parmsSampler, fun, u0Sampler, opts, taskTrajsSettings)
     writeOpts(res$parms, file.path(opts$path, DEEBpath::parmsFile(truthNr = truthNr)))
     writeTruthForObservation(
       res$trajs,
@@ -69,6 +91,7 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
       writeTurthForTask(
         res$trajs, res$parms, fun,
         taskList$list[[taskNr]],
+        res$taskTrajs[[taskNr]],
         file.path(opts$path, DEEBpath::taskTruthFile(truthNr = truthNr, taskNr = taskNr)),
         opts)
     }
@@ -81,7 +104,7 @@ writeTruthForObservation <- function(trajs, observationOpts, filePath) {
   writeTrajs(outTrajs, filePath)
 }
 
-writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
+writeTurthForTask <- function(trajs, parms, derivFun, task, taskTrajs, filePath, opts) {
   taskClass <- getClassAt(task, 2)
   switch(
     taskClass,
@@ -91,14 +114,8 @@ writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
       writeTrajs(outTrajs, filePath)
     },
     "newTrajs" = {
-      newTrajs <- solveOdeMulti(
-        derivFun, task$initialState,
-        tMax = task$predictionTime[2],
-        tStep = opts$tStepOde,
-        opts = opts$odeSolver,
-        parms = parms)
       times <- seq(task$predictionTime[1], task$predictionTime[2], task$timeStep)
-      outTrajs <- interpolateTrajs(newTrajs, times)
+      outTrajs <- interpolateTrajs(taskTrajs, times)
       writeTrajs(outTrajs, filePath)
     },
     "velocity" = {
@@ -115,3 +132,18 @@ writeTurthForTask <- function(trajs, parms, derivFun, task, filePath, opts) {
     stop("Unknown task class ", taskClass)
   )
 }
+
+collectRequiredTrajsFromTasks <- function(taskList) {
+  lapply(taskList$list, \(task) {
+    taskClass <- getClassAt(task, 2)
+    switch(
+      taskClass,
+      "estiObsTrajs" = NULL,
+      "newTrajs" = list(
+        initialState = task$initialState,
+        tMax = task$predictionTime[2]),
+      "velocity" = NULL,
+      stop("Unknown task class ", taskClass)
+    )})
+}
+
