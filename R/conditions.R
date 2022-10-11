@@ -17,10 +17,6 @@ checkConditionTurning <- function(traj, threshold, minTurnCount) {
   return(turnCount >= minTurnCount)
 }
 
-checkConditionFinite <- function(traj) {
-  return(all(is.finite(traj$state)))
-}
-
 checkConditionBounded <- function(traj, maxNorm) {
   uNormsSqr <- rowSums(traj$state^2)
   return(all(uNormsSqr <= maxNorm^2))
@@ -31,7 +27,6 @@ checkCondition <- function(opts, traj, fun, parms) {
   fulfilled <- switch(
     name,
     stopped = checkConditionStopped(traj, fun, parms, opts$threshold),
-    finite = checkConditionFinite(traj),
     bounded = checkConditionBounded(traj, opts$maxNorm),
     turning = checkConditionTurning(traj, opts$threshold, opts$minTurnCount),
     true = TRUE,

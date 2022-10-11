@@ -24,10 +24,7 @@
         },
         "conditions": {
             "_class": ["Condition", "List", "Opts"],
-            "list": [
-                {
-                    "_class": ["finite", "Condition", "Opts"]
-                },    
+            "list": [   
                 {
                     "_class": ["bounded", "Condition", "Opts"],
                     "maxNorm": 10
