@@ -2,8 +2,7 @@
     "_class": ["FollowTime", "TimeState", "Score", "Opts"],
     "_description": "",
     "name": "FollowTime",
-    "lostTimeThreshold": 1,
-    "constFraction": 0.5,
-    "sdFraction": 0.5
+    "timeScale": 1,
+    "radius": 1
 }
   
