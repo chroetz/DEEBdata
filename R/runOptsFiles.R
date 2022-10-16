@@ -12,7 +12,8 @@ runAll <- function(
     dbPath = paste0("~/DEEBDB", reps),
     pattern = NULL,
     createExample = FALSE,
-    reps = NULL
+    reps = NULL,
+    truth = TRUE, obs = TRUE, task = TRUE, plot = TRUE
 ) {
   files <- getRunOptsFiles(fullPath = TRUE)
   if (!is.null(pattern)) files <- files[grepl(pattern, basename(files))]
@@ -21,7 +22,7 @@ runAll <- function(
     overwrite$truthOpts = list(reps = reps)
   }
   for (fl in files) {
-    run(fl, createExample = createExample, overwriteList = overwrite)
+    run(fl, createExample = createExample, overwriteList = overwrite, truth = truth, obs = obs, task = task, plot = plot)
   }
   dbPath <- normalizePath(dbPath)
   return(dbPath)

@@ -89,7 +89,8 @@
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
-                            "lostTimeThreshold": 10
+                            "radius": 0.5,
+                            "timeScale": 1
                         }
                     ]
                 }
@@ -119,7 +120,8 @@
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
-                            "lostTimeThreshold": 10
+                            "radius": 0.5,
+                            "timeScale": 1
                         }
                     ]
                 }

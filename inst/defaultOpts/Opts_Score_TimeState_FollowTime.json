@@ -2,7 +2,7 @@
     "_class": ["FollowTime", "TimeState", "Score", "Opts"],
     "_description": "",
     "name": "FollowTime",
-    "timeScale": 1,
-    "radius": 1
+    "radius": 0.5,
+    "timeScale": 1
 }
   

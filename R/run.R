@@ -1,5 +1,5 @@
 #' @export
-run <- function(x, createExample = FALSE, overwriteList = NULL) {
+run <- function(x, createExample = FALSE, overwriteList = NULL, truth = TRUE, obs = TRUE, task = TRUE, plot = TRUE) {
 
   opts <- asOpts(x, "Run")
 
@@ -18,14 +18,14 @@ run <- function(x, createExample = FALSE, overwriteList = NULL) {
   writeOpts(opts, "Opts_Run")
 
   dir.create("estimation")
-  sampleTrajectoriesAndWriteForTasks(
+  if (truth) sampleTrajectoriesAndWriteForTasks(
     opts$truthOpts,
     opts$taskList,
     opts$observationOpts,
     writeOpts = FALSE)
-  generateObservations(opts$observationOpts, writeOpts = FALSE)
-  writeTasks(opts$taskList, writeOpts = FALSE)
-  plotTogether(opts$plotOpts, writeOpts = FALSE)
+  if (obs) generateObservations(opts$observationOpts, writeOpts = FALSE)
+  if (task) writeTasks(opts$taskList, writeOpts = FALSE)
+  if (plot) plotTogether(opts$plotOpts, writeOpts = FALSE)
 
   if (createExample) {
     dir.create("example")
@@ -33,13 +33,13 @@ run <- function(x, createExample = FALSE, overwriteList = NULL) {
     opts$truthOpts$seed <- sample.int(.Machine$integer.max, 1)
     opts$observationOpts$seed <- sample.int(.Machine$integer.max, 1)
     writeOpts(opts, "Opts_Run")
-    sampleTrajectoriesAndWriteForTasks(
+    if (truth) sampleTrajectoriesAndWriteForTasks(
       opts$truthOpts,
       opts$taskList,
       opts$observationOpts,
       writeOpts = FALSE)
-    generateObservations(opts$observationOpts, writeOpts = FALSE)
-    writeTasks(opts$taskList, writeOpts = FALSE)
-    plotTogether(opts$plotOpts, writeOpts = FALSE)
+    if (obs) generateObservations(opts$observationOpts, writeOpts = FALSE)
+    if (task) writeTasks(opts$taskList, writeOpts = FALSE)
+    if (plot) plotTogether(opts$plotOpts, writeOpts = FALSE)
   }
 }

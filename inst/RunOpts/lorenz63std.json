@@ -48,7 +48,8 @@
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
-                            "lostTimeThreshold": 2
+                            "timeScale": 1,
+                            "radius": 0.5
                         }   
                     ]
                 }
