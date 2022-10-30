@@ -26,7 +26,7 @@ generateObservations <- function(opts, writeOpts = TRUE) {
     for (i in seq_len(opts$reps)) for (s in opts$scales) {
       obsNr <- obsNr+1
       message("Generate observations. Iteration ", obsNr)
-      obs <- observeGrid(truth, opts$n, opts$tStep, noiseSampler, scale=s)
+      obs <- observeGrid(truth, opts$n, opts$timeStep, noiseSampler, scale=s)
       obsFileName <- DEEBpath::obsFile(truthNr = info$truthNr, obsNr = obsNr)
       writeTrajs(obs, file.path(opts$path, obsFileName))
     }
@@ -44,8 +44,8 @@ buildNoiseSampler <- function(opts, d) {
 }
 
 
-observeGrid <- function(trajs, n, tStep, noiseSampler, scale=1) {
-  tSample <- seq(0, by = tStep, length.out = n)
+observeGrid <- function(trajs, n, timeStep, noiseSampler, scale=1) {
+  tSample <- seq(0, by = timeStep, length.out = n)
   obs <- interpolateTrajs(trajs, tSample)
   trajIds <- unique(trajs$trajId)
   for (trajId in trajIds) {

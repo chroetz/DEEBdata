@@ -7,10 +7,8 @@
   "_path_description": "",
   "reps": 1,
   "_reps_description": "repetitions of drawing new random function and initial value",
-  "tMax": 10,
-  "_tMax_description": "Maximal time point at which values are produced. Should be max of prediction times.",
-  "tStepOde": 0.01,
-  "_tStepOde_description": "difference between time points for OdeSolver",
+  "timeRange": [0, 1],
+  "_timeRange_description": "time interval on which to solve the ODE",
   "deFunSampler": {
     "_class": ["Function", "Sampler", "Opts"],
     "d": 2

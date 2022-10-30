@@ -5,18 +5,18 @@
   "_name_description": "",
   "path": ".",
   "_path_description": "",
-  "truthOpts": {
+  "truth": {
     "_class": ["Truth", "Opts"]
   },
-  "_truthOpts_description": "",
-  "observationOpts": {
+  "_truth_description": "",
+  "observation": {
     "_class": ["Observation", "Opts"]
   },
-  "_observationOpts_description": "",
-  "plotOpts": {
+  "_observation_description": "",
+  "plot": {
     "_class": ["Plot", "Opts"]
   },
-  "_plotOpts_description": "",
+  "_plot_description": "",
   "taskList": {
     "_class": ["Task", "List", "Opts"]
   },

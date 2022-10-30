@@ -2,9 +2,6 @@
   "_class": ["OdeSolver", "Opts"],
   "_description": "see R function deSolve::ode()",
   "method": "rk4",
-  "_method_description": "",
-  "rtol": 1e-06,
-  "_rtol_description": "",
-  "atol": 1e-06,
-  "_atol_description": ""
+  "timeStep": 0.1,
+  "additionalArgs": {}
 }

@@ -11,8 +11,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSetti
         u0 <- as.vector(u0Sampler())
         traj <- solveOde(
           fun, u0,
-          tMax = opts$tMax,
-          tStep = opts$tStepOde,
+          timeRange = opts$timeRange,
           opts = opts$odeSolver,
           parms = parms)
         if (
@@ -39,8 +38,7 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSetti
       tt <- lapply(seq_len(nrow(tts$initialState)), \(id) {
         trajs <- solveOde(
           fun, tts$initialState[id, ],
-          tMax = tts$tMax,
-          tStep = opts$tStepOde,
+          timeRange = opts$timeRange,
           opts = opts$odeSolver,
           parms = parms)
         if (is.null(trajs)) return(NULL)
@@ -114,7 +112,7 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
 }
 
 writeTruthForObservation <- function(trajs, observationOpts, filePath) {
-  times <- seq(0, by = observationOpts$tStep, length.out = observationOpts$n)
+  times <- seq(0, by = observationOpts$timeStep, length.out = observationOpts$n)
   outTrajs <- interpolateTrajs(trajs, times)
   writeTrajs(outTrajs, filePath)
 }

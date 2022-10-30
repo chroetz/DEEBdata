@@ -2,11 +2,14 @@
     "_class": ["Run", "Opts"],
     "name": "lorenz63std",
     "path": "~/DEEDataDB",
-    "truthOpts": {
+    "truth": {
         "_class": ["Truth", "Opts"],
         "reps": 1,
-        "tMax": 150,
-        "tStepOde": 0.001,
+        "timeRange": [0, 120],
+        "odeSolver": {
+            "_class": ["OdeSolver", "Opts"],
+            "timeStep": 0.001
+        },
         "deFunSampler": {
             "_class": ["lorenz63", "Function", "Sampler", "Opts"],
             "coefSampler": {
@@ -18,10 +21,10 @@
             "_class": ["lorenz63", "Array", "Sampler", "Opts"]
         }
     },
-    "observationOpts": {
+    "observation": {
         "_class": ["Observation", "Opts"],
         "n": 5000,
-        "tStep": 0.02,
+        "timeStep": 0.02,
         "reps": 1,
         "scales": [0, 0.02, 0.1, 0.5],
         "noiseSampler": {
@@ -35,7 +38,7 @@
             {
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "future",
-                "predictionTime": [100, 150],
+                "predictionTime": [100, 120],
                 "timeStep": 0.01,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],

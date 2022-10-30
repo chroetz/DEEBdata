@@ -19,7 +19,7 @@ runAll <- function(
   if (!is.null(pattern)) files <- files[grepl(pattern, basename(files))]
   overwrite <- list(path = dbPath)
   if (!is.null(reps)) {
-    overwrite$truthOpts = list(reps = reps)
+    overwrite$truth = list(reps = reps)
   }
   for (fl in files) {
     run(fl, createExample = createExample, overwriteList = overwrite, truth = truth, obs = obs, task = task, plot = plot)

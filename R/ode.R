@@ -1,12 +1,15 @@
-solveOde <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
+solveOde <- function(fun, u0, timeRange, opts, parms = NULL) {
   opts <- asOpts(opts, "OdeSolver")
-  tm <- seq(0, tMax, by = tStep)
-  .solveOde(fun, u0, tm, parms, opts)
+  tm <- seq(timeRange[1], timeRange[2], by = opts$timeStep)
+  .solveOde(
+    fun, u0, tm, parms,
+    method = opts$method,
+    additionalArgs = opts$additonalArgs)
 }
 
-solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
+solveOdeMulti <- function(fun, u0, timeRange, opts, parms = NULL) {
   opts <- asOpts(opts, "OdeSolver")
-  tm <- seq(0, tMax, by = tStep)
+  tm <- seq(timeRange[1], timeRange[2], by = opts$timeStep)
   if (is.null(nrow(u0))) {
     u0 <- matrix(u0, nrow=1)
   }
@@ -15,7 +18,10 @@ solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
   }
   trajIds <- rownames(u0)
   trajList <- lapply(trajIds, \(id) {
-    trajs <- .solveOde(fun, u0[id, ], tm, parms, opts)
+    trajs <- .solveOde(
+      fun, u0[id, ], tm, parms,
+      method = opts$method,
+      additionalArgs = opts$additonalArgs)
     if (is.null(trajs)) {
       stop("Cannot solve this ODE")
     }
@@ -25,12 +31,19 @@ solveOdeMulti <- function(fun, u0, tMax, tStep, opts = list(), parms = NULL) {
   return(bindTrajs(trajList))
 }
 
-.solveOde <- function(fun, u0, time, parms, opts) {
-  suppressWarnings(suppressMessages(utils::capture.output( # make silent
-    u <- do.call(
+.solveOde <- function(fun, u0, times, parms, method, additionalArgs) {
+  u <- do.call(
       deSolve::ode,
-      c(list(y = u0, times = time, func = fun, parms = parms), opts))
-  )))
+      c(
+        list(
+          y = u0,
+          times = times,
+          func = fun,
+          parms = parms,
+          method = method),
+        additionalArgs
+      )
+    )
   if (any(!is.finite(u))) return(NULL)
   colnames(u) <- c("time", paste0("state", seq_len(ncol(u)-1)))
   return(asTrajs(u))
