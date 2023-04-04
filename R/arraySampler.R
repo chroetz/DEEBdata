@@ -54,7 +54,7 @@ buildArraySampler <- function(opts, arrayDim) {
     stop("Unrecognized name ", clss)
   }
   sampleArray <- \() array(sampleBase(), arrayDim)
-  if (length(opts$sparsity) == 1 && opts$sparsity < p) {
+  if (length(opts$sparsity) == 1 && opts$sparsity > 0 && opts$sparsity < p) {
     sampleSupport <- buildArraySupportSampler(opts$sparsity, arrayDim, opts$keepFirstColumn)
     sample <- \() sampleArray() * sampleSupport()
   } else {

@@ -1,6 +1,6 @@
 {
     "_class": ["Run", "Opts"],
-    "name": "localConstDim3multi",
+    "name": "gaussianProcessDim3multi",
     "path": "~/DEEBtest",
     "truth": {
         "_class": ["Truth", "Opts"],
@@ -12,10 +12,11 @@
             "timeStep": 0.01
         },
         "deFunSampler": {
-            "_class": ["localConst", "Function", "Sampler", "Opts"],
+            "_class": ["gaussianProcess", "Function", "Sampler", "Opts"],
             "d": 3,
-            "bw": 2,
-            "nSupp": 30,
+            "bandwidth": 5,
+            "regulation": 1e-7,
+            "nSupp": 12,
             "locationSampler": {
                 "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
                 "range": [0, 10],

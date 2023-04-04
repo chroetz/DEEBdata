@@ -2,8 +2,8 @@
   "_class": ["Array", "Sampler", "Opts"],
   "_defaultSubClass": "const",
   "_description": "",
-  "sparsity": [],
-  "_sparsity_description": "How many values are allowed to be different from 0. Set to NULL to allow all.",
+  "sparsity": 0,
+  "_sparsity_description": "How many values are allowed to be different from 0. Set to 0 to allow all.",
   "keepFirstColumn": false,
   "_keepFirstColumn_description": "When using sparsity, should the first column always be allowed?"
 }

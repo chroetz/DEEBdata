@@ -1,53 +1,52 @@
 {
     "_class": ["Run", "Opts"],
-    "name": "localConstDim3multi",
-    "path": "~/DEEBtest",
+    "name": "polyDeg2Dim3single",
+    "path": "~/DEEDataDB",
     "truth": {
         "_class": ["Truth", "Opts"],
         "reps": 1,
-        "nTrajectories": 30,
-        "timeRange": [0, 30],
+        "nTrajectories": 1,
+        "timeRange": [0, 100],
         "odeSolver": {
             "_class": ["OdeSolver", "Opts"],
             "timeStep": 0.01
         },
         "deFunSampler": {
-            "_class": ["localConst", "Function", "Sampler", "Opts"],
+            "_class": ["polynomial", "Function", "Sampler", "Opts"],
             "d": 3,
-            "bw": 2,
-            "nSupp": 30,
-            "locationSampler": {
-                "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
-                "range": [0, 10],
-                "keepFirstColumn": false
-            },
-            "valueSampler": {
-                "_class": ["normal", "Array", "Sampler", "Opts"],
-                "keepFirstColumn": false,
-                "mean": 0,
-                "sd": 1
-            },
-            "postprocessors": {
-                "_class": ["Postprocessor", "List", "Opts"],
-                "list": [ 
-                    {
-                        "_class": ["softBoundary", "Postprocessor", "Opts"],
-                        "boundaryRange": [5, 10]
-                    }
-                ]
+            "polyDeg": 2,
+            "maxNorm": 10,
+            "coefSampler": {
+                "_class": ["uniform", "Array", "Sampler", "Opts"],
+                "range": [-0.5, 0.5],
+                "sparsity": 5 
             }
         },
         "u0Sampler": {
             "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
-            "range": [0, 5]    
+            "range": [0, 1]    
+        },
+        "conditions": {
+            "_class": ["Condition", "List", "Opts"],
+            "list": [   
+                {
+                    "_class": ["bounded", "Condition", "Opts"],
+                    "maxNorm": 10
+                },
+                {
+                    "_class": ["turning", "Condition", "Opts"],
+                    "threshold": 0.01,
+                    "minTurnCount": 10
+                }
+            ]
         }
     },
     "observation": {
         "_class": ["Observation", "Opts"],
-        "n": 20,
-        "timeStep": 1.5,
+        "n": 100,
+        "timeStep": 0.5,
         "reps": 1,
-        "scales": [0, 0.03, 0.1, 0.3],
+        "scales": [0, 0.01, 0.03, 0.1],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
@@ -59,8 +58,8 @@
             {
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "observation time",
-                "predictionTime": [0, 10],
-                "timeStep": 0.1,
+                "predictionTime": [0, 50],
+                "timeStep": 0.05,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
@@ -77,24 +76,21 @@
                             "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
                             "name": "W2",
                             "p": 2
+                        },
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "radius": 0.5,
+                            "timeScale": 1
                         }
                     ]
                 }
             },
             {
-                "_class": ["newTrajs", "Task", "Opts"],
-                "name": "new trajectories",
-                "predictionTime": [0, 10],
-                "timeStep": 0.1,
-                "initialState": [
-                    [ 0, 0, 0],
-                    [ 3, 0, 0],
-                    [ 0, 3, 0],
-                    [ 0, 0, 3],
-                    [-3, 0, 0],
-                    [ 0,-3, 0],
-                    [ 0, 0,-3]
-                ],
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "future",
+                "predictionTime": [50, 100],
+                "timeStep": 0.05,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
@@ -111,22 +107,12 @@
                             "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
                             "name": "W2",
                             "p": 2
-                        }
-                    ]
-                }
-            },
-            {
-                "_class": ["velocity", "Task", "Opts"],
-                "name": "velocity",
-                "gridRanges": [[-4, 4], [-4, 4], [-4, 4]],
-                "gridSteps": [0.4, 0.4, 0.4],
-                "scoreList": {
-                    "_class": ["Score", "List", "Opts"],
-                    "list": [
+                        },
                         {
-                            "_class": ["Distance", "VelocityField", "Score", "Opts"],
-                            "name": "L2",
-                            "method": "Euclidean"
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "radius": 0.5,
+                            "timeScale": 1
                         }
                     ]
                 }

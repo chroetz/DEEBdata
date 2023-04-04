@@ -19,12 +19,10 @@
             "locationSampler": {
                 "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
                 "range": [0, 10],
-                "sparsity": [],
                 "keepFirstColumn": false
             },
             "valueSampler": {
                 "_class": ["normal", "Array", "Sampler", "Opts"],
-                "sparsity": [],
                 "keepFirstColumn": false,
                 "mean": 0,
                 "sd": 1

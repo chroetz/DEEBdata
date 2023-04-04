@@ -1,0 +1,12 @@
+{
+  "_class": ["gaussianProcess", "Parms", "Opts"],
+  "_description": "",
+  "locations": [
+    [0]
+  ],
+  "_locations_description": "",
+  "weights": [
+    [0]
+  ],
+  "_weights_description": ""
+}

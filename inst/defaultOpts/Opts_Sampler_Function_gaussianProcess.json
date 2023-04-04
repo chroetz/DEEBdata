@@ -1,0 +1,19 @@
+{
+  "_class": ["gaussianProcess", "Function", "Sampler", "Opts"],
+  "_description": "",
+  "bandwidth": 1,
+  "_bandwidth_description": "",
+  "regulation": 1e-7,
+  "_regulation_description": "",
+  "nSupp": 12,
+  "_nSupp_description": "Number of support points",
+  "locationSampler": {
+    "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
+    "range": [0, 2]
+  },
+  "_locationSampler_description": "",
+  "valueSampler": {
+    "_class": ["normal", "Array", "Sampler", "Opts"]
+  },
+  "_valueSampler_description": ""
+}
