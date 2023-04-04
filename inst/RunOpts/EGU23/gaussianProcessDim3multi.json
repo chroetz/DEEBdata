@@ -1,0 +1,137 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "gaussianProcessDim3multi",
+    "path": "~/DEEBtest",
+    "truth": {
+        "_class": ["Truth", "Opts"],
+        "reps": 1,
+        "nTrajectories": 30,
+        "timeRange": [0, 30],
+        "odeSolver": {
+            "_class": ["OdeSolver", "Opts"],
+            "timeStep": 0.01
+        },
+        "deFunSampler": {
+            "_class": ["gaussianProcess", "Function", "Sampler", "Opts"],
+            "d": 3,
+            "bandwidth": 5,
+            "regulation": 1e-7,
+            "nSupp": 12,
+            "locationSampler": {
+                "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
+                "range": [0, 10],
+                "keepFirstColumn": false
+            },
+            "valueSampler": {
+                "_class": ["normal", "Array", "Sampler", "Opts"],
+                "keepFirstColumn": false,
+                "mean": 0,
+                "sd": 1
+            },
+            "postprocessors": {
+                "_class": ["Postprocessor", "List", "Opts"],
+                "list": [ 
+                    {
+                        "_class": ["softBoundary", "Postprocessor", "Opts"],
+                        "boundaryRange": [5, 10]
+                    }
+                ]
+            }
+        },
+        "u0Sampler": {
+            "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
+            "range": [0, 5]    
+        }
+    },
+    "observation": {
+        "_class": ["Observation", "Opts"],
+        "n": 20,
+        "timeStep": 1.5,
+        "reps": 1,
+        "scales": [0, 0.03, 0.1, 0.3],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "observation time",
+                "predictionTime": [0, 10],
+                "timeStep": 0.1,
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "_class": ["newTrajs", "Task", "Opts"],
+                "name": "new trajectories",
+                "predictionTime": [0, 10],
+                "timeStep": 0.1,
+                "initialState": [
+                    [ 0, 0, 0],
+                    [ 3, 0, 0],
+                    [ 0, 3, 0],
+                    [ 0, 0, 3],
+                    [-3, 0, 0],
+                    [ 0,-3, 0],
+                    [ 0, 0,-3]
+                ],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "_class": ["velocity", "Task", "Opts"],
+                "name": "velocity",
+                "gridRanges": [[-4, 4], [-4, 4], [-4, 4]],
+                "gridSteps": [0.4, 0.4, 0.4],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "VelocityField", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

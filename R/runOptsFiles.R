@@ -1,6 +1,9 @@
 #' @export
-getRunOptsFiles <- function(fullPath = FALSE, fileEnding = fullPath) {
-  runOptsPath <- system.file("runOpts", package = "DEEBdata")
+getRunOptsFiles <- function(fullPath = FALSE, fileEnding = fullPath, subfolder = NULL) {
+  if (length(subfolder) == 0) subfolder <- ""
+  runOptsPath <- system.file(
+    file.path("runOpts", subfolder),
+    package = "DEEBdata")
   files <- dir(runOptsPath, full.names=fullPath)
   if (!fileEnding)
     files <- substr(files, 1, nchar(files) - 5)
@@ -11,11 +14,12 @@ getRunOptsFiles <- function(fullPath = FALSE, fileEnding = fullPath) {
 runAll <- function(
     dbPath = paste0("~/DEEBDB", reps),
     pattern = NULL,
+    subfolder = NULL,
     createExample = FALSE,
     reps = NULL,
     truth = TRUE, obs = TRUE, task = TRUE, plot = TRUE
 ) {
-  files <- getRunOptsFiles(fullPath = TRUE)
+  files <- getRunOptsFiles(fullPath = TRUE, subfolder = subfolder)
   if (!is.null(pattern)) files <- files[grepl(pattern, basename(files))]
   overwrite <- list(path = dbPath)
   if (!is.null(reps)) {

@@ -1,0 +1,121 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "polyDeg2Dim2single",
+    "path": "~/DEEDataDB",
+    "truth": {
+        "_class": ["Truth", "Opts"],
+        "reps": 1,
+        "nTrajectories": 1,
+        "timeRange": [0, 100],
+        "odeSolver": {
+            "_class": ["OdeSolver", "Opts"],
+            "timeStep": 0.01
+        },
+        "deFunSampler": {
+            "_class": ["polynomial", "Function", "Sampler", "Opts"],
+            "d": 2,
+            "polyDeg": 2,
+            "maxNorm": 10,
+            "coefSampler": {
+                "_class": ["uniform", "Array", "Sampler", "Opts"],
+                "range": [-0.5, 0.5]      
+            }
+        },
+        "u0Sampler": {
+            "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
+            "range": [0, 1]    
+        },
+        "conditions": {
+            "_class": ["Condition", "List", "Opts"],
+            "list": [   
+                {
+                    "_class": ["bounded", "Condition", "Opts"],
+                    "maxNorm": 10
+                },
+                {
+                    "_class": ["turning", "Condition", "Opts"],
+                    "threshold": 0.01,
+                    "minTurnCount": 10
+                }
+            ]
+        }
+    },
+    "observation": {
+        "_class": ["Observation", "Opts"],
+        "n": 100,
+        "timeStep": 0.5,
+        "reps": 1,
+        "scales": [0, 0.01, 0.03, 0.1],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "observation time",
+                "predictionTime": [0, 50],
+                "timeStep": 0.05,
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        },
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "radius": 0.5,
+                            "timeScale": 1
+                        }
+                    ]
+                }
+            },
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "future",
+                "predictionTime": [50, 100],
+                "timeStep": 0.05,
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "Euclidean"
+                        },
+                        {
+                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
+                            "name": "WarpedL2"
+                        },
+                        {
+                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
+                            "name": "W2",
+                            "p": 2
+                        },
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "radius": 0.5,
+                            "timeScale": 1
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
