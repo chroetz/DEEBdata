@@ -15,6 +15,8 @@
   "_reps_description": "repetitions of sampling n observations of each scale",
   "scales": 1,
   "_scale_description": "a sequence of factors the sampled noise is scaled with to generate different sets of n observations with different noise levels",
+  "noiseFree": 0,
+  "_noiseFree_description": "a sequence of indices of the observations that will be noise free; first index is 1; negative indices count from the end, i.e., the last obs is -1; 0 is ignored",
   "noiseSampler": {
     "_class": ["Array", "Sampler", "Opts"]
   },

@@ -32,6 +32,7 @@
         "timeStep": 0.02,
         "reps": 1,
         "scales": [0, 0.1],
+        "noiseFree": [1,-1],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
