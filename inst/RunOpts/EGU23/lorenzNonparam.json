@@ -31,7 +31,7 @@
         "n": 5000,
         "timeStep": 0.02,
         "reps": 1,
-        "scales": [0, 0.02, 0.1, 0.5],
+        "scales": [0, 0.1],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
@@ -49,16 +49,27 @@
                     "_class": ["Score", "List", "Opts"],
                     "list": [
                         {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "L2"
+                        },
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         },
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
                             "timeScale": 1,
                             "radius": 0.5
-                        }   
+                        },
+                        {
+                            "_class": ["ValidTime", "TimeState", "Score", "Opts"],
+                            "name": "ValidTime",
+                            "threshold": 0.4,
+                            "nomalization": "scale"
+                        } 
                     ]
                 }
             }

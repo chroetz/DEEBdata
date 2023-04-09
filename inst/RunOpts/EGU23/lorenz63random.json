@@ -5,7 +5,7 @@
     "truth": {
         "_class": ["Truth", "Opts"],
         "reps": 1,
-        "timeRange": [0, 40],
+        "timeRange": [0, 120],
         "odeSolver": {
             "_class": ["OdeSolver", "Opts"],
             "timeStep": 0.001
@@ -24,10 +24,10 @@
     },
     "observation": {
         "_class": ["Observation", "Opts"],
-        "n": 400,
-        "timeStep": 0.05,
+        "n": 5000,
+        "timeStep": 0.02,
         "reps": 1,
-        "scales": [0, 0.02, 0.1, 0.5],
+        "scales": [0, 0.1],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
@@ -38,8 +38,8 @@
         "list": [
             {
                 "_class": ["estiObsTrajs", "Task", "Opts"],
-                "name": "observation time",
-                "predictionTime": [0, 20],
+                "name": "future",
+                "predictionTime": [100, 120],
                 "timeStep": 0.01,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
@@ -47,45 +47,25 @@
                         {
                             "_class": ["Distance", "TimeState", "Score", "Opts"],
                             "name": "L2",
-                            "method": "Euclidean"
+                            "method": "L2"
                         },
                         {
-                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
-                            "name": "WarpedL2"
-                        },
-                        {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         },
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
                             "timeScale": 1,
                             "radius": 0.5
-                        }
-                    ]
-                }
-            },
-            {
-                "_class": ["estiObsTrajs", "Task", "Opts"],
-                "name": "future",
-                "predictionTime": [20, 40],
-                "timeStep": 0.01,
-                "scoreList": {
-                    "_class": ["Score", "List", "Opts"],
-                    "list": [
-                        {
-                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
-                            "name": "FollowTime",
-                            "timeScale": 1,
-                            "radius": 0.5
                         },
                         {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
-                        }
+                            "_class": ["ValidTime", "TimeState", "Score", "Opts"],
+                            "name": "ValidTime",
+                            "threshold": 0.4,
+                            "nomalization": "scale"
+                        } 
                     ]
                 }
             }

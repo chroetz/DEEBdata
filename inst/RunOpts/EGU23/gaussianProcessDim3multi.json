@@ -14,9 +14,9 @@
         "deFunSampler": {
             "_class": ["gaussianProcess", "Function", "Sampler", "Opts"],
             "d": 3,
-            "bandwidth": 5,
+            "bandwidth": 4,
             "regulation": 1e-7,
-            "nSupp": 12,
+            "nSupp": 20,
             "locationSampler": {
                 "_class": ["uniformOnBall", "Array", "Sampler", "Opts"],
                 "range": [0, 10],
@@ -48,7 +48,7 @@
         "n": 20,
         "timeStep": 1.5,
         "reps": 1,
-        "scales": [0, 0.03, 0.1, 0.3],
+        "scales": [0, 0.2],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
@@ -68,16 +68,12 @@
                         {
                             "_class": ["Distance", "TimeState", "Score", "Opts"],
                             "name": "L2",
-                            "method": "Euclidean"
+                            "method": "L2"
                         },
                         {
-                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
-                            "name": "WarpedL2"
-                        },
-                        {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         }
                     ]
                 }
@@ -102,16 +98,12 @@
                         {
                             "_class": ["Distance", "TimeState", "Score", "Opts"],
                             "name": "L2",
-                            "method": "Euclidean"
+                            "method": "L2"
                         },
                         {
-                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
-                            "name": "WarpedL2"
-                        },
-                        {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         }
                     ]
                 }
@@ -127,7 +119,12 @@
                         {
                             "_class": ["Distance", "VelocityField", "Score", "Opts"],
                             "name": "L2",
-                            "method": "Euclidean"
+                            "method": "L2"
+                        },
+                        {
+                            "_class": ["Distance", "VelocityField", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         }
                     ]
                 }

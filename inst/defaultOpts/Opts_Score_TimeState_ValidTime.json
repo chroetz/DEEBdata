@@ -1,0 +1,8 @@
+{
+    "_class": ["ValidTime", "TimeState", "Score", "Opts"],
+    "_description": "",
+    "name": "ValidTime",
+    "threshold": 0.4,
+    "nomalization": "scale"
+}
+  

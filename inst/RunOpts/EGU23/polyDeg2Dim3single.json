@@ -1,6 +1,6 @@
 {
     "_class": ["Run", "Opts"],
-    "name": "polyDeg2Dim2single",
+    "name": "polyDeg2Dim3single",
     "path": "~/DEEDataDB",
     "truth": {
         "_class": ["Truth", "Opts"],
@@ -13,12 +13,13 @@
         },
         "deFunSampler": {
             "_class": ["polynomial", "Function", "Sampler", "Opts"],
-            "d": 2,
+            "d": 3,
             "polyDeg": 2,
             "maxNorm": 10,
             "coefSampler": {
                 "_class": ["uniform", "Array", "Sampler", "Opts"],
-                "range": [-0.5, 0.5]      
+                "range": [-0.5, 0.5],
+                "sparsity": 5 
             }
         },
         "u0Sampler": {
@@ -45,7 +46,7 @@
         "n": 100,
         "timeStep": 0.5,
         "reps": 1,
-        "scales": [0, 0.01, 0.03, 0.1],
+        "scales": [0, 0.05],
         "noiseSampler": {
             "_class": ["normal", "Array", "Sampler", "Opts"],
             "sd": 1  
@@ -65,22 +66,24 @@
                         {
                             "_class": ["Distance", "TimeState", "Score", "Opts"],
                             "name": "L2",
-                            "method": "Euclidean"
+                            "method": "L2"
                         },
                         {
-                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
-                            "name": "WarpedL2"
-                        },
-                        {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         },
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
                             "radius": 0.5,
                             "timeScale": 1
+                        },
+                        {
+                            "_class": ["ValidTime", "TimeState", "Score", "Opts"],
+                            "name": "ValidTime",
+                            "threshold": 0.4,
+                            "nomalization": "scale"
                         }
                     ]
                 }
@@ -96,22 +99,24 @@
                         {
                             "_class": ["Distance", "TimeState", "Score", "Opts"],
                             "name": "L2",
-                            "method": "Euclidean"
+                            "method": "L2"
                         },
                         {
-                            "_class": ["TimeWarp", "TimeState", "Score", "Opts"],
-                            "name": "WarpedL2"
-                        },
-                        {
-                            "_class": ["Wasserstein", "StateSpace", "Score", "Opts"],
-                            "name": "W2",
-                            "p": 2
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
                         },
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",
                             "radius": 0.5,
                             "timeScale": 1
+                        },
+                        {
+                            "_class": ["ValidTime", "TimeState", "Score", "Opts"],
+                            "name": "ValidTime",
+                            "threshold": 0.4,
+                            "nomalization": "scale"
                         }
                     ]
                 }
