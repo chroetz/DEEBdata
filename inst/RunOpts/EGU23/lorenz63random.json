@@ -41,20 +41,10 @@
                 "_class": ["estiObsTrajs", "Task", "Opts"],
                 "name": "future",
                 "predictionTime": [100, 120],
-                "timeStep": 0.01,
+                "timeStep": 0.02,
                 "scoreList": {
                     "_class": ["Score", "List", "Opts"],
                     "list": [
-                        {
-                            "_class": ["Distance", "TimeState", "Score", "Opts"],
-                            "name": "L2",
-                            "method": "L2"
-                        },
-                        {
-                            "_class": ["Distance", "TimeState", "Score", "Opts"],
-                            "name": "L1",
-                            "method": "L1"
-                        },
                         {
                             "_class": ["FollowTime", "TimeState", "Score", "Opts"],
                             "name": "FollowTime",

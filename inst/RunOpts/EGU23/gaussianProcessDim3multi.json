@@ -79,36 +79,6 @@
                 }
             },
             {
-                "_class": ["newTrajs", "Task", "Opts"],
-                "name": "new trajectories",
-                "predictionTime": [0, 10],
-                "timeStep": 0.1,
-                "initialState": [
-                    [ 0, 0, 0],
-                    [ 3, 0, 0],
-                    [ 0, 3, 0],
-                    [ 0, 0, 3],
-                    [-3, 0, 0],
-                    [ 0,-3, 0],
-                    [ 0, 0,-3]
-                ],
-                "scoreList": {
-                    "_class": ["Score", "List", "Opts"],
-                    "list": [
-                        {
-                            "_class": ["Distance", "TimeState", "Score", "Opts"],
-                            "name": "L2",
-                            "method": "L2"
-                        },
-                        {
-                            "_class": ["Distance", "TimeState", "Score", "Opts"],
-                            "name": "L1",
-                            "method": "L1"
-                        }
-                    ]
-                }
-            },
-            {
                 "_class": ["velocity", "Task", "Opts"],
                 "name": "velocity",
                 "gridRanges": [[-4, 4], [-4, 4], [-4, 4]],

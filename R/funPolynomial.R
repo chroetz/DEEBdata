@@ -1,6 +1,6 @@
 getParmsFunctionPolynomial <- function(opts) {
 
-  degVecs <- DEEButil::getMonomialExponents(d, opts$polyDeg)
+  degVecs <- DEEButil::getMonomialExponents(opts$d, opts$polyDeg)
 
   parmsFunction <- function(t, u, parms) {
     if (any(abs(u) > opts$boundary)) return(list(rep(0, length(u))))
