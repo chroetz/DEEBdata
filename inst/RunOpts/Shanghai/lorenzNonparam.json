@@ -1,0 +1,69 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "lorenzNonparam",
+    "path": "~/DEEDataDB",
+    "truth": {
+        "_class": ["Truth", "Opts"],
+        "reps": 1,
+        "timeRange": [0, 420],
+        "odeSolver": {
+            "_class": ["OdeSolver", "Opts"],
+            "timeStep": 0.001
+        },
+        "deFunSampler": {
+            "_class": ["lorenzNonparam", "Function", "Sampler", "Opts"]  
+        },
+        "u0Sampler": {
+            "_class": ["lorenz63", "Array", "Sampler", "Opts"]
+        },
+        "conditions": {
+            "_class": ["Condition", "List", "Opts"],
+            "list": [   
+                {
+                    "_class": ["stopped", "Condition", "Opts"],
+                    "threshold": 0.1
+                }
+            ]
+        }
+    },
+    "observation": {
+        "_class": ["Observation", "Opts"],
+        "n": 20000,
+        "timeStep": 0.02,
+        "reps": 1,
+        "scales": [0, 0.1],
+        "noiseFree": [1,-1],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "future",
+                "predictionTime": [400, 420],
+                "timeStep": 0.02,
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["FollowTime", "TimeState", "Score", "Opts"],
+                            "name": "FollowTime",
+                            "timeScale": 1,
+                            "radius": 0.5
+                        },
+                        {
+                            "_class": ["ValidTime", "TimeState", "Score", "Opts"],
+                            "name": "ValidTime",
+                            "threshold": 0.4,
+                            "nomalization": "scale"
+                        } 
+                    ]
+                }
+            }
+        ]
+    }
+}

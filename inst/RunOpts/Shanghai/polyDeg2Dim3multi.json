@@ -1,0 +1,97 @@
+{
+    "_class": ["Run", "Opts"],
+    "name": "polyDeg2Dim3multi",
+    "path": "~/DEEDataDB",
+    "truth": {
+        "_class": ["Truth", "Opts"],
+        "reps": 1,
+        "nTrajectories": 100,
+        "timeRange": [0, 10],
+        "odeSolver": {
+            "_class": ["OdeSolver", "Opts"],
+            "timeStep": 0.01
+        },
+        "deFunSampler": {
+            "_class": ["polynomial", "Function", "Sampler", "Opts"],
+            "d": 3,
+            "polyDeg": 2,
+            "maxNorm": 10,
+            "coefSampler": {
+                "_class": ["uniform", "Array", "Sampler", "Opts"],
+                "range": [-0.5, 0.5],
+                "sparsity": 5 
+            }
+        },
+        "u0Sampler": {
+            "_class": ["uniform", "Array", "Sampler", "Opts"],
+            "range": [-1, 1]    
+        },
+        "conditions": {
+            "_class": ["Condition", "List", "Opts"],
+            "list": [
+                {
+                    "_class": ["bounded", "Condition", "Opts"],
+                    "maxNorm": 10
+                }
+            ]
+        }
+    },
+    "observation": {
+        "_class": ["Observation", "Opts"],
+        "n": 20,
+        "timeStep": 0.5,
+        "reps": 1,
+        "scales": [0, 0.05],
+        "noiseSampler": {
+            "_class": ["normal", "Array", "Sampler", "Opts"],
+            "sd": 1  
+        }
+    },
+    "taskList": {
+        "_class": ["Task", "List", "Opts"],
+        "list": [
+            {
+                "_class": ["estiObsTrajs", "Task", "Opts"],
+                "name": "observation time",
+                "predictionTime": [0, 10],
+                "timeStep": 0.1,
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "L2"
+                        },
+                        {
+                            "_class": ["Distance", "TimeState", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
+                        }
+                    ]
+                }
+            },
+            {
+                "_class": ["velocity", "Task", "Opts"],
+                "name": "velocity",
+                "gridRanges": [[-1, 1], [-1, 1], [-1, 1]],
+                "gridSteps": [0.1, 0.1, 0.1],
+                "scoreList": {
+                    "_class": ["Score", "List", "Opts"],
+                    "list": [
+                        {
+                            "_class": ["Distance", "VelocityField", "Score", "Opts"],
+                            "name": "L2",
+                            "method": "L2"
+                        },
+                        {
+                            "_class": ["Distance", "VelocityField", "Score", "Opts"],
+                            "name": "L1",
+                            "method": "L1"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
