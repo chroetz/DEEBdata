@@ -20,7 +20,7 @@ getParmsFunctionLorenz63 <- function(opts) {
 buildParmsSamplerLorenz63 <- function(opts) {
   coefSampler <- buildArraySampler(
     opts$coefSampler,
-    arrayDim = 3)
+    arrayDim = c(1, 3))
   parmsSampler <- function() list(coef = as.vector(coefSampler()))
   return(parmsSampler)
 }

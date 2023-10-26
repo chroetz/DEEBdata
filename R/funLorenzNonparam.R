@@ -1,40 +1,41 @@
-sampleGpLorenz <- function(maxTires = 100) {
+sampleGpParmsSuiteableForLorenz <- function(opts) {
 
-  # TODO: disenchant magic constants
-  odeSteps <- 1e3
-  time <- seq(0, 50, length.out = odeSteps)
-
-  # maybe need to fix this in data generation??
-  u0 <- c(-0.32, -0.6,  8) # Starting point on the original Lorenz63 attractor.
-
-  for (k in seq_len(maxTires)) {
-    parms <- sampleGaussianProcess(n = 5, d = 3)
-    res <- deSolve::ode(
-      u0, time,
-      \(t, u, parms) list(lorenz63(u, getLorenzNonparamCoef(u, parms))),
-      parms, "rk4")
-    if (any(is.na(res))) next
-    finalVariation <- mean(abs(diff(res[(odeSteps*0.9):odeSteps, 2])))
-    if (finalVariation > 1) {
-      return(parms)
-    }
+  for (k in seq_len(opts$maxTries)) {
+    parms <- sampleGaussianProcess(n = opts$nSupportPoints, d = 3) # default parameters: [0,1]^3 -> [-1,1]^3
+    suitable <- checkParmsSuitable(parms, opts)
+    if (suitable) return(parms)
   }
 
   stop("Could not find suitable GP.")
 }
 
 
-getLorenzNonparamCoef <- function(u, parms) {
-  # TODO: disenchant magic constants
-  x <- c((u[1]+50), (u[2]+50), u[3]+25) / 100
-  y <- DEEButil::evalGaussianProcess(x, parms$locations, parms$weights, bandwidth = 1)
-  c(10+5*y[1], 50+30*y[2], 4+2*y[3])
+checkParmsSuitable <- function(parms, opts) {
+  time <- seq(0, opts$maxTime, length.out = opts$odeSteps)
+  res <- deSolve::ode(
+    opts$u0, time,
+    \(t, u, parms) list(lorenz63(u, getLorenzNonparamCoef(u, parms, opts))),
+    parms, "rk4")
+  if (any(is.na(res))) return(FALSE)
+  resTailStates <- res[(opts$odeSteps*opts$warmUpRatio):opts$odeSteps, -1]
+  finalVariation <- mean(abs(apply(resTailStates, 2, diff)))
+  if (finalVariation < opts$minVariation) return(FALSE)
+  return(TRUE)
+}
+
+getLorenzNonparamCoef <- function(u, parms, opts) {
+  gpIn <- (u + opts$gpInOffset)*opts$gpInScale
+  gpOut <- DEEButil::evalGaussianProcess(
+    gpIn, parms$locations, parms$weights, bandwidth = opts$gpBandwidth)
+  coef <- gpOut*opts$gpOutScale + opts$gpOutOffset
+  return(coef)
 }
 
 
 getParmsFunctionLorenzNonparam <- function(opts) {
+  opts <- asOpts(opts, c("lorenzNonparam", "Function", "Sampler"))
   parmsFunction <- function(t, u, parms) {
-    coef <- getLorenzNonparamCoef(u, parms)
+    coef <- getLorenzNonparamCoef(u, parms, opts)
     du <- lorenz63(u, coef)
     return(du)
   }
@@ -43,5 +44,7 @@ getParmsFunctionLorenzNonparam <- function(opts) {
 
 
 buildParmsSamplerLorenzNonparam <- function(opts) {
-  return(sampleGpLorenz)
+  opts <- asOpts(opts, c("lorenzNonparam", "Function", "Sampler"))
+  sample <- \() sampleGpParmsSuiteableForLorenz(opts)
+  return(sample)
 }

@@ -1,0 +1,8 @@
+{
+  "_class": ["periodic", "Condition", "Opts"],
+  "_description": "True if the time series does not look too periodic. Ration between the max and kth largest value of squared absolute Fourier coeffiecent of a FFT of the times series.",
+  "kthLargest": 10,
+  "_kthLargest_description": "The denominator is kthLargest*log10(length)-largest value.",
+  "threshold": 10,
+  "_threshold_description": "Max periodicity quotient to be counted as non-periodic"
+}

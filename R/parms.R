@@ -1,4 +1,5 @@
 getParmsFunction <- function(opts) {
+  stopifnot(inheritsOptsClass(opts, c("Function", "Sampler")))
   name <- getThisClass(opts)
   fun <- switch(
     name,
@@ -16,6 +17,7 @@ getParmsFunction <- function(opts) {
 
 
 buildParmsSampler <- function(opts) {
+  stopifnot(inheritsOptsClass(opts, c("Function", "Sampler")))
   name <- getThisClass(opts)
   parmsSampler <- switch(
     name,

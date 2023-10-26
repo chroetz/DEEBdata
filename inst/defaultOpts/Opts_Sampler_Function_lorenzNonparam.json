@@ -1,5 +1,17 @@
 {
-  "_class": ["lorenz63", "Function", "Sampler", "Opts"],
+  "_class": ["lorenzNonparam", "Function", "Sampler", "Opts"],
   "_description": "",
-  "d": 3
+  "d": 3,
+  "maxTries": 100,
+  "odeSteps": 1e3,
+  "maxTime": 50,
+  "u0": [-0.32, -0.6,  8],
+  "minVariation": 1,
+  "warmUpRatio": 0.9,
+  "nSupportPoints": 5,
+  "gpInOffset": [50, 50, 25],
+  "gpInScale": 0.01,
+  "gpOutOffset": [10, 50, 4],
+  "gpOutScale": [5, 30, 2],
+  "gpBandwidth": 1
 }
