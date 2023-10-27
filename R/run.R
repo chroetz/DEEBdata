@@ -28,6 +28,7 @@ run <- function(x, createExample = FALSE, overwriteList = NULL, truth = TRUE, ob
   if (plot) plotTogether(opts$plot, writeOpts = FALSE)
 
   if (createExample) {
+    message("Creating Example")
     dir.create("example")
     setwd("example")
     opts$truth$seed <- sample.int(.Machine$integer.max, 1)

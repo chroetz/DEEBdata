@@ -74,6 +74,8 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSetti
 
 sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, writeOpts = TRUE) {
 
+  message("Creating Truth")
+
   opts <- asOpts(opts, "Truth")
   if (!dir.exists(opts$path)) dir.create(opts$path)
   if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Truth"))
@@ -112,7 +114,11 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
 }
 
 writeTruthForObservation <- function(trajs, observationOpts, filePath) {
-  times <- seq(0, by = observationOpts$timeStep, length.out = observationOpts$n)
+  times <- getTimes(
+    observationOpts$n,
+    observationOpts$timeLimit,
+    observationOpts$timeStep,
+    observationOpts$random)
   outTrajs <- interpolateTrajs(trajs, times)
   writeTrajs(outTrajs, filePath)
 }

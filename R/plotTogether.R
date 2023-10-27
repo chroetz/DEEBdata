@@ -1,5 +1,7 @@
 plotTogether <- function(opts, writeOpts = TRUE) {
 
+  message("Creating Plots")
+
   opts <- asOpts(opts, "Plot")
   if (!dir.exists(opts$path)) dir.create(opts$path)
   if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Plot"))

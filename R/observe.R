@@ -1,5 +1,7 @@
 generateObservations <- function(opts, writeOpts = TRUE) {
 
+  message("Creating Observations")
+
   opts <- asOpts(opts, "Observation")
   if (!dir.exists(opts$path)) dir.create(opts$path)
   if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Observation"))
@@ -50,43 +52,40 @@ buildNoiseSampler <- function(opts, d) {
 }
 
 observeGrid <- function(
-    trajs,
-    n = NULL, timeStep = NULL, timeLimit = NULL,
+    truthTrajs,
+    n, timeStep, timeLimit,
     random,
     noiseSampler,
     scale=1,
     noiseFree=NULL
   ) {
 
-  if (is.null(n)) n <- ceiling(timeLimit / timeStep)
-  if (is.null(timeStep)) timeStep <- timeLimit / n
-  if (is.null(timeLimit)) timeLimit <- timeStep * n
+  obsTrajs <- mapTrajs2Trajs(truthTrajs, \(truthTraj) {
 
+    noiseFreeRows <- unique(c(
+      noiseFree[noiseFree>0],
+      (nrow(truthTraj)+1) + noiseFree[noiseFree<0]))
+    noise <- scale * noiseSampler(nrow(truthTraj))
+    noise[noiseFreeRows,] <- 0
+    obsTraj <- makeTrajs(truthTraj$time, truthTraj$state + noise, trajId=truthTraj$trajId)
+
+    return(obsTraj)
+  })
+
+  return(obsTrajs)
+}
+
+
+getTimes <- function(n, timeLimit, timeStep, random) {
   if (random) {
-    timeSteps <- c()
-    kMax <- 1000
-    for (k in seq_len(kMax)) {
-      timeSteps <- c(timeSteps, stats::rexp(n, rate = 1 / timeStep))
-      if (sum(timeSteps) > timeLimit) break
-    }
-    stopifnot(k < kMax)
+    timeSteps <- stats::rexp(
+      pmin(n, ceiling(timeLimit / timeStep)*2+1000),
+      rate = 1 / timeStep)
+    stopifnot(sum(timeSteps) > timeLimit)
     tSample <- c(0, cumsum(timeSteps))
   } else {
     tSample <- seq(0, by = timeStep, length.out = n)
   }
-  tSample <- tSample[tSample < timeLimit]
-
-  obs <- interpolateTrajs(trajs, tSample)
-  trajIds <- unique(trajs$trajId)
-  noiseFreeRows <- unique(c(
-    noiseFree[noiseFree>0],
-    (n+1) + noiseFree[noiseFree<0]))
-  for (trajId in trajIds) {
-    nTraj <- sum(obs$trajId == trajId)
-    noise <- scale * noiseSampler(nTraj)
-    noise[noiseFreeRows,] <- 0
-    obs$state[obs$trajId == trajId, ] <-
-      obs$state[obs$trajId == trajId, ] + noise
-  }
-  return(obs)
+  tSample <- tSample[(tSample < timeLimit) & (seq_along(tSample) <= n)]
+  return(tSample)
 }
