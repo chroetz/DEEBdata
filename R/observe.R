@@ -26,7 +26,13 @@ generateObservations <- function(opts, writeOpts = TRUE) {
     for (i in seq_len(opts$reps)) for (s in opts$scales) {
       obsNr <- obsNr+1
       message("Generate observations. Iteration ", obsNr)
-      obs <- observeGrid(truth, opts$n, opts$timeStep, noiseSampler, scale=s, noiseFree = opts$noiseFree)
+      obs <- observeGrid(
+        truth,
+        opts$n, opts$timeStep, opts$timeLimit,
+        opts$random,
+        noiseSampler,
+        scale=s,
+        noiseFree = opts$noiseFree)
       obsFileName <- DEEBpath::obsFile(truthNr = info$truthNr, obsNr = obsNr)
       writeTrajs(obs, file.path(opts$path, obsFileName))
     }
@@ -43,9 +49,33 @@ buildNoiseSampler <- function(opts, d) {
   return(noiseSampler)
 }
 
+observeGrid <- function(
+    trajs,
+    n = NULL, timeStep = NULL, timeLimit = NULL,
+    random,
+    noiseSampler,
+    scale=1,
+    noiseFree=NULL
+  ) {
 
-observeGrid <- function(trajs, n, timeStep, noiseSampler, scale=1, noiseFree=NULL) {
-  tSample <- seq(0, by = timeStep, length.out = n)
+  if (is.null(n)) n <- ceiling(timeLimit / timeStep)
+  if (is.null(timeStep)) timeStep <- timeLimit / n
+  if (is.null(timeLimit)) timeLimit <- timeStep * n
+
+  if (random) {
+    timeSteps <- c()
+    kMax <- 1000
+    for (k in seq_len(kMax)) {
+      timeSteps <- c(timeSteps, stats::rexp(n, rate = 1 / timeStep))
+      if (sum(timeSteps) > timeLimit) break
+    }
+    stopifnot(k < kMax)
+    tSample <- c(0, cumsum(timeSteps))
+  } else {
+    tSample <- seq(0, by = timeStep, length.out = n)
+  }
+  tSample <- tSample[tSample < timeLimit]
+
   obs <- interpolateTrajs(trajs, tSample)
   trajIds <- unique(trajs$trajId)
   noiseFreeRows <- unique(c(
