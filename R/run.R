@@ -26,7 +26,7 @@ run <- function(
 
   writeOpts(opts, "Opts_Run")
 
-  dir.create("estimation")
+  if (!dir.exists("estimation")) dir.create("estimation")
   if (truth) sampleTrajectoriesAndWriteForTasks(
     opts$truth,
     opts$taskList,

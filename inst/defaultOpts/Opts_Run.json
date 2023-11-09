@@ -10,7 +10,7 @@
   },
   "_truth_description": "",
   "observation": {
-    "_class": ["Observation", "Opts"]
+    "_class": ["Observation", "List", "Opts"]
   },
   "_observation_description": "",
   "plot": {

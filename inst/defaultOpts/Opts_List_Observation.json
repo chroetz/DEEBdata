@@ -1,0 +1,9 @@
+{
+    "_class": ["Observation", "List", "Opts"],
+    "_description": "",
+    "truthPath": "truth",
+    "_truthPath_description": "where to find the truth",
+    "path": "observation",
+    "_path_description": "where to write the observation files"
+}
+  

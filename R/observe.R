@@ -2,40 +2,47 @@ generateObservations <- function(opts, writeOpts = TRUE) {
 
   message("Creating Observations")
 
-  opts <- asOpts(opts, "Observation")
+  opts <- asOpts(opts, c("Observation", "List"))
   if (!dir.exists(opts$path)) dir.create(opts$path)
-  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Observation"))
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_List_Observation"))
 
   set.seed(opts$seed)
 
-  meta <- DEEBpath::getMetaGeneric(opts$truthPath, tagsFilter = c("obs", "truth"))
+  meta <- DEEBpath::getMetaGeneric(opts$truthPath, tagsFilter = c("truth"))
 
   if (nrow(meta) == 0) {
     message("No truth files found.")
     return(invisible(NULL))
   }
+
   d <-
     meta$truthPath[1] |>
-    readTrajs() |>
+    readRDS() |>
     getDim()
-  noiseSampler <- buildNoiseSampler(opts$noiseSampler, d = d)
 
-  for (i in seq_len(nrow(meta))) {
-    info <- meta[i, ]
-    message("Process Truth ", info$truthNr)
-    truth <- readTrajs(info$truthPath)
-    obsNr <- 0
-    for (i in seq_len(opts$reps)) for (s in opts$scales) {
-      obsNr <- obsNr+1
-      message("Generate observations. Iteration ", obsNr)
-      obs <- observeGrid(
+  for (observerNr in seq_along(opts$list)) {
+
+    message("Generate observation ", observerNr)
+    obsOpts <- opts$list[[observerNr]]
+    noiseSampler <- buildNoiseSampler(obsOpts$noiseSampler, d = d)
+
+    for (i in seq_len(nrow(meta))) {
+      info <- meta[i, ]
+      message("Process Truth ", info$truthNr)
+      truth <- readRDS(info$truthPath)
+
+      obsTruth <- writeAndGetTruthForObservation(
         truth,
-        opts$n, opts$timeStep, opts$timeLimit,
-        opts$random,
+        obsOpts,
+        file.path(opts$truthPath, DEEBpath::obsTruthFile(truthNr = info$truthNr, obsNr = observerNr)))
+
+      obs <- observeGrid(
+        obsTruth,
+        obsOpts$n, obsOpts$timeStep, obsOpts$timeLimit,
+        obsOpts$random,
         noiseSampler,
-        scale=s,
-        noiseFree = opts$noiseFree)
-      obsFileName <- DEEBpath::obsFile(truthNr = info$truthNr, obsNr = obsNr)
+        noiseFree = obsOpts$noiseFree)
+      obsFileName <- DEEBpath::obsFile(truthNr = info$truthNr, obsNr = observerNr)
       writeTrajs(obs, file.path(opts$path, obsFileName))
     }
   }

@@ -10,9 +10,12 @@ plotTogether <- function(opts, writeOpts = TRUE) {
   if (!dir.exists(plotsPath)) dir.create(plotsPath)
   plotsPath <- normalizePath(plotsPath, mustWork=TRUE)
 
-  metaObs <- DEEBpath::getMetaGeneric(
-    c(opts$truthPath, opts$obsPath),
-    tagsFilter = c("truth", "obs"))
+  metaObs <-
+    DEEBpath::getMetaGeneric(
+      c(opts$truthPath, opts$obsPath),
+      tagsFilter = c("truth", "obs")
+    ) |>
+    tidyr::drop_na()
 
   for (i in seq_len(nrow(metaObs))) {
     info <- metaObs[i,]
@@ -23,9 +26,13 @@ plotTogether <- function(opts, writeOpts = TRUE) {
     }
   }
 
-  metaTruth <- DEEBpath::getMetaGeneric(
-    c(opts$truthPath, opts$taskPath),
-    tagsFilter = c("truth", "task"))
+  metaTruth <-
+    DEEBpath::getMetaGeneric(
+      c(opts$truthPath, opts$taskPath),
+      tagsFilter = c("truth", "task")
+    ) |>
+    tidyr::drop_na()
+
   if (!"taskNr" %in% colnames(metaTruth)) metaTruth <- metaTruth[0,]
 
   for (i in seq_len(nrow(metaTruth))) {

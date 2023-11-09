@@ -98,10 +98,7 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
     message("Iteration ", truthNr, " of ", opts$reps, ".")
     res <- sampleConditional(parmsSampler, fun, u0Sampler, opts, taskTrajsSettings)
     writeOpts(res$parms, file.path(opts$path, DEEBpath::parmsFile(truthNr = truthNr)))
-    writeTruthForObservation(
-      res$trajs,
-      observationOpts,
-      file.path(opts$path, DEEBpath::obsTruthFile(truthNr = truthNr)))
+    saveRDS(res$trajs, file.path(opts$path, DEEBpath::truthFile(truthNr = truthNr)))
     for (taskNr in seq_along(taskList$list)) {
       writeTurthForTask(
         res$trajs, res$parms, fun,
@@ -113,7 +110,7 @@ sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, 
   }
 }
 
-writeTruthForObservation <- function(trajs, observationOpts, filePath) {
+writeAndGetTruthForObservation <- function(trajs, observationOpts, filePath) {
   times <- getTimes(
     observationOpts$n,
     observationOpts$timeLimit,
@@ -121,6 +118,7 @@ writeTruthForObservation <- function(trajs, observationOpts, filePath) {
     observationOpts$random)
   outTrajs <- interpolateTrajs(trajs, times)
   writeTrajs(outTrajs, filePath)
+  return(outTrajs)
 }
 
 writeTurthForTask <- function(trajs, parms, derivFun, task, taskTrajs, filePath, opts) {

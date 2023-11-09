@@ -18,4 +18,5 @@ Imports:
     deSolve,
     ggplot2,
     stats,
-    tibble
+    tibble,
+    tidyr
