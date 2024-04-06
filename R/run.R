@@ -7,12 +7,13 @@ run <- function(
 
   opts <- asOpts(x, "Run")
 
-  opts <- overwriteOpts(opts, overwriteList)
-
   if (randomizeSeed) {
     opts$truth$seed <- sample.int(.Machine$integer.max, 1)
-    opts$observation$seed <- sample.int(.Machine$integer.max, 1)
+    for (k in seq_along(opts$observation$list))
+      opts$observation$list[[k]]$seed <- sample.int(.Machine$integer.max, 1)
   }
+
+  opts <- overwriteOpts(opts, overwriteList)
 
   wd <- getwd()
   on.exit(setwd(wd))

@@ -1,3 +1,44 @@
+
+
+sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, writeOpts = TRUE) {
+
+  message("Creating Truth")
+
+  opts <- asOpts(opts, "Truth")
+  if (!dir.exists(opts$path)) dir.create(opts$path)
+  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Truth"))
+
+  parmsSampler <- buildParmsSampler(opts$deFunSampler)
+  fun <- getParmsFunction(opts$deFunSampler)
+  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = c(1, opts$deFunSampler$d))
+
+  # Some tasks require the existence / calculatability of further trajectories
+  # (starting from new initial states) additional to those used for creating the
+  # observations and solving the task of predicting these observed trajectories
+  # into the future. These are collected here and are then calculated in
+  # sampleConditional(). If the ODE solver cannot calculate them, the sampled
+  # parms are rejected.
+  taskTrajsSettings <- collectRequiredTrajsFromTasks(taskList)
+
+  set.seed(opts$seed)
+
+  for (truthNr in seq_len(opts$reps)) {
+    message("Iteration ", truthNr, " of ", opts$reps, ".")
+    res <- sampleConditional(parmsSampler, fun, u0Sampler, opts, taskTrajsSettings)
+    writeOpts(res$parms, file.path(opts$path, DEEBpath::parmsFile(truthNr = truthNr)))
+    saveRDS(res$trajs, file.path(opts$path, DEEBpath::truthFile(truthNr = truthNr)))
+    for (taskNr in seq_along(taskList$list)) {
+      writeTurthForTask(
+        res$trajs, res$parms, fun,
+        taskList$list[[taskNr]],
+        res$taskTrajs[[taskNr]],
+        file.path(opts$path, DEEBpath::taskTruthFile(truthNr = truthNr, taskNr = taskNr)),
+        opts)
+    }
+  }
+}
+
+
 sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSettings) {
 
   successFun <- FALSE
@@ -69,45 +110,6 @@ sampleConditional <- function(parmsSampler, fun, u0Sampler, opts, taskTrajsSetti
     trajs = bindTrajs(trajList),
     parms = parms,
     taskTrajs = taskTrajs))
-}
-
-
-sampleTrajectoriesAndWriteForTasks <- function(opts, taskList, observationOpts, writeOpts = TRUE) {
-
-  message("Creating Truth")
-
-  opts <- asOpts(opts, "Truth")
-  if (!dir.exists(opts$path)) dir.create(opts$path)
-  if (writeOpts) writeOpts(opts, file.path(opts$path, "Opts_Truth"))
-
-  parmsSampler <- buildParmsSampler(opts$deFunSampler)
-  fun <- getParmsFunction(opts$deFunSampler)
-  u0Sampler <- buildArraySampler(opts$u0Sampler, arrayDim = c(1, opts$deFunSampler$d))
-
-  # Some tasks require the existence / calculatability of further trajectories
-  # (starting from new initial states) additional to those used for creating the
-  # observations and solving the task of predicting these observed trajectories
-  # into the future. These are collected here and are then calculated in
-  # sampleConditional(). If the ODE solver cannot calculate them, the sampled
-  # parms are rejected.
-  taskTrajsSettings <- collectRequiredTrajsFromTasks(taskList)
-
-  set.seed(opts$seed)
-
-  for (truthNr in seq_len(opts$reps)) {
-    message("Iteration ", truthNr, " of ", opts$reps, ".")
-    res <- sampleConditional(parmsSampler, fun, u0Sampler, opts, taskTrajsSettings)
-    writeOpts(res$parms, file.path(opts$path, DEEBpath::parmsFile(truthNr = truthNr)))
-    saveRDS(res$trajs, file.path(opts$path, DEEBpath::truthFile(truthNr = truthNr)))
-    for (taskNr in seq_along(taskList$list)) {
-      writeTurthForTask(
-        res$trajs, res$parms, fun,
-        taskList$list[[taskNr]],
-        res$taskTrajs[[taskNr]],
-        file.path(opts$path, DEEBpath::taskTruthFile(truthNr = truthNr, taskNr = taskNr)),
-        opts)
-    }
-  }
 }
 
 writeAndGetTruthForObservation <- function(trajs, observationOpts, filePath) {
