@@ -5,6 +5,9 @@
     "optimalValue": 0,
     "method": "Euclidean",
     "_method_description": "A method from R package proxy. See argument `method` of proxy::dist()",
-    "methodArgs": {}
+    "methodArgs": {},
+    "normalize": "none",
+    "_normalize_description": "Normalizing of distance in each time step",
+    "factor": 1
 }
   
