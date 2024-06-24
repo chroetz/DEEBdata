@@ -2,6 +2,7 @@
     "_class": ["Distance", "TimeState", "Score", "Opts"],
     "_description": "",
     "name": "CumMaxErr",
+    "bound": 1,
     "optimalValue": 0
 }
   
