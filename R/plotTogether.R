@@ -48,6 +48,7 @@ plotTogether <- function(opts, writeOpts = TRUE) {
 }
 
 
+#' @export
 createTruthObsPlots <- function(info) {
   info <- DEEBpath::loadPathsInInfo(as.list(info))
   title <- sprintf("Truth %d, Obs %d", info$truthNr, info$obsNr)
@@ -60,6 +61,7 @@ createTruthObsPlots <- function(info) {
 }
 
 
+#' @export
 createTruthTaskPlots <- function(info) {
   info <- DEEBpath::loadPathsInInfo(as.list(info))
   title <- sprintf("Truth %d, Task %d", info$truthNr, info$taskNr)
